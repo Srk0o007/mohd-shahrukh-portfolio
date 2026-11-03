@@ -8,9 +8,9 @@
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 05 PR. On approval it is merged into `main` and Phase 05 is marked complete. Phase 06 requires separate approval. |
+| **Next approved action** | Owner final review of PR #4 (review clarifications applied 2026-11-04). The PR is **not** merged until the owner gives final approval. Phase 06 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 05 PR review; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 06–12 not started |
+| **Pending work** | Phase 05 final approval of PR #4; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 06–12 not started |
 
 ## Phase tracker
 
@@ -50,9 +50,10 @@ Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting ap
 - Custom theme script.
 - Formspree with progressive enhancement.
 - Vitest + Playwright + axe.
-- Static CSP with `'unsafe-inline'` (NFR-SEC-02 amended).
+- Static CSP with `'unsafe-inline'` (NFR-SEC-02 amended); Phase 11 evaluates CSP hash sources (SRI considered separately).
 - Inline SVG icons.
-- `next/image`.
+- `next/image`, with Vercel-managed image optimisation (runtime, cached).
+- No application-owned server code at runtime. Image optimisation is the only platform runtime processing; the hosting plan is verified in Phase 12.
 - TypeScript pinned to 6.0.3.
 
 **Versions verified 2026-11-03:** Next.js 16.4.5 · React 19.3.1 · Tailwind CSS 4.3.4 · TypeScript 6.0.3 (7.0.2 is incompatible with typescript-eslint 8.72) · ESLint 10.14 · Vitest 5.1 · Playwright 1.64.
@@ -163,7 +164,8 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Could items adopted: FR-RES-02 (collapsible highlights), FR-INT-06 (skills strip), FR-PRJ-07 (hover zoom), FR-CON-07 (character counter) | Decided in Phase 04 as planned |
 | 2026-11-03 | Phase 04 open questions resolved to their defaults (OQ-1: no extra About facts; OQ-2: skills strip after the hero; OQ-3: canvas not updated) | PR #3 merged without changes |
 | 2026-11-04 | Architecture decisions ADR 0001–0011 accepted | Owner approved the Phase 05 proposal with recommendations; see [docs/architecture/adr/](docs/architecture/adr/) |
-| 2026-11-04 | **NFR-SEC-02 amended:** static CSP with `script-src 'self' 'unsafe-inline'`; SRI re-evaluated in Phase 11 | ADR 0008; nonces would force dynamic rendering (Next.js 16 docs) |
+| 2026-11-04 | **NFR-SEC-02 amended:** static CSP with `script-src 'self' 'unsafe-inline'`; retained until the Phase 11 evaluation of CSP hash sources (SRI is a separate mechanism for external files) | ADR 0008; nonces would force dynamic rendering (Next.js 16 docs) |
+| 2026-11-04 | Hosting plan is a deployment-stage decision: Vercel Hobby intended; limits, image-optimisation pricing and acceptable-use terms verified in Phase 12 | Owner review of PR #4; ADR 0002 |
 | 2026-11-04 | Test runner: Vitest (Jest-compatible API) | ADR 0007 |
 
 ## Risks & dependencies
@@ -183,7 +185,8 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R13 | The skills strip adds motion and a control (WCAG 2.2.2) | Low | Pause control, static under reduced motion, `aria-hidden` duplicate; can be dropped without layout impact | 09 |
 | R14 | TypeScript pinned below the latest major (7.x) | Low | ADR 0011; upgrade when typescript-eslint supports 7 | 06+ |
 | R15 | Formspree account access unconfirmed (existing form `xleyzgzo`) | Medium | Owner confirms before Phase 09; fallback: new free form, config-only change | 09 |
-| R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; SRI re-evaluated in Phase 11 (ADR 0008) | 11 |
+| R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
+| R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
 | R9 | Mixed project image aspect ratios (16:9 and about 1:1) | Low | Fixed-ratio card frames with `object-fit` in Phase 04 | 04 |
 
@@ -201,3 +204,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Phase 04: three visual directions presented on a canvas; owner selected A with C and B borrowings; content re-verified; five design documents written in `docs/design/`; PR opened for review |
 | 2026-11-03 | Phase 04 approved by owner; PR #3 merged into `main`; branch `phase/04-design-system` deleted |
 | 2026-11-04 | Phase 05: architecture documents and ADR 0001–0011 written in `docs/architecture/`; NFR-SEC-02 amended; PR opened for review |
+| 2026-11-04 | PR #4 review clarifications: runtime-compute boundaries (ADR 0002, 0010, ARCHITECTURE §2.1); CSP hash sources vs SRI separated, plus a Phase 11 evaluation plan (ADR 0008, NFR-SEC-02); hosting plan deferred to Phase 12; ten-project invariant confirmed (no change) |

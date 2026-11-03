@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-11-04
+- **Revision:** 2026-11-04, before merge, per owner review. Image optimisation is now stated as platform-managed runtime processing; cost and limits are verified in Phase 12.
 
 ## Context
 
@@ -33,7 +34,7 @@ The live site ships about 9.73 MB of PNG/JPEG with no responsive sizes (audit P1
 
 **Source files:**
 - Copied from the live site in Phase 06 and renamed to kebab-case IDs (e.g. `frontier-mining-solutions.png`; this also fixes the "sss" typo).
-- Kept as the highest-quality originals; no pre-compression is needed because Vercel serves optimised variants.
+- Kept as the highest-quality originals; no pre-compression is needed because Vercel's optimiser generates the variants.
 
 **Fit rule:** `object-fit: cover` when width / height ≥ 1.4, otherwise `contain` on `surface-2` (DS-08). It is derived in `toProjectView()`.
 
@@ -49,6 +50,8 @@ The live site ships about 9.73 MB of PNG/JPEG with no responsive sizes (audit P1
 
 ## Consequences
 
-- Image optimisation runs on Vercel and its usage is tiny.
+- **Runtime processing:** `next/image` optimisation is **platform-managed runtime processing**, not build-time work. Vercel transforms a source image the first time each width/format is requested (`/_next/image`) and then serves it from cache. This is the only runtime processing in the deployment besides the third-party form endpoint ([ADR 0002 §Runtime compute boundaries](0002-static-prerendering-on-vercel.md#runtime-compute-boundaries)).
+- **Expected volume:** about 20 source images × the widths requested × 2 formats (AVIF, WebP). Static imports give content-hashed URLs and long cache lifetimes, so repeat transformations are rare.
+- **Cost and limits** are confirmed in **Phase 12** against Vercel's current plan terms. If unacceptable: pre-optimise the assets and set `images.unoptimized: true`, or use the `output: 'export'` fallback (ADR 0002).
 - The total page weight target (≤ 1.5 MB after a full scroll; NFR-PERF-06) is achievable.
 - Images must be imported (not `public/` paths) to get dimensions automatically.

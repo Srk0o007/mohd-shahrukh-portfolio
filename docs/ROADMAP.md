@@ -75,10 +75,10 @@ WCAG 2.2 AA target, keyboard accessibility, screen readers, mobile and tablet te
 
 Lighthouse, Core Web Vitals, metadata, testing, security and production build.
 
-- **Exit criteria:** performance and SEO targets met, tests passing, production build verified.
+- **Exit criteria:** performance and SEO targets met, tests passing, production build verified, and the CSP hash-source evaluation completed and recorded ([ADR 0008](architecture/adr/0008-csp-for-static-pages.md)).
 
 ## Phase 12 — Deployment & Domain Configuration
 
 Vercel deployment, Hostinger DNS, custom domain, SSL and production verification.
 
-- **Exit criteria:** site is live on https://mohdshahrukh.in/ over HTTPS, and production is verified.
+- **Exit criteria:** site is live on https://mohdshahrukh.in/ over HTTPS, and production is verified. Before go-live, the hosting plan is confirmed against Vercel's current usage limits, image-optimisation pricing and acceptable-use terms ([ADR 0002](architecture/adr/0002-static-prerendering-on-vercel.md)).

@@ -35,8 +35,8 @@ Related: [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) · [COMPONENT_ARCHITECTURE.m
 |---|---|---|
 | Framework | Next.js **16.4** App Router, React **19.3** | [0002](adr/0002-static-prerendering-on-vercel.md) |
 | Language | TypeScript **6.0.3**, strict | [0011](adr/0011-pin-typescript-6.md) |
-| Rendering | Static prerendering at build time; no server code at runtime | [0002](adr/0002-static-prerendering-on-vercel.md) |
-| Hosting | Vercel (Phase 12) | [0002](adr/0002-static-prerendering-on-vercel.md) |
+| Rendering | Static prerendering at build time; no application-owned server code at runtime (see §2.1) | [0002](adr/0002-static-prerendering-on-vercel.md) |
+| Hosting | Vercel; plan (Hobby intended) verified in Phase 12 | [0002](adr/0002-static-prerendering-on-vercel.md) |
 | Content | Typed TypeScript modules in `src/content/` | [0003](adr/0003-typed-content-modules.md) |
 | Styling | Tailwind CSS **4.3**, design tokens as CSS variables | [0004](adr/0004-tailwind-v4-design-tokens.md) |
 | Theme | Custom inline pre-paint script plus a small client toggle | [0005](adr/0005-custom-theme-script.md) |
@@ -47,11 +47,23 @@ Related: [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) · [COMPONENT_ARCHITECTURE.m
 | Images | `next/image` with static imports, AVIF/WebP | [0010](adr/0010-image-handling.md) |
 | Decision records | Lightweight ADRs | [0001](adr/0001-record-architecture-decisions.md) |
 
+### 2.1 What runs at runtime
+
+| Category | Present? | Detail |
+|---|---|---|
+| Application-owned dynamic rendering | **No** | All pages and metadata routes are prerendered at build ([ADR 0002](adr/0002-static-prerendering-on-vercel.md)) |
+| Custom server endpoints (route handlers, Server Actions, `proxy.ts`) | **No** | None exist; adding one requires an ADR |
+| Platform-managed image optimisation | **Yes, potentially** | Vercel transforms each source image on first request per size and format, then caches it ([ADR 0010](adr/0010-image-handling.md)). This is runtime processing subject to plan limits and cost, verified in Phase 12. |
+| Third-party processing | Yes | Formspree receives form submissions directly from the browser |
+| Browser JavaScript | Yes | 8 small client islands plus the theme script |
+
+The deployment therefore has **no application-owned server compute**. It is **not** free of runtime processing while image optimisation is enabled.
+
 ## 3. External services: are they required?
 
 | Need | Service | Required? | Reason |
 |---|---|---|---|
-| Hosting + CDN | Vercel | **Yes** | Roadmap Phase 12; serves static files, optimises images, sets headers |
+| Hosting + CDN | Vercel | **Yes** | Roadmap Phase 12; serves prerendered files, applies headers, and performs managed image optimisation (runtime, cached). Plan limits, image-optimisation pricing and acceptable-use terms are verified in Phase 12 ([ADR 0002](adr/0002-static-prerendering-on-vercel.md)). |
 | Contact form delivery | Formspree | **Yes** | A static site cannot send email; FR-CON-02 is a Must. Formspree is the existing provider: no server, no secrets ([ADR 0006](adr/0006-formspree-contact-form.md)) |
 | Domain / DNS | Hostinger | **Yes** | Existing registrar (Phase 12) |
 | Analytics | — | **No** | D21 |
@@ -156,7 +168,7 @@ src/content/index.ts        single export surface
 | All other images | `loading="lazy"` (default) |
 | Every image | `sizes` per layout span ([COMPONENT_ARCHITECTURE.md §6](COMPONENT_ARCHITECTURE.md#6-image-sizes)) |
 
-Source files are renamed (no spaces or parentheses) and kept as the highest-quality originals; Vercel serves optimised variants. Details: [ADR 0010](adr/0010-image-handling.md).
+Source files are renamed (no spaces or parentheses) and kept as the highest-quality originals. Vercel's image optimiser generates the AVIF/WebP variants **on demand at runtime** and caches them (§2.1). Details: [ADR 0010](adr/0010-image-handling.md).
 
 ## 10. Font loading
 
