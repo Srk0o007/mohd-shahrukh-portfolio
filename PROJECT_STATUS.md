@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-03
-**Current phase:** Phase 02 — Existing Website Investigation ✅ Complete (PR #1 merged)
-**Next phase:** Phase 03 — Requirements & Content Specification ⏸️ Awaiting approval
+**Current phase:** Phase 03 — Requirements & Content Specification 🔍 Deliverables in review (PR on `phase/03-requirements-specification`)
+**Next phase:** Phase 04 — UI/UX Research & Design System ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | None. Awaiting approval to start Phase 03 — Requirements & Content Specification. |
+| **Next approved action** | Owner reviews the Phase 03 PR. On approval it is merged into `main` and Phase 03 is marked complete. Phase 04 requires separate approval. |
 | **Blockers** | None |
-| **Pending work** | Phase 03 awaits approval; Phases 04–12 not started; open content questions Q1–Q12 (see below) |
+| **Pending work** | Phase 03 PR review and merge; Phases 04–12 not started; non-blocking owner inputs Q8 (extra project details) and Q11 (new project URLs) |
 
 ## Phase tracker
 
@@ -18,8 +18,8 @@
 |---|---|---|---|
 | 01 | Repository & Project Initialization | ✅ Complete | 2026-11-03 |
 | 02 | Existing Website Investigation | ✅ Complete | 2026-11-03 |
-| 03 | Requirements & Content Specification | ⏸️ Awaiting approval | — |
-| 04 | UI/UX Research & Design System | ⏳ Not started | — |
+| 03 | Requirements & Content Specification | 🔍 In review | — |
+| 04 | UI/UX Research & Design System | ⏸️ Awaiting approval | — |
 | 05 | Technical Architecture | ⏳ Not started | — |
 | 06 | Foundation & Design System Implementation | ⏳ Not started | — |
 | 07 | Core Portfolio Development | ⏳ Not started | — |
@@ -30,6 +30,20 @@
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 03 summary
+
+**Delivered** (in `docs/requirements/`)
+
+- [PRD.md](docs/requirements/PRD.md): goals, non-goals, audience, scope, decisions D1–D21, assumptions, constraints, release criteria
+- [FUNCTIONAL_REQUIREMENTS.md](docs/requirements/FUNCTIONAL_REQUIREMENTS.md): 47 functional requirements (FR-NAV … FR-ERR) plus a Won't-have list
+- [NON_FUNCTIONAL_REQUIREMENTS.md](docs/requirements/NON_FUNCTIONAL_REQUIREMENTS.md): 58 non-functional requirements (accessibility, performance, SEO, security, maintainability, responsive, browser)
+- [CONTENT_SCHEMA.md](docs/requirements/CONTENT_SCHEMA.md): content models with sources, project data, new UI copy, validation rules
+- [ACCEPTANCE_CRITERIA.md](docs/requirements/ACCEPTANCE_CRITERIA.md): verification methods, Definition of Done, Given/When/Then scenarios, release checklist, traceability matrix
+
+Every requirement has an ID, description, priority (MoSCoW), acceptance criteria, dependencies and a source.
+
+**Open questions Q1–Q7, Q9, Q10 and Q12 are resolved** by decisions D8–D21. Q5 is resolved by D10. Q8 and Q11 remain non-blocking owner inputs.
 
 ## Phase 02 summary
 
@@ -52,7 +66,7 @@ Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting ap
 
 **Not done in this phase (by design):** no assets copied, no screenshots committed, live site untouched.
 
-## Open content questions (resolved in Phase 03)
+## Open content questions (raised in Phase 02; resolved in Phase 03 except Q8 and Q11)
 
 Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs Bengaluru · Q4 nav/section labels · Q5 portfolio filter taxonomy · Q6 MARCOM vs "Digital Asset Management" title · Q7 add mohdshahrukh.in / PropShare Titania as projects · Q8 extra project details · Q9 testimonial consent and companies · Q10 "Call Me!" behaviour · Q11 new URLs for the 6 re-deployed projects · Q12 services copy refresh. Details: [CONTENT_INVENTORY.md §19](docs/audit/CONTENT_INVENTORY.md#19-open-items-for-phase-03).
 
@@ -88,6 +102,20 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | D6: Keep all 10 projects with images; dead links hidden until the owner supplies new URLs | Owner decision |
 | 2026-11-03 | D7: CV download uses the 03 Nov 2026 resume PDF (copied in Phase 06) | Owner decision |
 | 2026-11-03 | Reference site used for patterns only; no code, assets or content reused | It is another person's site, built on a commercial template |
+| 2026-11-03 | D8: Light and dark themes; follows the system setting; toggle with persisted choice | Owner approved (Phase 03) |
+| 2026-11-03 | D9: Project details on cards; no detail pages or modals in v1 | No detailed project content exists |
+| 2026-11-03 | D10: Project filter is All / Enterprise products (1–3) / Websites (4–10) | Fixes the inaccurate live taxonomy |
+| 2026-11-03 | D11: Projects 1–3 labelled "Internal product — no public link" | Neutral; avoids claiming confidentiality |
+| 2026-11-03 | D12: Static hero title; no typing animation; "UI/UX Designer" dropped | Matches the resume; WCAG 2.2.2 |
+| 2026-11-03 | D13: "Targeting SDE-2 / Senior Frontend roles." dropped | Consistent with D1 |
+| 2026-11-03 | D14: "Bangalore" spelling everywhere | Matches the resume |
+| 2026-11-03 | D15: Nav is About · Services · Experience · Skills · Projects · Testimonials · Contact, plus Download CV | Fixes mismatched labels |
+| 2026-11-03 | D16: Project #1 keeps its live title "Digital Asset Management" / "Marketing Resource Management (MRM)" | Owner decision |
+| 2026-11-03 | D17: No new projects in v1 (mohdshahrukh.in, PropShare Titania) | No images; schema allows adding later |
+| 2026-11-03 | D18: Both testimonials kept; owner confirms they may continue to be published; no company names | Owner decision |
+| 2026-11-03 | D19: "Call Me!" becomes a `tel:` link | The button label promises a call |
+| 2026-11-03 | D20: Services copy kept word for word | No invented copy |
+| 2026-11-03 | D21: No analytics in v1 | Not requested; privacy |
 
 ## Risks & dependencies
 
@@ -99,7 +127,9 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R4 | Content fidelity: existing site content must be preserved without fabrication | High | Full verified inventory in Phase 02; content spec sign-off in Phase 03 | 02–03 |
 | R5 | Existing-site assets (headshot, project screenshots, resume PDF) must be obtained in usable quality | Medium | ✅ Inventoried in Phase 02; all 17 images are available. Three project images are low resolution (375×393). | 02 → 06 |
 | R6 | 6 project demo links are dead | Medium | D6: render without links until the owner supplies new URLs (Q11) | 08 |
-| R7 | Testimonials and photos are third-party personal data | Medium | Confirm consent in Phase 03 (Q9) | 03 |
+| R7 | Testimonials and photos are third-party personal data | Medium | ✅ Owner confirmed continued publication (D18); company names omitted | 03 |
+| R10 | First-load JS budget (≤ 150 KB gzip) with the App Router | Medium | Server Components by default; client components only for interactive parts | 05–06 |
+| R11 | Contact form provider limits (rate limits, free tier) | Low | Provider chosen in Phase 05; failure state offers an email fallback | 05, 09 |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
 | R9 | Mixed project image aspect ratios (16:9 and about 1:1) | Low | Fixed-ratio card frames with `object-fit` in Phase 04 | 04 |
 
@@ -111,3 +141,5 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Added "Current state" section (next approved action, blockers, pending work); aligned workflow doc with the 5-step execution strategy |
 | 2026-11-03 | Phase 02 deliverables written in `docs/audit/`; owner decisions D1–D7 recorded; PR opened for review |
 | 2026-11-03 | Phase 02 approved by owner; PR #1 merged into `main` |
+| 2026-11-03 | Merged branch `phase/02-website-investigation` deleted |
+| 2026-11-03 | Phase 03 deliverables written in `docs/requirements/`; decisions D8–D21 recorded; PR opened for review |
