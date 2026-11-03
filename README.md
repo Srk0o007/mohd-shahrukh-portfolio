@@ -57,6 +57,12 @@ Prerequisites:
 │   │   ├── ASSET_INVENTORY.md
 │   │   ├── SECTION_MAPPING.md
 │   │   └── REFERENCE_DESIGN_ANALYSIS.md
+│   ├── design/               # Phase 04: design direction and design system
+│   │   ├── DESIGN_DIRECTION.md
+│   │   ├── DESIGN_SYSTEM.md
+│   │   ├── COLOR_TOKENS.md
+│   │   ├── TYPOGRAPHY.md
+│   │   └── COMPONENT_VISUAL_SPEC.md
 │   ├── requirements/         # Phase 03: product specification
 │   │   ├── PRD.md
 │   │   ├── FUNCTIONAL_REQUIREMENTS.md
