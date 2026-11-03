@@ -74,6 +74,7 @@ Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting ap
 | E2E + axe (Chromium) | ✅ 19 passed: zero axe violations on home and 404, both themes, 375 and 1280 px |
 | First-load JS for `/` | ✅ 136.9 KB gzip (budget 150; ⚠ above the 120 KB target, mostly the framework runtime) |
 | `npm audit --audit-level=high` | ✅ 0 high or critical; 0 issues in runtime deps; 17 moderate, all in the ESLint dev toolchain |
+| GitHub Actions CI (PR #5) | ✅ All 16 steps passed (run 41705994672, commit `2f4191f`). The first run failed at the type check (see change log); fixed and re-verified on a fresh clone. |
 
 ## Phase 05 summary
 
@@ -262,3 +263,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | PR #4 review clarifications: runtime-compute boundaries (ADR 0002, 0010, ARCHITECTURE §2.1); CSP hash sources vs SRI separated, plus a Phase 11 evaluation plan (ADR 0008, NFR-SEC-02); hosting plan deferred to Phase 12; ten-project invariant confirmed (no change) |
 | 2026-11-04 | Phase 05 approved by owner; PR #4 merged into `main`; branch `phase/05-technical-architecture` deleted |
 | 2026-11-04 | Phase 06: application foundation, design tokens, primitives, metadata, content layer, assets, temporary preview, tests and CI implemented on `phase/06-foundation`; documents reconciled; PR opened for review |
+| 2026-11-04 | First CI run failed at the type check: the git-ignored `next-env.d.ts` (image-import declarations) did not exist on a clean checkout. Fixed with `typecheck: next typegen && tsc --noEmit`; the full pipeline was re-run on a fresh clone and CI now passes |
