@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 05 — Technical Architecture 🔍 Deliverables in review (PR on `phase/05-technical-architecture`)
+**Current phase:** Phase 05 — Technical Architecture ✅ Complete (PR #4 merged)
 **Next phase:** Phase 06 — Foundation & Design System Implementation ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner final review of PR #4 (review clarifications applied 2026-11-04). The PR is **not** merged until the owner gives final approval. Phase 06 stays unstarted until explicitly approved. |
+| **Next approved action** | None. Awaiting explicit approval to start Phase 06 — Foundation & Design System Implementation. |
 | **Blockers** | None |
-| **Pending work** | Phase 05 final approval of PR #4; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 06–12 not started |
+| **Pending work** | Phase 06 awaits approval; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 06–12 not started |
 
 ## Phase tracker
 
@@ -20,7 +20,7 @@
 | 02 | Existing Website Investigation | ✅ Complete | 2026-11-03 |
 | 03 | Requirements & Content Specification | ✅ Complete | 2026-11-03 |
 | 04 | UI/UX Research & Design System | ✅ Complete | 2026-11-03 |
-| 05 | Technical Architecture | 🔍 In review | — |
+| 05 | Technical Architecture | ✅ Complete | 2026-11-04 |
 | 06 | Foundation & Design System Implementation | ⏸️ Awaiting approval | — |
 | 07 | Core Portfolio Development | ⏳ Not started | — |
 | 08 | Projects & Content Showcase | ⏳ Not started | — |
@@ -205,3 +205,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Phase 04 approved by owner; PR #3 merged into `main`; branch `phase/04-design-system` deleted |
 | 2026-11-04 | Phase 05: architecture documents and ADR 0001–0011 written in `docs/architecture/`; NFR-SEC-02 amended; PR opened for review |
 | 2026-11-04 | PR #4 review clarifications: runtime-compute boundaries (ADR 0002, 0010, ARCHITECTURE §2.1); CSP hash sources vs SRI separated, plus a Phase 11 evaluation plan (ADR 0008, NFR-SEC-02); hosting plan deferred to Phase 12; ten-project invariant confirmed (no change) |
+| 2026-11-04 | Phase 05 approved by owner; PR #4 merged into `main`; branch `phase/05-technical-architecture` deleted |
