@@ -1,5 +1,6 @@
 import { About } from '@/components/sections/About'
 import { Hero } from '@/components/sections/Hero'
+import { Services } from '@/components/sections/Services'
 
 /**
  * Home page (PRD §7 order). Phase 07 sections: Hero, 01 About … 06 Education.
@@ -10,6 +11,7 @@ export default function HomePage() {
     <main id="main" tabIndex={-1} className="focus:outline-none">
       <Hero />
       <About />
+      <Services />
     </main>
   )
 }
