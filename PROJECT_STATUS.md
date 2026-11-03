@@ -1,16 +1,16 @@
 # Project Status
 
-**Last updated:** 2026-11-03
-**Current phase:** Phase 04 — UI/UX Research & Design System ✅ Complete (PR #3 merged)
-**Next phase:** Phase 05 — Technical Architecture ⏸️ Awaiting approval
+**Last updated:** 2026-11-04
+**Current phase:** Phase 05 — Technical Architecture 🔍 Deliverables in review (PR on `phase/05-technical-architecture`)
+**Next phase:** Phase 06 — Foundation & Design System Implementation ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | None. Phase 05 — Technical Architecture: investigation and proposal in progress; implementation of its documents awaits owner approval. |
+| **Next approved action** | Owner reviews the Phase 05 PR. On approval it is merged into `main` and Phase 05 is marked complete. Phase 06 requires separate approval. |
 | **Blockers** | None |
-| **Pending work** | Phase 05 proposal approval; open design questions OQ-1 to OQ-3 (non-blocking, defaults defined); non-blocking owner inputs Q8 and Q11; Phases 05–12 not started |
+| **Pending work** | Phase 05 PR review; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 06–12 not started |
 
 ## Phase tracker
 
@@ -20,8 +20,8 @@
 | 02 | Existing Website Investigation | ✅ Complete | 2026-11-03 |
 | 03 | Requirements & Content Specification | ✅ Complete | 2026-11-03 |
 | 04 | UI/UX Research & Design System | ✅ Complete | 2026-11-03 |
-| 05 | Technical Architecture | ⏸️ Awaiting approval | — |
-| 06 | Foundation & Design System Implementation | ⏳ Not started | — |
+| 05 | Technical Architecture | 🔍 In review | — |
+| 06 | Foundation & Design System Implementation | ⏸️ Awaiting approval | — |
 | 07 | Core Portfolio Development | ⏳ Not started | — |
 | 08 | Projects & Content Showcase | ⏳ Not started | — |
 | 09 | Contact & Interactive Features | ⏳ Not started | — |
@@ -30,6 +30,32 @@
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 05 summary
+
+**Delivered** (in `docs/architecture/`)
+
+- [ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md): overview, external services, routing, Server vs Client Components, layout, content flow, styling, images, fonts, metadata, errors, contact form, security, testing, CI, dependency budget
+- [FOLDER_STRUCTURE.md](docs/architecture/FOLDER_STRUCTURE.md): target tree and dependency rules
+- [COMPONENT_ARCHITECTURE.md](docs/architecture/COMPONENT_ARCHITECTURE.md): layers, component tree, 8 client-island contracts, primitives, form design, image `sizes`, layout logic
+- [DATA_MODEL.md](docs/architecture/DATA_MODEL.md): TypeScript types for all content, view models, invariants I-1 to I-11, owner update workflow
+- [ENGINEERING_GUIDELINES.md](docs/architecture/ENGINEERING_GUIDELINES.md): toolchain, TypeScript, React/Next, Tailwind, accessibility, testing, style, security, budgets
+- [adr/](docs/architecture/adr/): ADR 0001–0011
+
+**Key decisions:**
+- Static prerendering on Vercel.
+- Only 3 runtime dependencies (`next`, `react`, `react-dom`).
+- Typed content modules.
+- Tailwind v4 tokens.
+- Custom theme script.
+- Formspree with progressive enhancement.
+- Vitest + Playwright + axe.
+- Static CSP with `'unsafe-inline'` (NFR-SEC-02 amended).
+- Inline SVG icons.
+- `next/image`.
+- TypeScript pinned to 6.0.3.
+
+**Versions verified 2026-11-03:** Next.js 16.4.5 · React 19.3.1 · Tailwind CSS 4.3.4 · TypeScript 6.0.3 (7.0.2 is incompatible with typescript-eslint 8.72) · ESLint 10.14 · Vitest 5.1 · Playwright 1.64.
 
 ## Phase 04 summary
 
@@ -135,6 +161,10 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | DS-01: Direction A — Editorial Grid, with borrowings from C (numbered sections, technical hierarchy) and B (optional skills strip, category distinction) | Owner selection (Phase 04) |
 | 2026-11-03 | DS-02 to DS-20: design decisions (sections 01–09, nav at 1280 px, fonts, palette rules, border tokens, project rhythm, image fit, category tags, CTA band, motion limits, …) | See [DESIGN_DIRECTION.md §5](docs/design/DESIGN_DIRECTION.md#5-design-decisions-ds) |
 | 2026-11-03 | Could items adopted: FR-RES-02 (collapsible highlights), FR-INT-06 (skills strip), FR-PRJ-07 (hover zoom), FR-CON-07 (character counter) | Decided in Phase 04 as planned |
+| 2026-11-03 | Phase 04 open questions resolved to their defaults (OQ-1: no extra About facts; OQ-2: skills strip after the hero; OQ-3: canvas not updated) | PR #3 merged without changes |
+| 2026-11-04 | Architecture decisions ADR 0001–0011 accepted | Owner approved the Phase 05 proposal with recommendations; see [docs/architecture/adr/](docs/architecture/adr/) |
+| 2026-11-04 | **NFR-SEC-02 amended:** static CSP with `script-src 'self' 'unsafe-inline'`; SRI re-evaluated in Phase 11 | ADR 0008; nonces would force dynamic rendering (Next.js 16 docs) |
+| 2026-11-04 | Test runner: Vitest (Jest-compatible API) | ADR 0007 |
 
 ## Risks & dependencies
 
@@ -151,6 +181,9 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R11 | Contact form provider limits (rate limits, free tier) | Low | Provider chosen in Phase 05; failure state offers an email fallback | 05, 09 |
 | R12 | The asymmetric project grid can create awkward gaps with filtered subsets on tablet and desktop | Low | Layout by visible index; unpaired card spans 7; verify every filter state in Phase 08 | 08 |
 | R13 | The skills strip adds motion and a control (WCAG 2.2.2) | Low | Pause control, static under reduced motion, `aria-hidden` duplicate; can be dropped without layout impact | 09 |
+| R14 | TypeScript pinned below the latest major (7.x) | Low | ADR 0011; upgrade when typescript-eslint supports 7 | 06+ |
+| R15 | Formspree account access unconfirmed (existing form `xleyzgzo`) | Medium | Owner confirms before Phase 09; fallback: new free form, config-only change | 09 |
+| R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; SRI re-evaluated in Phase 11 (ADR 0008) | 11 |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
 | R9 | Mixed project image aspect ratios (16:9 and about 1:1) | Low | Fixed-ratio card frames with `object-fit` in Phase 04 | 04 |
 
@@ -167,3 +200,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Phase 03 approved by owner; PR #2 merged into `main`; branch `phase/03-requirements-specification` deleted |
 | 2026-11-03 | Phase 04: three visual directions presented on a canvas; owner selected A with C and B borrowings; content re-verified; five design documents written in `docs/design/`; PR opened for review |
 | 2026-11-03 | Phase 04 approved by owner; PR #3 merged into `main`; branch `phase/04-design-system` deleted |
+| 2026-11-04 | Phase 05: architecture documents and ADR 0001–0011 written in `docs/architecture/`; NFR-SEC-02 amended; PR opened for review |
