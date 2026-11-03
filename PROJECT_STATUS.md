@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-03
-**Current phase:** Phase 03 — Requirements & Content Specification ✅ Complete (PR #2 merged)
-**Next phase:** Phase 04 — UI/UX Research & Design System ⏸️ Awaiting approval
+**Current phase:** Phase 04 — UI/UX Research & Design System 🔍 Deliverables in review (PR on `phase/04-design-system`)
+**Next phase:** Phase 05 — Technical Architecture ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | None. Awaiting approval to start Phase 04 — UI/UX Research & Design System. |
+| **Next approved action** | Owner reviews the Phase 04 PR. On approval it is merged into `main` and Phase 04 is marked complete. Phase 05 requires separate approval. |
 | **Blockers** | None |
-| **Pending work** | Phase 04 awaits approval; Phases 05–12 not started; non-blocking owner inputs Q8 (extra project details) and Q11 (new project URLs) |
+| **Pending work** | Phase 04 PR review; open design questions OQ-1 to OQ-3 (non-blocking, defaults defined); non-blocking owner inputs Q8 and Q11; Phases 05–12 not started |
 
 ## Phase tracker
 
@@ -19,8 +19,8 @@
 | 01 | Repository & Project Initialization | ✅ Complete | 2026-11-03 |
 | 02 | Existing Website Investigation | ✅ Complete | 2026-11-03 |
 | 03 | Requirements & Content Specification | ✅ Complete | 2026-11-03 |
-| 04 | UI/UX Research & Design System | ⏸️ Awaiting approval | — |
-| 05 | Technical Architecture | ⏳ Not started | — |
+| 04 | UI/UX Research & Design System | 🔍 In review | — |
+| 05 | Technical Architecture | ⏸️ Awaiting approval | — |
 | 06 | Foundation & Design System Implementation | ⏳ Not started | — |
 | 07 | Core Portfolio Development | ⏳ Not started | — |
 | 08 | Projects & Content Showcase | ⏳ Not started | — |
@@ -30,6 +30,22 @@
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 04 summary
+
+**Direction:** A — Editorial Grid (owner-selected), with numbered sections and a technical hierarchy from C, and the optional skills strip and category distinction from B.
+
+**Delivered** (in `docs/design/`)
+
+- [DESIGN_DIRECTION.md](docs/design/DESIGN_DIRECTION.md): content verification, directions explored, principles, decisions DS-01 to DS-20, originality, open questions
+- [DESIGN_SYSTEM.md](docs/design/DESIGN_SYSTEM.md): breakpoints, grid, asymmetric project rhythm, spacing, shape, motion, focus, icons, imagery, theming, layering
+- [COLOR_TOKENS.md](docs/design/COLOR_TOKENS.md): 21 primitives, 19 semantic tokens (light and dark), 43 verified contrast pairings
+- [TYPOGRAPHY.md](docs/design/TYPOGRAPHY.md): Fraunces + Inter, loading strategy, 13-step fluid scale, hierarchy per section
+- [COMPONENT_VISUAL_SPEC.md](docs/design/COMPONENT_VISUAL_SPEC.md): 25 components with anatomy, states and responsive behaviour
+
+**Content verification (owner request):** 10 projects confirmed on the live site (byte-identical to the Phase 02 snapshot). "Nine" traces to the live "Front-End Development" filter, which holds 9 of the 10. "6+ years" and all employment dates match the 03 Nov 2026 resume (74 consecutive months).
+
+**Visual exploration canvas:** a private artifact owned by the site owner (three directions, desktop and mobile, light and dark).
 
 ## Phase 03 summary
 
@@ -116,6 +132,9 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | D19: "Call Me!" becomes a `tel:` link | The button label promises a call |
 | 2026-11-03 | D20: Services copy kept word for word | No invented copy |
 | 2026-11-03 | D21: No analytics in v1 | Not requested; privacy |
+| 2026-11-03 | DS-01: Direction A — Editorial Grid, with borrowings from C (numbered sections, technical hierarchy) and B (optional skills strip, category distinction) | Owner selection (Phase 04) |
+| 2026-11-03 | DS-02 to DS-20: design decisions (sections 01–09, nav at 1280 px, fonts, palette rules, border tokens, project rhythm, image fit, category tags, CTA band, motion limits, …) | See [DESIGN_DIRECTION.md §5](docs/design/DESIGN_DIRECTION.md#5-design-decisions-ds) |
+| 2026-11-03 | Could items adopted: FR-RES-02 (collapsible highlights), FR-INT-06 (skills strip), FR-PRJ-07 (hover zoom), FR-CON-07 (character counter) | Decided in Phase 04 as planned |
 
 ## Risks & dependencies
 
@@ -130,6 +149,8 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R7 | Testimonials and photos are third-party personal data | Medium | ✅ Owner confirmed continued publication (D18); company names omitted | 03 |
 | R10 | First-load JS budget (≤ 150 KB gzip) with the App Router | Medium | Server Components by default; client components only for interactive parts | 05–06 |
 | R11 | Contact form provider limits (rate limits, free tier) | Low | Provider chosen in Phase 05; failure state offers an email fallback | 05, 09 |
+| R12 | The asymmetric project grid can create awkward gaps with filtered subsets on tablet and desktop | Low | Layout by visible index; unpaired card spans 7; verify every filter state in Phase 08 | 08 |
+| R13 | The skills strip adds motion and a control (WCAG 2.2.2) | Low | Pause control, static under reduced motion, `aria-hidden` duplicate; can be dropped without layout impact | 09 |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
 | R9 | Mixed project image aspect ratios (16:9 and about 1:1) | Low | Fixed-ratio card frames with `object-fit` in Phase 04 | 04 |
 
@@ -144,3 +165,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Merged branch `phase/02-website-investigation` deleted |
 | 2026-11-03 | Phase 03 deliverables written in `docs/requirements/`; decisions D8–D21 recorded; PR opened for review |
 | 2026-11-03 | Phase 03 approved by owner; PR #2 merged into `main`; branch `phase/03-requirements-specification` deleted |
+| 2026-11-03 | Phase 04: three visual directions presented on a canvas; owner selected A with C and B borrowings; content re-verified; five design documents written in `docs/design/`; PR opened for review |
