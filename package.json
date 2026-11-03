@@ -13,7 +13,7 @@
     "start": "next start",
     "size": "node scripts/check-bundle-size.mjs",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",

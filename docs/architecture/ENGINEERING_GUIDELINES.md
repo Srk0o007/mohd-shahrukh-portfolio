@@ -26,7 +26,7 @@ These guidelines apply to all code from Phase 06 onward. They complement [ENGINE
 | `build` | `next build` |
 | `start` | `next start` |
 | `lint` | `eslint .` |
-| `typecheck` | `tsc --noEmit` |
+| `typecheck` | `next typegen && tsc --noEmit`. `next typegen` writes the git-ignored `next-env.d.ts` and route types, including the declarations for static image imports, so type checking works on a clean checkout before any build |
 | `format` / `format:check` | `prettier --write .` / `prettier --check .` |
 | `test` | `vitest run` |
 | `test:watch` | `vitest` |

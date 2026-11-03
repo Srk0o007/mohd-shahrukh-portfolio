@@ -256,7 +256,7 @@ Details: [ADR 0007](adr/0007-testing-stack.md) and [ENGINEERING_GUIDELINES.md §
 | Install | `npm ci` |
 | Format | `npm run format:check` (Prettier) |
 | Lint | `npm run lint` (`eslint .`; `next lint` was removed in Next 16) |
-| Type check | `npm run typecheck` (`tsc --noEmit`) |
+| Type check | `npm run typecheck` (`next typegen && tsc --noEmit`) |
 | Unit and component tests | `npm test` (`vitest run`) |
 | Build | `npm run build` (Turbopack, the Next 16 default); the build output must mark `/` as static (○) |
 | E2E and accessibility | `npm run test:e2e` (Playwright) |

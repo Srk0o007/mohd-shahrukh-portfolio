@@ -61,7 +61,7 @@ npm run start          # serve the production build
 |---|---|
 | `npm run check` | Format check, lint, type check and unit/component tests |
 | `npm run lint` | ESLint 9 (Next.js core-web-vitals + TypeScript + jsx-a11y) |
-| `npm run typecheck` | `tsc --noEmit` (TypeScript 6.0.3, strict) |
+| `npm run typecheck` | `next typegen` + `tsc --noEmit` (TypeScript 6.0.3, strict) |
 | `npm test` | Vitest unit, component and content-invariant tests |
 | `npm run size` | First-load JS budget for `/` (run after `build`) |
 | `npm run test:e2e` | Playwright E2E + axe accessibility scans (run after `build`; first time: `npx playwright install chromium`) |
