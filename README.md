@@ -57,6 +57,12 @@ Prerequisites:
 │   │   ├── ASSET_INVENTORY.md
 │   │   ├── SECTION_MAPPING.md
 │   │   └── REFERENCE_DESIGN_ANALYSIS.md
+│   ├── requirements/         # Phase 03: product specification
+│   │   ├── PRD.md
+│   │   ├── FUNCTIONAL_REQUIREMENTS.md
+│   │   ├── NON_FUNCTIONAL_REQUIREMENTS.md
+│   │   ├── CONTENT_SCHEMA.md
+│   │   └── ACCEPTANCE_CRITERIA.md
 │   ├── ROADMAP.md            # 12-phase roadmap with exit criteria
 │   └── ENGINEERING_WORKFLOW.md
 ├── PROJECT_STATUS.md         # Live phase tracker, decisions, risks
