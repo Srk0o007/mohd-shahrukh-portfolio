@@ -97,3 +97,33 @@ All of these are replaced by the Next.js, React and Tailwind stack. None will be
 | Full-size screenshots for projects 6–8 | Sharp project cards | Optional, after re-deployment (D6) |
 | Screenshot of PropShare Titania / mohdshahrukh.in | Only if added as projects (Q7) | Optional |
 | High-resolution favicon / app icons | Browser and OS icons | Generated in Phase 06 |
+
+---
+
+## 7. Imported into the repository (Phase 06)
+
+Every file below is a **byte-for-byte copy** of the verified source. Each SHA-256 was compared against a fresh download from the live site on 2026-11-04 and matched. Nothing was edited, recompressed, upscaled or replaced. Optimised variants are produced at request time by `next/image` (ADR 0010).
+
+| Repository path | Source | Pixels | SHA-256 (first 16 hex) | Notes |
+|---|---|---|---|---|
+| `src/assets/images/portrait/headshot.png` | `images/headshot-2.png` | 1024×1024 | `510afa347139f8f1` | Portrait |
+| `src/assets/images/projects/digital-asset-management.png` | `images/projects/marcom-blurr.png` | 1600×900 | `dcc58141e420e30f` | Blurred, as supplied |
+| `src/assets/images/projects/approval-software-management.png` | `images/projects/collaborate-blur.png` | 1600×900 | `d173012dfa64c0d3` | Blurred, as supplied |
+| `src/assets/images/projects/campaign-management.png` | `images/projects/lam-blur.png` | 1600×900 | `1de9811b1fb0772e` | Blurred, as supplied |
+| `src/assets/images/projects/job-listing-website.png` | `images/projects/sarkarijobskhoj.com_(Desktop 1920).png` | 1600×900 | `7e119212bac893d2` | |
+| `src/assets/images/projects/sosudatech.png` | `images/projects/www.sosudatech.com_(Desktop 1920).png` | 1600×900 | `7d44f340a17c8d7d` | |
+| `src/assets/images/projects/virtual-university.png` | `images/projects/virtual_375x393.png` | **375×393** | `fe8a1c9dc7fdf419` | **Low resolution, kept as is** (`contain`, DS-08) |
+| `src/assets/images/projects/quickcashtx.png` | `images/projects/e-wallet_375x393.png` | **375×393** | `2b44d0ffc215c46d` | **Low resolution, kept as is** |
+| `src/assets/images/projects/niles-academy.png` | `images/projects/nile_1_375x393.png` | **375×393** | `f231ea78dfb8c8fc` | **Low resolution, kept as is** |
+| `src/assets/images/projects/swiss-cosmetics.png` | `images/projects/swisscosmetics.mohdshahrukh.in_(Desktop 1920).png` | 1600×900 | `ce7a9f740829a3c8` | |
+| `src/assets/images/projects/frontier-mining-solutions.png` | `images/projects/frontierminingsssolutions.mohdshahrukh.in_(Desktop 1920).png` | 1600×900 | `27707ab7cda243fa` | Filename typo ("sss") fixed in the new name only |
+| `src/assets/images/testimonials/sowmit-nag.png` | `images/testimonial/sowmit.png` | 800×800 | `5f6c8d3b36e3d038` | D18 |
+| `src/assets/images/testimonials/divesh-kumar.jpg` | `images/testimonial/Divesh-sir.jpg` | 450×450 | `6ed16d58df05d22a` | D18 |
+| `public/Mohd_Shahrukh_Resume_03_Nov_2026.pdf` | Owner's `Mohd_Shahrukh_Resume_03_nov_2026.pdf` | 2 pages, 72,379 bytes | `dce4f75fd212d2ef` | D7; served at `/Mohd_Shahrukh_Resume_03_Nov_2026.pdf` |
+
+**Not imported** (not used by the approved design): `favicon.png` (replaced by the monogram below), `logo.png` (the wordmark is text), `faq.png`, `intro-bg-2.jpg` (no parallax band, DS-10), and the July 2026 resume PDF (superseded).
+
+### Favicon (owner-approved, Phase 06)
+
+`src/app/icon.svg`: an "MS" monogram, paper `#F5F2EA` on ink `#161513`, 32×32 viewBox, 2.6 KB. The glyphs are **outlined paths** taken from Fraunces (SIL OFL 1.1), using the same font file `next/font` bundles, instanced at `opsz` 9 and `wght` 600 for sturdiness at 16 px. The SVG contains no text, fonts or external references. This is the favicon only, not a wordmark or identity change. A PNG fallback, the Apple touch icon and the manifest's 192/512 icons follow in Phase 11.
+

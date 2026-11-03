@@ -1,0 +1,13 @@
+/** Single export surface for all site content (ADR 0003, NFR-MNT-03). */
+export { certifications } from './certifications'
+export { contactDetails, ctaBand, footer, socialLinks } from './contact'
+export { education } from './education'
+export { experience } from './experience'
+export { profile } from './profile'
+export { projects } from './projects'
+export { services } from './services'
+export { cv, heroActions, navItems, sectionHeadings, siteMeta } from './site'
+export { skillGroups } from './skills'
+export { testimonials } from './testimonials'
+export { formatCopy, uiCopy } from './ui-copy'
+export type * from './types'

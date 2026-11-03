@@ -15,6 +15,7 @@ These guidelines apply to all code from Phase 06 onward. They complement [ENGINE
 | npm | Lockfile committed; `npm ci` in CI |
 | Next.js / React | Caret ranges on the current minor (`next@^16.4`, `react@^19.3`) |
 | TypeScript | **Exact `6.0.3`** until `typescript-eslint` supports 7.x ([ADR 0011](adr/0011-pin-typescript-6.md)) |
+| ESLint | **`9.39.5`** (caret within 9.x) until the plugins bundled by `eslint-config-next` declare ESLint 10 support ([ADR 0012](adr/0012-use-eslint-9.md)) |
 | Others | Caret ranges; Renovate or Dependabot is not added in v1 (manual monthly check) |
 
 ### Scripts (`package.json`)
@@ -29,8 +30,11 @@ These guidelines apply to all code from Phase 06 onward. They complement [ENGINE
 | `format` / `format:check` | `prettier --write .` / `prettier --check .` |
 | `test` | `vitest run` |
 | `test:watch` | `vitest` |
-| `test:e2e` | `playwright test` |
+| `test:e2e` | `playwright test` (run `npm run build` first; it starts `next start`) |
+| `size` | `node scripts/check-bundle-size.mjs`: first-load JS budget for `/` (fails > 150 KB gzip, warns > 120 KB) |
 | `check` | `npm run format:check && npm run lint && npm run typecheck && npm test` |
+
+**Worker limits:** Vitest runs with `maxWorkers: 2` and Playwright with `workers: 1`. One worker per CPU exhausted memory on the development machine (Phase 06), and the suites are small enough that this costs little time.
 
 ## 2. TypeScript
 

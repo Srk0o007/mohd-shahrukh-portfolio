@@ -36,6 +36,10 @@ The no-JS fallbacks also need a reliable "JS is running" signal (NFR-BRW-03).
 3. `<html suppressHydrationWarning>` tolerates the pre-hydration attributes.
 4. **CSS fallback:** with JS disabled, `@media (prefers-color-scheme: dark)` applies the dark tokens to `:root:not([data-theme])`, so the system preference still works.
 
+## Addendum (Phase 06, 2026-11-04)
+
+The application theme lives on `<html>` and is controlled solely by this script and (from Phase 09) `ThemeToggle`. The temporary component preview at `/` may set scoped `data-theme` attributes on individual panels to render light and dark side by side; this does not change the production theme behaviour, and the preview is removed in Phase 07.
+
 ## Alternatives considered
 
 | Option | Why not |

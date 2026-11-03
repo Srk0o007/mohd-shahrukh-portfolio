@@ -1,0 +1,131 @@
+import { expect, test, type ConsoleMessage } from '@playwright/test'
+
+/** Phase 06 foundation checks: rendering, theme bootstrap, fonts, metadata, headers, no-JS. */
+
+const CV_PATH = '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf'
+
+test.describe('home page', () => {
+  test('renders statically with the pre-paint flags and no console errors', async ({ page }) => {
+    const errors: string[] = []
+    page.on('console', (msg: ConsoleMessage) => {
+      if (msg.type() === 'error' || msg.type() === 'warning') errors.push(msg.text())
+    })
+    page.on('pageerror', (err) => errors.push(err.message))
+
+    const response = await page.goto('/')
+    expect(response?.status()).toBe(200)
+    await expect(page.getByRole('heading', { level: 1, name: 'Mohd Shahrukh' })).toBeVisible()
+    await expect(page.locator('html')).toHaveAttribute('data-js', '')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', /^(light|dark)$/)
+    expect(errors, 'console errors/warnings (incl. CSP violations)').toEqual([])
+  })
+
+  test('skip link is first in tab order and moves focus to <main> (FR-NAV-03)', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await page.keyboard.press('Tab')
+    const skip = page.getByRole('link', { name: 'Skip to main content' })
+    await expect(skip).toBeFocused()
+    await expect(skip).toBeInViewport()
+    await page.keyboard.press('Enter')
+    await expect(page.locator('main#main')).toBeFocused()
+  })
+})
+
+test.describe('theme bootstrap (ADR 0005)', () => {
+  test('follows the system preference on first visit', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' })
+    await page.goto('/')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  })
+
+  test('a stored choice overrides the system preference', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' })
+    await page.addInitScript(() => window.localStorage.setItem('theme', 'light'))
+    await page.goto('/')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  })
+})
+
+test('fonts are served only from this origin, never Google (NFR-PERF-07)', async ({
+  page,
+  baseURL,
+}) => {
+  const fontRequests: string[] = []
+  const googleRequests: string[] = []
+  page.on('request', (request) => {
+    const url = request.url()
+    if (/fonts\.(googleapis|gstatic)\.com/.test(url)) googleRequests.push(url)
+    if (request.resourceType() === 'font') fontRequests.push(url)
+  })
+  await page.goto('/', { waitUntil: 'networkidle' })
+  expect(googleRequests).toEqual([])
+  expect(fontRequests.length).toBeGreaterThan(0)
+  expect(fontRequests.length).toBeLessThanOrEqual(4)
+  for (const url of fontRequests)
+    expect(url.startsWith(`${baseURL}/_next/static/media/`)).toBe(true)
+})
+
+test('CV is served as the 03 Nov 2026 PDF (FR-RES-06, D7)', async ({ request }) => {
+  const response = await request.get(CV_PATH)
+  expect(response.status()).toBe(200)
+  expect(response.headers()['content-type']).toContain('application/pdf')
+  expect((await response.body()).byteLength).toBe(72379)
+})
+
+test('unknown URLs return a branded, noindex 404 (FR-ERR-01, NFR-SEO-09)', async ({ page }) => {
+  const response = await page.goto('/this-page-does-not-exist')
+  expect(response?.status()).toBe(404)
+  await expect(page.getByRole('heading', { level: 1, name: 'Page not found' })).toBeVisible()
+  const robots = page.locator('meta[name="robots"]')
+  await expect(robots).toHaveCount(1)
+  await expect(robots).toHaveAttribute('content', /noindex/)
+  await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/')
+})
+
+test.describe('metadata foundations (ARCHITECTURE §11)', () => {
+  test('head tags: canonical, Open Graph text, Twitter summary, icon', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      'https://mohdshahrukh.in',
+    )
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+      'content',
+      'Mohd Shahrukh | Software Development Engineer – Frontend',
+    )
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary')
+    await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveCount(1)
+  })
+
+  test('robots.txt, sitemap.xml and the web manifest are generated', async ({ request }) => {
+    const robots = await (await request.get('/robots.txt')).text()
+    expect(robots).toContain('Sitemap: https://mohdshahrukh.in/sitemap.xml')
+    const sitemap = await (await request.get('/sitemap.xml')).text()
+    expect(sitemap).toContain('<loc>https://mohdshahrukh.in/</loc>')
+    const manifest = await (await request.get('/manifest.webmanifest')).json()
+    expect(manifest.short_name).toBe('Mohd Shahrukh')
+  })
+})
+
+test('security headers are sent (ADR 0008)', async ({ request }) => {
+  const headers = (await request.get('/')).headers()
+  expect(headers['content-security-policy']).toContain("default-src 'self'")
+  expect(headers['content-security-policy']).toContain("frame-ancestors 'none'")
+  expect(headers['content-security-policy']).toContain("form-action 'self' https://formspree.io")
+  expect(headers['x-content-type-options']).toBe('nosniff')
+  expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin')
+  expect(headers['x-frame-options']).toBe('DENY')
+  expect(headers['x-powered-by']).toBeUndefined()
+})
+
+test.describe('without JavaScript (NFR-BRW-03)', () => {
+  test.use({ javaScriptEnabled: false })
+
+  test('content renders and the JS flag is absent', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.getByRole('heading', { level: 1, name: 'Mohd Shahrukh' })).toBeVisible()
+    await expect(page.locator('html')).not.toHaveAttribute('data-js', '')
+  })
+})

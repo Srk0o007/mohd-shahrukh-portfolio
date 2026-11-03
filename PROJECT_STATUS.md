@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 05 — Technical Architecture ✅ Complete (PR #4 merged)
-**Next phase:** Phase 06 — Foundation & Design System Implementation ⏸️ Awaiting approval
+**Current phase:** Phase 06 — Foundation & Design System Implementation 🔍 Implementation in review (PR on `phase/06-foundation`)
+**Next phase:** Phase 07 — Core Portfolio Development ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | None. Awaiting explicit approval to start Phase 06 — Foundation & Design System Implementation. |
+| **Next approved action** | Owner reviews the Phase 06 PR. It is **not** merged without the owner's approval. Phase 07 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 06 awaits approval; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 06–12 not started |
+| **Pending work** | Phase 06 PR review; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 07–12 not started |
 
 ## Phase tracker
 
@@ -21,8 +21,8 @@
 | 03 | Requirements & Content Specification | ✅ Complete | 2026-11-03 |
 | 04 | UI/UX Research & Design System | ✅ Complete | 2026-11-03 |
 | 05 | Technical Architecture | ✅ Complete | 2026-11-04 |
-| 06 | Foundation & Design System Implementation | ⏸️ Awaiting approval | — |
-| 07 | Core Portfolio Development | ⏳ Not started | — |
+| 06 | Foundation & Design System Implementation | 🔍 In review | — |
+| 07 | Core Portfolio Development | ⏸️ Awaiting approval | — |
 | 08 | Projects & Content Showcase | ⏳ Not started | — |
 | 09 | Contact & Interactive Features | ⏳ Not started | — |
 | 10 | Accessibility & Responsive Engineering | ⏳ Not started | — |
@@ -30,6 +30,50 @@
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 06 summary
+
+**Delivered** (application foundation; no portfolio sections):
+
+- **Toolchain:**
+  - Next.js 16.4.5 (App Router, Turbopack), React 19.3.1, TypeScript **6.0.3** strict.
+  - Tailwind CSS 4.3.4, ESLint **9.39.5** (ADR 0012), Prettier.
+  - Vitest 5 + Testing Library, Playwright + axe-core.
+- **Runtime dependencies:** only `next`, `react` and `react-dom`.
+- **Design tokens** (`src/app/globals.css`):
+  - all Phase 04 colours in light and dark, the fluid type scale, breakpoints, radii and motion;
+  - Tailwind's default palette and scales removed;
+  - focus, selection, reduced motion, no-JS and forced-colours rules.
+- **Fonts:** Fraunces and Inter via `next/font/google`, fetched at build time and self-hosted. The browser loads **2 files**, with **no Google requests**.
+- **Theme:** the ADR 0005 pre-paint script on `<html>`. Scoped `data-theme` is used only by the temporary preview.
+- **Primitives:** `Button`, `ButtonLink`, `TextLink`, `ExternalLink`, `Container`, `Section`, `SectionHeader`, `VisuallyHidden`, `SkipLink`, `ThemeScript`, plus 3 icons copied from Lucide (ISC).
+- **Metadata:** title, description, canonical URL, Open Graph and Twitter text, `viewport` theme colour, `robots.txt`, `sitemap.xml`, `manifest.webmanifest`, and the **"MS" monogram favicon** (outlined Fraunces). The social image follows in Phase 11.
+- **Error pages:** `not-found`, `error`, `global-error`.
+- **Content layer:**
+  - all typed content modules (CONTENT_SCHEMA);
+  - **10 projects** with the approved groups and link statuses;
+  - the 03 Nov 2026 CV;
+  - 13 verified images, byte-identical to the live site ([ASSET_INVENTORY §7](docs/audit/ASSET_INVENTORY.md#7-imported-into-the-repository-phase-06)).
+- **Temporary preview at `/`:** real primitives and tokens in light and dark panels. Phase 07 replaces it.
+- **CI** (`.github/workflows/ci.yml`): audit (high), format, lint, typecheck, unit tests, build, JS budget, E2E + axe.
+- **Documents reconciled:**
+  - social image deferred to Phase 11 (CONTENT_SCHEMA, FOLDER_STRUCTURE, ARCHITECTURE);
+  - font sourcing made explicit;
+  - ESLint 9 (ADR 0012, ENGINEERING_GUIDELINES);
+  - theme-scope addenda in ADR 0004 and 0005;
+  - new error-page UI copy added to CONTENT_SCHEMA §13.
+
+**Validation (2026-11-04):**
+
+| Check | Result |
+|---|---|
+| Production build | ✅ All 6 routes static (○) |
+| Development server | ✅ Ready in 1.6 s; `/` 200; unknown route 404; no errors |
+| TypeScript, ESLint, Prettier | ✅ 0 errors / all formatted |
+| Unit, component and content tests | ✅ 52 passed (10 files) |
+| E2E + axe (Chromium) | ✅ 19 passed: zero axe violations on home and 404, both themes, 375 and 1280 px |
+| First-load JS for `/` | ✅ 136.9 KB gzip (budget 150; ⚠ above the 120 KB target, mostly the framework runtime) |
+| `npm audit --audit-level=high` | ✅ 0 high or critical; 0 issues in runtime deps; 17 moderate, all in the ESLint dev toolchain |
 
 ## Phase 05 summary
 
@@ -56,7 +100,7 @@ Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting ap
 - No application-owned server code at runtime. Image optimisation is the only platform runtime processing; the hosting plan is verified in Phase 12.
 - TypeScript pinned to 6.0.3.
 
-**Versions verified 2026-11-03:** Next.js 16.4.5 · React 19.3.1 · Tailwind CSS 4.3.4 · TypeScript 6.0.3 (7.0.2 is incompatible with typescript-eslint 8.72) · ESLint 10.14 · Vitest 5.1 · Playwright 1.64.
+**Versions verified 2026-11-03:** Next.js 16.4.5 · React 19.3.1 · Tailwind CSS 4.3.4 · TypeScript 6.0.3 (7.0.2 is incompatible with typescript-eslint 8.72) · ESLint 9.39.5 (ADR 0012; ESLint 10 is blocked by bundled plugin peer ranges) · Vitest 5.1 · Playwright 1.64.
 
 ## Phase 04 summary
 
@@ -166,6 +210,14 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Architecture decisions ADR 0001–0011 accepted | Owner approved the Phase 05 proposal with recommendations; see [docs/architecture/adr/](docs/architecture/adr/) |
 | 2026-11-04 | **NFR-SEC-02 amended:** static CSP with `script-src 'self' 'unsafe-inline'`; retained until the Phase 11 evaluation of CSP hash sources (SRI is a separate mechanism for external files) | ADR 0008; nonces would force dynamic rendering (Next.js 16 docs) |
 | 2026-11-04 | Hosting plan is a deployment-stage decision: Vercel Hobby intended; limits, image-optimisation pricing and acceptable-use terms verified in Phase 12 | Owner review of PR #4; ADR 0002 |
+| 2026-11-04 | ESLint 9.39.5 instead of 10 (ADR 0012); TypeScript stays exactly 6.0.3 | Bundled plugins do not declare ESLint 10 support (owner approved) |
+| 2026-11-04 | Content layer, images and CV implemented in Phase 06 | Owner approved: Phase 07 consumes a typed, tested content layer |
+| 2026-11-04 | Temporary component preview at `/` with scoped light/dark panels | Owner approved; replaced in Phase 07 |
+| 2026-11-04 | Favicon: Fraunces "MS" monogram, paper on ink, outlined paths | Owner approved; favicon only, not an identity change |
+| 2026-11-04 | Social image generated in Phase 11; Phase 06 emits the OG/Twitter text (`card: summary`) | Owner refinement 1 |
+| 2026-11-04 | Test worker limits: Vitest `maxWorkers: 2`, Playwright `workers: 1` | One worker per CPU exhausted memory on the development machine |
+| 2026-11-04 | First-load JS guarded by `npm run size` in CI (fails > 150 KB gzip) | NFR-PERF-05; `noModule` polyfill excluded (never loaded by supported browsers) |
+| 2026-11-04 | `agentRules: false` in `next.config.ts`; the auto-generated `AGENTS.md` is not committed | Next.js 16 `next dev` writes AI-agent instructions into the repo root by default; not an approved deliverable (owner may reverse) |
 | 2026-11-04 | Test runner: Vitest (Jest-compatible API) | ADR 0007 |
 
 ## Risks & dependencies
@@ -187,6 +239,9 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R15 | Formspree account access unconfirmed (existing form `xleyzgzo`) | Medium | Owner confirms before Phase 09; fallback: new free form, config-only change | 09 |
 | R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
 | R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
+| R18 | First-load JS (136.9 KB gzip) is above the 120 KB target, though within the 150 KB budget; the framework runtime dominates, and every client island in Phases 07–09 adds to it | Medium | CI budget gate (`npm run size`); keep islands small; review in Phase 11 | 07–11 |
+| R19 | 17 moderate `npm audit` advisories in the ESLint dev toolchain (none in runtime deps) | Low | Not shipped to users; CI fails only on high or critical; re-check when updating the lint stack | 06+ |
+| R20 | Local machine memory pressure caused a transient Turbopack build crash (`os error 1450`) and Vitest worker OOMs | Low | Worker limits set; retry succeeded; CI runners are unaffected | 06+ |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
 | R9 | Mixed project image aspect ratios (16:9 and about 1:1) | Low | Fixed-ratio card frames with `object-fit` in Phase 04 | 04 |
 
@@ -206,3 +261,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 05: architecture documents and ADR 0001–0011 written in `docs/architecture/`; NFR-SEC-02 amended; PR opened for review |
 | 2026-11-04 | PR #4 review clarifications: runtime-compute boundaries (ADR 0002, 0010, ARCHITECTURE §2.1); CSP hash sources vs SRI separated, plus a Phase 11 evaluation plan (ADR 0008, NFR-SEC-02); hosting plan deferred to Phase 12; ten-project invariant confirmed (no change) |
 | 2026-11-04 | Phase 05 approved by owner; PR #4 merged into `main`; branch `phase/05-technical-architecture` deleted |
+| 2026-11-04 | Phase 06: application foundation, design tokens, primitives, metadata, content layer, assets, temporary preview, tests and CI implemented on `phase/06-foundation`; documents reconciled; PR opened for review |

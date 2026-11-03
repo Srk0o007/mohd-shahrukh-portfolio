@@ -38,18 +38,55 @@ Details: [docs/ROADMAP.md](docs/ROADMAP.md). Process and conventions: [docs/ENGI
 
 ## Getting started
 
-> The application is scaffolded in **Phase 06**. Setup, development and build instructions will be added here at that point.
+> **Status:** Phase 06 foundation. The home page (`/`) is a **temporary component preview** of the design system; Phase 07 replaces it with the portfolio.
 
-Prerequisites:
+### Prerequisites
 
 - Node.js 24 (`nvm use` reads `.nvmrc`)
 - npm
+- Network access during `npm run build`: `next/font/google` fetches Fraunces and Inter at build time and self-hosts them. Browsers never contact Google Fonts.
+
+### Install and run
+
+```bash
+npm ci                 # install exact locked dependencies
+npm run dev            # development server on http://localhost:3000
+npm run build          # production build (all routes are statically prerendered)
+npm run start          # serve the production build
+```
+
+### Quality checks
+
+| Command | What it does |
+|---|---|
+| `npm run check` | Format check, lint, type check and unit/component tests |
+| `npm run lint` | ESLint 9 (Next.js core-web-vitals + TypeScript + jsx-a11y) |
+| `npm run typecheck` | `tsc --noEmit` (TypeScript 6.0.3, strict) |
+| `npm test` | Vitest unit, component and content-invariant tests |
+| `npm run size` | First-load JS budget for `/` (run after `build`) |
+| `npm run test:e2e` | Playwright E2E + axe accessibility scans (run after `build`; first time: `npx playwright install chromium`) |
+
+CI (`.github/workflows/ci.yml`) runs all of the above on every pull request, plus `npm audit --audit-level=high`.
+
+### Updating content
+
+All copy, links and images live in `src/content/` (typed, single source). For example, when a re-deployed project gets a URL, set `linkStatus: 'live'` and `url` on its entry in `src/content/projects.ts`; no component changes are needed. The content tests (`src/content/content.test.ts`) guard the approved facts: ten projects, employment dates, and the owner decisions.
 
 ## Repository structure
 
 ```
 .
-├── .github/                  # PR template
+├── .github/                  # PR template, CI workflow
+├── src/
+│   ├── app/                  # Routes, root layout, metadata files, globals.css (tokens)
+│   ├── components/           # ui/ primitives, layout/ (SkipLink, ThemeScript)
+│   ├── content/              # Typed content (single source) + invariant tests
+│   ├── config/               # Public, non-secret site configuration
+│   ├── lib/                  # Pure helpers (cn, dates, theme script)
+│   └── assets/images/        # Verified images from the live site
+├── public/                   # CV PDF (03 Nov 2026)
+├── tests/                    # Playwright e2e/ and a11y/ specs, Vitest setup
+├── scripts/                  # check-bundle-size.mjs
 ├── docs/
 │   ├── architecture/         # Phase 05: technical architecture
 │   │   ├── ARCHITECTURE.md
@@ -57,7 +94,7 @@ Prerequisites:
 │   │   ├── COMPONENT_ARCHITECTURE.md
 │   │   ├── DATA_MODEL.md
 │   │   ├── ENGINEERING_GUIDELINES.md
-│   │   └── adr/              # Architecture decision records 0001–0011
+│   │   └── adr/              # Architecture decision records 0001–0012
 │   ├── audit/                # Phase 02: audit and inventories of the existing site
 │   │   ├── WEBSITE_AUDIT.md
 │   │   ├── CONTENT_INVENTORY.md

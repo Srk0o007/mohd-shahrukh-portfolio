@@ -20,7 +20,7 @@ The previous site's Poppins is retired. The reference site's Syne and Poppins ar
 
 | Rule | Detail |
 |---|---|
-| Self-hosted | Via `next/font` (Phase 06); no runtime request to Google Fonts (NFR-PERF-07) |
+| Self-hosted | Via `next/font/google` (Phase 06): files are fetched from Google **at build time only** and served from this site's origin; the browser never requests Google Fonts (NFR-PERF-07; see [ARCHITECTURE.md §10](../architecture/ARCHITECTURE.md#10-font-loading)) |
 | Files | **2 variable font files** (Fraunces roman, Inter), Latin subset only. **No italic files** (DS-04). |
 | Display | `font-display: swap`, with size-adjusted fallbacks (`next/font` `adjustFontFallback`) to limit CLS (NFR-PERF-02) |
 | Preload | Both files are preloaded: the hero uses Fraunces (h1) and Inter (title line) |

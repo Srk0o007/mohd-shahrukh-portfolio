@@ -25,9 +25,9 @@ mohd-shahrukh-portfolio/
 │   │   ├── robots.ts
 │   │   ├── sitemap.ts
 │   │   ├── manifest.ts
-│   │   ├── opengraph-image.tsx          # 1200×630, built once
+│   │   ├── opengraph-image.tsx          # 1200×630, built once (later: Phase 11)
 │   │   ├── icon.svg
-│   │   └── apple-icon.png
+│   │   └── apple-icon.png               # (later: Phase 11)
 │   ├── components/
 │   │   ├── layout/
 │   │   │   ├── SiteHeader.tsx
@@ -73,7 +73,7 @@ mohd-shahrukh-portfolio/
 │   │       ├── Section.tsx
 │   │       ├── Container.tsx
 │   │       ├── VisuallyHidden.tsx
-│   │       └── icons/                   # one file per icon (inline SVG)
+│   │       └── icons/                   # one file per icon (inline SVG) + index.ts + LICENSES.md
 │   ├── content/                         # SINGLE content source (DATA_MODEL.md)
 │   │   ├── types.ts
 │   │   ├── site.ts                      # SiteMeta, nav, section headings
@@ -103,11 +103,13 @@ mohd-shahrukh-portfolio/
 │       │   ├── portrait/headshot.png
 │       │   ├── projects/<project-id>.png  # renamed from the live site
 │       │   └── testimonials/<name>.(png|jpg)
-│       └── fonts/                       # Fraunces TTF + OFL.txt for the OG image only
+│       └── fonts/                       # Fraunces TTF + OFL.txt for the OG image only (later: Phase 11)
 ├── tests/
 │   ├── e2e/                             # Playwright specs (navigation, projects, contact, theme, no-js)
 │   ├── a11y/                            # axe scans
 │   └── setup/                           # Vitest setup (jest-dom matchers)
+├── scripts/
+│   └── check-bundle-size.mjs            # first-load JS budget check (Phase 06)
 ├── eslint.config.mjs
 ├── next.config.ts                       # headers (CSP), images
 ├── postcss.config.mjs

@@ -31,7 +31,7 @@ This document defines **what content the site holds, its shape, and where each v
 | `description` | string | ✓ | Draft below (derived only from [R] facts) | ≤ 160 chars |
 | `canonicalUrl` | Url | ✓ | `https://mohdshahrukh.in/` | Trailing slash |
 | `locale` | string | ✓ | `en` | BCP 47 |
-| `ogImage` | Image | ✓ | 1200×630, built from existing assets (Phase 06) | Absolute URL when emitted |
+| `ogImage` | Image | ✓ | 1200×630, built from existing assets. **Generated in Phase 11** (`app/opengraph-image.tsx`); Phase 06 emits the title, description, canonical URL and Open Graph/Twitter text only | Absolute URL when emitted |
 | `themeColor` | {light, dark} | ✓ | Phase 04 tokens | — |
 
 **Draft description:** "Mohd Shahrukh — Software Development Engineer | Frontend with 6+ years building fintech, proptech and enterprise web apps in React.js, Next.js and TypeScript." Every fact in it comes from [R]. The owner approves it in this PR.
@@ -305,6 +305,9 @@ This is new text needed for functionality and accessibility. It contains **no pe
 | `notFoundText` | The page you're looking for doesn't exist. |
 | `notFoundLink` | Back to home |
 | `statLabel` | Years of Experience (`[S]`) |
+| `errorHeading` | Something went wrong (added in Phase 06 for the error boundaries) |
+| `errorText` | This page could not be displayed. Please try again. (Phase 06) |
+| `errorRetry` | Try again (Phase 06) |
 
 ## 14. `Image` type
 
