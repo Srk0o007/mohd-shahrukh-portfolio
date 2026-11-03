@@ -11,19 +11,29 @@ This document defines how the project is executed. It applies to every phase in 
 - **No fabricated personal information.** All content must trace back to the verified existing website or be supplied by the owner.
 - Preserve all verified content from the existing website
 
-## Phase execution process
+## Execution strategy
 
-Every phase follows these steps in order:
+Every phase follows the same controlled workflow:
 
-1. **Investigate.** Inspect the current state before changing anything.
-2. **Explain** findings and recommendations.
-3. **Identify** risks and dependencies.
-4. **Plan.** Present a clear implementation plan.
-5. **Approval gate.** Wait for explicit approval.
-6. **Implement** only the approved scope.
-7. **Validate.** Run the relevant checks (lint, typecheck, build, tests, a11y).
-8. **Document.** Update the docs and [PROJECT_STATUS.md](../PROJECT_STATUS.md).
-9. **Stop.** The next phase needs its own explicit approval.
+| Step | Name | What it means |
+|---|---|---|
+| 01 | **Investigate** | Understand the existing state and gather evidence. |
+| 02 | **Propose** | Present the solution, decisions and trade-offs. |
+| 03 | **Wait for approval** | No implementation without approval. |
+| 04 | **Implement** | Work in small, reviewable steps. |
+| 05 | **Validate & Handover** | Test, document, record decisions and obtain approval for the next phase. |
+
+Approval of one phase never authorizes the next phase.
+
+## Project status tracking
+
+[PROJECT_STATUS.md](../PROJECT_STATUS.md) is kept up to date throughout the project. It records:
+
+- Completed phases
+- Pending work
+- Decisions
+- Blockers
+- The next approved action
 
 ## Branching
 

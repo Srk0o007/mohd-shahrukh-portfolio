@@ -4,6 +4,14 @@
 **Current phase:** Phase 01 — Repository & Project Initialization ✅ Complete
 **Next phase:** Phase 02 — Existing Website Investigation ⏸️ Awaiting approval
 
+## Current state
+
+| Item | Status |
+|---|---|
+| **Next approved action** | None. Awaiting approval to start Phase 02 — Existing Website Investigation. |
+| **Blockers** | None |
+| **Pending work** | Phase 02 awaits approval; Phases 03–12 have not started |
+
 ## Phase tracker
 
 | # | Phase | Status | Completed |
@@ -62,3 +70,4 @@ Legend: ✅ Complete · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not 
 | Date | Change |
 |---|---|
 | 2026-11-03 | Phase 01 complete: repository initialized and pushed |
+| 2026-11-03 | Added "Current state" section (next approved action, blockers, pending work); aligned workflow doc with the 5-step execution strategy |
