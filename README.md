@@ -51,6 +51,12 @@ Prerequisites:
 .
 ├── .github/                  # PR template
 ├── docs/
+│   ├── audit/                # Phase 02: audit and inventories of the existing site
+│   │   ├── WEBSITE_AUDIT.md
+│   │   ├── CONTENT_INVENTORY.md
+│   │   ├── ASSET_INVENTORY.md
+│   │   ├── SECTION_MAPPING.md
+│   │   └── REFERENCE_DESIGN_ANALYSIS.md
 │   ├── ROADMAP.md            # 12-phase roadmap with exit criteria
 │   └── ENGINEERING_WORKFLOW.md
 ├── PROJECT_STATUS.md         # Live phase tracker, decisions, risks
