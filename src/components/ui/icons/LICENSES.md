@@ -7,8 +7,17 @@ Icon paths in this folder are copied (not installed as a dependency) per [ADR 00
 | `ArrowRightIcon` (arrow-right) | [Lucide](https://lucide.dev) | ISC |
 | `ArrowUpRightIcon` (arrow-up-right) | [Lucide](https://lucide.dev) | ISC |
 | `DownloadIcon` (download) | [Lucide](https://lucide.dev) | ISC |
+| `MonitorIcon` (monitor) | [Lucide](https://lucide.dev) | ISC |
+| `PencilRulerIcon` (pencil-ruler) | [Lucide](https://lucide.dev) | ISC |
+| `AccessibilityIcon` (accessibility) | [Lucide](https://lucide.dev) | ISC |
+| `FlaskConicalIcon` (flask-conical) | [Lucide](https://lucide.dev) | ISC |
+| `ChevronDownIcon` (chevron-down) | [Lucide](https://lucide.dev) | ISC |
+| `MenuIcon` (menu) | [Lucide](https://lucide.dev) | ISC |
+| `CloseIcon` (x) | [Lucide](https://lucide.dev) | ISC |
 
-Brand marks added in later phases (LinkedIn, GitHub) will come from [Simple Icons](https://simpleicons.org) (CC0 1.0) and be listed here.
+All paths are copied verbatim from `lucide-static` 1.67.0; the Phase 06 icons were re-verified against it in Phase 07.
+
+**No brand marks.** Lucide no longer ships brand icons, and Simple Icons no longer includes LinkedIn, so social links use text labels (GitHub, LinkedIn, Email), as approved by the owner on 2026-11-04.
 
 ## Lucide: ISC License
 

@@ -214,4 +214,10 @@ export interface UiCopy {
   errorText: string
   errorRetry: string
   statLabel: string
+  heroEyebrow: string
+  factRole: string
+  factLocation: string
+  factExperience: string
+  primaryNavLabel: string
+  graduated: string
 }

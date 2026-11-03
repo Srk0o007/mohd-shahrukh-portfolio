@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SkipLink } from '@/components/layout/SkipLink'
 import { ThemeScript } from '@/components/layout/ThemeScript'
 import { siteConfig } from '@/config/site'
@@ -65,7 +67,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <SkipLink label={uiCopy.skipLink} />
+        <SiteHeader />
         {children}
+        <SiteFooter />
       </body>
     </html>
   )
