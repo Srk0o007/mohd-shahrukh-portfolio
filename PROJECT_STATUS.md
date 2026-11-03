@@ -1,23 +1,23 @@
 # Project Status
 
 **Last updated:** 2026-11-03
-**Current phase:** Phase 02 — Existing Website Investigation 🔍 Deliverables in review (PR on `phase/02-website-investigation`)
+**Current phase:** Phase 02 — Existing Website Investigation ✅ Complete (PR #1 merged)
 **Next phase:** Phase 03 — Requirements & Content Specification ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 02 PR. Once approved, it is merged into `main` and Phase 02 is marked complete. Phase 03 needs separate approval. |
+| **Next approved action** | None. Awaiting approval to start Phase 03 — Requirements & Content Specification. |
 | **Blockers** | None |
-| **Pending work** | Phase 02 PR review and merge; Phases 03–12 not started; open content questions Q1–Q12 (see below) |
+| **Pending work** | Phase 03 awaits approval; Phases 04–12 not started; open content questions Q1–Q12 (see below) |
 
 ## Phase tracker
 
 | # | Phase | Status | Completed |
 |---|---|---|---|
 | 01 | Repository & Project Initialization | ✅ Complete | 2026-11-03 |
-| 02 | Existing Website Investigation | 🔍 In review | — |
+| 02 | Existing Website Investigation | ✅ Complete | 2026-11-03 |
 | 03 | Requirements & Content Specification | ⏸️ Awaiting approval | — |
 | 04 | UI/UX Research & Design System | ⏳ Not started | — |
 | 05 | Technical Architecture | ⏳ Not started | — |
@@ -110,3 +110,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-03 | Phase 01 complete: repository initialized and pushed |
 | 2026-11-03 | Added "Current state" section (next approved action, blockers, pending work); aligned workflow doc with the 5-step execution strategy |
 | 2026-11-03 | Phase 02 deliverables written in `docs/audit/`; owner decisions D1–D7 recorded; PR opened for review |
+| 2026-11-03 | Phase 02 approved by owner; PR #1 merged into `main` |
