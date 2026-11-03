@@ -51,6 +51,13 @@ Prerequisites:
 .
 ├── .github/                  # PR template
 ├── docs/
+│   ├── architecture/         # Phase 05: technical architecture
+│   │   ├── ARCHITECTURE.md
+│   │   ├── FOLDER_STRUCTURE.md
+│   │   ├── COMPONENT_ARCHITECTURE.md
+│   │   ├── DATA_MODEL.md
+│   │   ├── ENGINEERING_GUIDELINES.md
+│   │   └── adr/              # Architecture decision records 0001–0011
 │   ├── audit/                # Phase 02: audit and inventories of the existing site
 │   │   ├── WEBSITE_AUDIT.md
 │   │   ├── CONTENT_INVENTORY.md
