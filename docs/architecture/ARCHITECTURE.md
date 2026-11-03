@@ -46,6 +46,7 @@ Related: [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) · [COMPONENT_ARCHITECTURE.m
 | Icons | Inline SVG components copied from permissive sets | [0009](adr/0009-inline-svg-icons.md) |
 | Images | `next/image` with static imports, AVIF/WebP | [0010](adr/0010-image-handling.md) |
 | Decision records | Lightweight ADRs | [0001](adr/0001-record-architecture-decisions.md) |
+| Linting | ESLint **9.39.5** (ESLint 10 is blocked by bundled plugin peer ranges) | [0012](adr/0012-use-eslint-9.md) |
 
 ### 2.1 What runs at runtime
 
@@ -80,8 +81,8 @@ The deployment therefore has **no application-owned server compute**. It is **no
 | `/robots.txt` | `app/robots.ts` | Static | NFR-SEO-03 |
 | `/sitemap.xml` | `app/sitemap.ts` | Static | NFR-SEO-03 |
 | `/manifest.webmanifest` | `app/manifest.ts` | Static | NFR-SEO-07 |
-| `/opengraph-image` | `app/opengraph-image.tsx` | Static (built once) | 1200×630 (NFR-SEO-04) |
-| `/icon.svg`, `/apple-icon.png` | `app/icon.svg`, `app/apple-icon.png` | Static files | NFR-SEO-07 |
+| `/opengraph-image` | `app/opengraph-image.tsx` | Static (built once) | 1200×630 (NFR-SEO-04); **added in Phase 11** |
+| `/icon.svg`, `/apple-icon.png` | `app/icon.svg` (Phase 06), `app/apple-icon.png` (Phase 11) | Static files | NFR-SEO-07 |
 | CV | `public/Mohd_Shahrukh_Resume_03_Nov_2026.pdf` | Static file | FR-RES-06 (filename finalised in Phase 06) |
 
 There are no other pages, no dynamic segments, no route handlers, no Server Actions and no `proxy.ts`. **Legacy anchors** (`#home`, `#resume`, `#portfolio`, `#testimonial`; FR-NAV-06, Could) are handled by a few lines in an existing client island, not by routes.
@@ -172,7 +173,7 @@ Source files are renamed (no spaces or parentheses) and kept as the highest-qual
 
 ## 10. Font loading
 
-`next/font/google` downloads the fonts at build time and self-hosts them, with no runtime Google request:
+**Font sourcing (explicit):** `next/font/google` **fetches the font files from Google Fonts during `next build` only** and bundles them into `/_next/static/media/`. The production browser requests the fonts **only from this site's origin, never from `fonts.googleapis.com` or `fonts.gstatic.com`** (verified by an E2E network assertion; CSP `font-src 'self'` also enforces it). The build machine (CI or Vercel) therefore needs network access to Google Fonts. `next/font/local` with committed files is the documented fallback if build-time fetching becomes a problem. Settings:
 
 - **Fraunces:** `axes: ['opsz']`, variable weight, `subsets: ['latin']`, `display: 'swap'`, CSS variable `--font-display`.
 - **Inter:** variable, Latin, swap, `--font-sans`.
@@ -185,9 +186,9 @@ That's 2 files (NFR-PERF-07, DS-04).
 | Item | Implementation | Requirement |
 |---|---|---|
 | Title, description, canonical, Open Graph, Twitter | `export const metadata: Metadata` in `app/layout.tsx`, built from `siteMeta`; `metadataBase = new URL('https://mohdshahrukh.in')` | NFR-SEO-01/02/04 |
-| OG image | `app/opengraph-image.tsx` (`ImageResponse`, generated once at build) using a committed Fraunces TTF (OFL) | NFR-SEO-04 |
+| OG image | `app/opengraph-image.tsx` (`ImageResponse`, generated once at build) using a committed Fraunces TTF (OFL). **Phase 11.** Phase 06 emits the Open Graph/Twitter text only (Twitter `card: 'summary'` until the image exists). | NFR-SEO-04 |
 | robots / sitemap / manifest | `app/robots.ts`, `app/sitemap.ts`, `app/manifest.ts` | NFR-SEO-03/07 |
-| Icons | `app/icon.svg`, `app/apple-icon.png`; manifest icons 192/512 | NFR-SEO-07 |
+| Icons | `app/icon.svg`: Fraunces "MS" monogram, paper on ink, glyphs outlined as paths (Phase 06); `app/apple-icon.png`, PNG fallback and manifest icons 192/512 (Phase 11) | NFR-SEO-07 |
 | Structured data | JSON-LD `Person` (verified fields only) rendered as `<script type="application/ld+json">` in `page.tsx`; a non-executing data block | NFR-SEO-05 |
 | 404 | `not-found.tsx` exports `robots: { index: false }` | NFR-SEO-09 |
 | Theme colour | `export const viewport` with `themeColor` for light and dark | — |
@@ -255,7 +256,7 @@ Details: [ADR 0007](adr/0007-testing-stack.md) and [ENGINEERING_GUIDELINES.md §
 | Install | `npm ci` |
 | Format | `npm run format:check` (Prettier) |
 | Lint | `npm run lint` (`eslint .`; `next lint` was removed in Next 16) |
-| Type check | `npm run typecheck` (`tsc --noEmit`) |
+| Type check | `npm run typecheck` (`next typegen && tsc --noEmit`) |
 | Unit and component tests | `npm test` (`vitest run`) |
 | Build | `npm run build` (Turbopack, the Next 16 default); the build output must mark `/` as static (○) |
 | E2E and accessibility | `npm run test:e2e` (Playwright) |
@@ -268,8 +269,8 @@ The workflow lives in `.github/workflows/ci.yml` (added in Phase 06 per NFR-MNT-
 |---|---|
 | **Runtime (3)** | `next`, `react`, `react-dom` |
 | Dev: language and build | `typescript@6.0.3`, `@types/react`, `@types/react-dom`, `@types/node`, `tailwindcss`, `@tailwindcss/postcss` |
-| Dev: quality | `eslint`, `eslint-config-next`, `eslint-plugin-jsx-a11y` (rules enabled explicitly), `eslint-config-prettier`, `prettier`, `prettier-plugin-tailwindcss` |
-| Dev: testing | `vitest`, `@vitejs/plugin-react`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `@playwright/test`, `@axe-core/playwright` |
+| Dev: quality | `eslint@9.39.5` ([ADR 0012](adr/0012-use-eslint-9.md)), `eslint-config-next`, `eslint-plugin-jsx-a11y` (rules enabled explicitly), `eslint-config-prettier`, `prettier`, `prettier-plugin-tailwindcss` |
+| Dev: testing | `vitest`, `vite@^8` (peer of `@vitejs/plugin-react` 6), `@vitejs/plugin-react`, `jsdom`, `@testing-library/react`, `@testing-library/dom` (peer), `@testing-library/user-event`, `@testing-library/jest-dom`, `@playwright/test`, `@axe-core/playwright` |
 | Later (Phase 11) | `@lhci/cli` |
 
 Any addition needs a justification in the PR and an ADR if it is a runtime dependency (NFR-MNT-05).

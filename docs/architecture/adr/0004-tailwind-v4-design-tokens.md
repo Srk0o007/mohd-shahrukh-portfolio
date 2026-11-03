@@ -37,3 +37,7 @@ The target stack names Tailwind CSS. Phase 04 defined colour, type, spacing, mot
 - Design tokens have one source of truth in CSS.
 - Accidental off-palette colours are impossible.
 - Utility names follow the token names (e.g. `bg-surface-2`, `text-text-muted`).
+
+## Addendum (Phase 06, 2026-11-04)
+
+The per-theme variables are declared on `[data-theme="light"]` / `[data-theme="dark"]` attribute selectors (with `:root` as the light default), rather than only on `:root[data-theme=…]`. The **production theme is still set only on `<html>`** by the pre-paint script ([ADR 0005](0005-custom-theme-script.md)). Scoped `data-theme` attributes on inner elements are used **only** by the temporary Phase 06 component preview to show both themes side by side; they are removed when Phase 07 replaces the preview.

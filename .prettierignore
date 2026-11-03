@@ -1,0 +1,17 @@
+# Build and tool output
+.next/
+out/
+build/
+coverage/
+playwright-report/
+test-results/
+node_modules/
+package-lock.json
+next-env.d.ts
+
+# Binary or third-party assets
+public/
+src/assets/
+
+# Hand-formatted documentation (tables are aligned manually; not reformatted)
+*.md

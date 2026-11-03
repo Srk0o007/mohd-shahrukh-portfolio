@@ -49,3 +49,4 @@ Record significant decisions as lightweight Architecture Decision Records in `do
 | 0009 | Inline SVG icons | Accepted |
 | 0010 | Image handling | Accepted |
 | 0011 | Pin TypeScript to 6.0 | Accepted |
+| 0012 | Use ESLint 9 | Accepted |
