@@ -26,7 +26,10 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-/* Metadata foundations (ARCHITECTURE §11). The social image arrives in Phase 11. */
+/*
+ * Metadata (ARCHITECTURE §11). The social image comes from app/opengraph-image.tsx (Phase 11);
+ * Next adds og:image (and X/Twitter falls back to it) with its width, height and alt.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: siteMeta.title,
@@ -41,7 +44,7 @@ export const metadata: Metadata = {
     locale: siteMeta.locale,
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: siteMeta.title,
     description: siteMeta.description,
   },

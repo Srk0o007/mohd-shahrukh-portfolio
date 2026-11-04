@@ -1,5 +1,6 @@
 import { ActiveSectionObserver } from '@/components/layout/ActiveSectionObserver'
 import { BackToTop } from '@/components/layout/BackToTop'
+import { StructuredData } from '@/components/layout/StructuredData'
 import { About } from '@/components/sections/About'
 import { Certifications } from '@/components/sections/Certifications'
 import { Contact } from '@/components/sections/Contact'
@@ -39,6 +40,7 @@ export default function HomePage() {
         <BackToTop label={uiCopy.backToTop} />
       </main>
       <ActiveSectionObserver navIds={navIds} />
+      <StructuredData />
     </>
   )
 }
