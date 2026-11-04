@@ -8,6 +8,24 @@ afterEach(() => {
 })
 
 /**
+ * jsdom has no matchMedia. This stub reports "light" and "no reduced motion" by default;
+ * tests that need system changes replace it (see ThemeToggle.test.tsx).
+ */
+if (typeof window !== 'undefined' && !window.matchMedia) {
+  window.matchMedia = (query: string) =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }) as MediaQueryList
+}
+
+/**
  * next/image needs Next's image loader. In Vitest, static image imports resolve to
  * { src, width, height } (plugin in vitest.config.mts); render a plain <img> with the
  * accessibility-relevant props and, like Next, the intrinsic dimensions.

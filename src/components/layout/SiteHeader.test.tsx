@@ -32,10 +32,12 @@ describe('SiteHeader (FR-NAV-01, D15)', () => {
     expect(cv).toHaveAttribute('download')
   })
 
-  it('has the mobile menu toggle and no theme toggle yet (Phase 09)', () => {
+  it('has the mobile menu toggle and the theme toggle (Phase 09)', () => {
     render(<SiteHeader />)
     expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /theme/i })).not.toBeInTheDocument()
+    // jsdom applies no CSS, so both CSS-selected labels are present here; E2E checks each theme.
+    const toggle = screen.getByRole('button', { name: /Switch to dark theme/ })
+    expect(toggle).toHaveClass('js-only')
   })
 })
 
