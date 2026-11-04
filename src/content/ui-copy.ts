@@ -50,6 +50,10 @@ export const uiCopy = {
   // Phase 08 — category tag labels from DATA_MODEL §4 (`ProjectView.groupLabel`, DS-09).
   tagEnterprise: 'Enterprise product',
   tagWebsite: 'Website',
+  // Phase 09 — contact detail labels, approved by the owner on 2026-11-04
+  // (shown with factLocation "Based in").
+  contactPhone: 'Phone',
+  contactEmail: 'Email',
 } as const satisfies UiCopy
 
 /** Replaces `{key}` placeholders in UI copy. */

@@ -222,4 +222,6 @@ export interface UiCopy {
   graduated: string
   tagEnterprise: string
   tagWebsite: string
+  contactPhone: string
+  contactEmail: string
 }
