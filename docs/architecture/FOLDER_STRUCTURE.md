@@ -25,9 +25,10 @@ mohd-shahrukh-portfolio/
 │   │   ├── robots.ts
 │   │   ├── sitemap.ts
 │   │   ├── manifest.ts
-│   │   ├── opengraph-image.tsx          # 1200×630, built once (later: Phase 11)
+│   │   ├── opengraph-image.tsx          # 1200×630 social image, built once (Phase 11)
 │   │   ├── icon.svg
-│   │   └── apple-icon.png               # (later: Phase 11)
+│   │   ├── apple-icon.tsx               # 180 px monogram, built once (Phase 11)
+│   │   └── icons/[size]/route.tsx       # 192 / 512 manifest icons, prerendered (Phase 11)
 │   ├── components/
 │   │   ├── layout/
 │   │   │   ├── SiteHeader.tsx
@@ -104,16 +105,18 @@ mohd-shahrukh-portfolio/
 │   │   ├── section-nav.ts               # goToSection, current section, legacy anchors
 │   │   ├── theme.ts                     # pre-paint script; storage and apply helpers
 │   │   ├── links.ts                     # siteAnchor("#id") → "/#id"; anchorId()
+│   │   ├── structured-data.ts           # WebSite + Person JSON-LD (Phase 11)
+│   │   ├── brand-images.tsx             # build-time next/og helpers: tokens, fonts, monogram
 │   │   └── *.test.ts                    # colocated unit tests
 │   └── assets/
 │       ├── images/
 │       │   ├── portrait/headshot.png
 │       │   ├── projects/<project-id>.png  # renamed from the live site
 │       │   └── testimonials/<name>.(png|jpg)
-│       └── fonts/                       # Fraunces TTF + OFL.txt for the OG image only (later: Phase 11)
 ├── tests/
-│   ├── e2e/                             # Playwright specs (navigation, projects, contact, theme, no-js)
-│   ├── a11y/                            # axe scans
+│   ├── e2e/                             # Playwright specs (core, projects, interactions, foundation, performance)
+│   ├── a11y/                            # axe matrix, keyboard walk, robustness (Phase 10)
+│   ├── fixtures.ts                      # shared Playwright fixtures; WebKit CSP harness (Phase 11)
 │   └── setup/                           # Vitest setup (jest-dom matchers)
 ├── scripts/
 │   └── check-bundle-size.mjs            # first-load JS budget check (Phase 06)

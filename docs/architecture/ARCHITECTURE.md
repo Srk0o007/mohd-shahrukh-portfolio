@@ -82,10 +82,11 @@ The deployment therefore has **no application-owned server compute**. It is **no
 | `/sitemap.xml` | `app/sitemap.ts` | Static | NFR-SEO-03 |
 | `/manifest.webmanifest` | `app/manifest.ts` | Static | NFR-SEO-07 |
 | `/opengraph-image` | `app/opengraph-image.tsx` | Static (built once) | 1200×630 (NFR-SEO-04); **added in Phase 11** |
-| `/icon.svg`, `/apple-icon.png` | `app/icon.svg` (Phase 06), `app/apple-icon.png` (Phase 11) | Static files | NFR-SEO-07 |
+| `/icon.svg`, `/apple-icon` | `app/icon.svg` (Phase 06), `app/apple-icon.tsx` (Phase 11) | Static | NFR-SEO-07 |
+| `/icons/192`, `/icons/512` | `app/icons/[size]/route.tsx` | Static (SSG via `generateStaticParams`; other sizes 404) | Manifest icons, NFR-SEO-07 (Phase 11) |
 | CV | `public/Mohd_Shahrukh_Resume_03_Nov_2026.pdf` | Static file | FR-RES-06 (filename finalised in Phase 06) |
 
-There are no other pages, no dynamic segments, no route handlers, no Server Actions and no `proxy.ts`. **Legacy anchors** (`#home`, `#resume`, `#portfolio`, `#testimonial`; FR-NAV-06, Could) are handled by a few lines in an existing client island, not by routes.
+There are no other pages, no Server Actions and no `proxy.ts`. The only route handler (`icons/[size]`, Phase 11) is fully prerendered for two sizes; nothing runs per request. **Legacy anchors** (`#home`, `#resume`, `#portfolio`, `#testimonial`; FR-NAV-06, Could) are handled by a few lines in an existing client island, not by routes.
 
 ## 5. Rendering model: Server vs Client Components
 
@@ -186,10 +187,10 @@ That's 2 files (NFR-PERF-07, DS-04).
 | Item | Implementation | Requirement |
 |---|---|---|
 | Title, description, canonical, Open Graph, Twitter | `export const metadata: Metadata` in `app/layout.tsx`, built from `siteMeta`; `metadataBase = new URL('https://mohdshahrukh.in')` | NFR-SEO-01/02/04 |
-| OG image | `app/opengraph-image.tsx` (`ImageResponse`, generated once at build) using a committed Fraunces TTF (OFL). **Phase 11.** Phase 06 emits the Open Graph/Twitter text only (Twitter `card: 'summary'` until the image exists). | NFR-SEO-04 |
+| OG image | `app/opengraph-image.tsx` (`next/og` `ImageResponse`, prerendered once at build): name, title, location and host from content, in the site's tokens. Fraunces and Inter are fetched as TTF subsets **at build time** (like `next/font`; no font binary committed, no runtime fetch). Twitter `card: 'summary_large_image'` uses the same image. **Phase 11.** | NFR-SEO-04 |
 | robots / sitemap / manifest | `app/robots.ts`, `app/sitemap.ts`, `app/manifest.ts` | NFR-SEO-03/07 |
-| Icons | `app/icon.svg`: Fraunces "MS" monogram, paper on ink, glyphs outlined as paths (Phase 06); `app/apple-icon.png`, PNG fallback and manifest icons 192/512 (Phase 11) | NFR-SEO-07 |
-| Structured data | JSON-LD `Person` (verified fields only) rendered as `<script type="application/ld+json">` in `page.tsx`; a non-executing data block | NFR-SEO-05 |
+| Icons | `app/icon.svg`: Fraunces "MS" monogram, paper on ink, glyphs outlined as paths (Phase 06). Phase 11: `app/apple-icon.tsx` (180 px) and `app/icons/[size]/route.tsx` (192 / 512 px manifest icons), both rendering the same SVG with `next/og` at build time | NFR-SEO-07 |
+| Structured data | JSON-LD `@graph` with `WebSite` + `Person` (name, job title, URL, portrait, GitHub/LinkedIn, city; **no phone or email**, owner decision) from `lib/structured-data.ts`, rendered by `components/layout/StructuredData.tsx` on the home page; a non-executing data block (Phase 11) | NFR-SEO-05 |
 | 404 | `not-found.tsx` exports `robots: { index: false }` | NFR-SEO-09 |
 | Theme colour | `export const viewport` with `themeColor` for light and dark | — |
 

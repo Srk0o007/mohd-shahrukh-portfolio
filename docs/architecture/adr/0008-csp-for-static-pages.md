@@ -93,3 +93,25 @@ The same `headers()` block also sends:
 - Third-party script origins remain blocked; framing is blocked; form posts are restricted to Formspree.
 - Inline script injection would not be stopped by CSP. This is mitigated by never rendering user input and by `dangerouslySetInnerHTML` being limited to two static, reviewed uses ([ENGINEERING_GUIDELINES.md §3](../ENGINEERING_GUIDELINES.md#3-react-and-nextjs)).
 - securityheaders.com may grade below A+ because of `'unsafe-inline'`. NFR-SEC-03's "A or better" target is still expected.
+
+## Addendum (Phase 11, 2026-11-04): evaluation result — keep this ADR
+
+**Measured:** the prerendered home page has **9 executable inline scripts**:
+- the theme pre-paint script;
+- **6 RSC payload chunks** (`self.__next_f.push(…)`), whose content changes with every build;
+- 2 Next.js bootstrap snippets.
+
+The 404 page has 4. The JSON-LD block is a data block and is not executed, so `script-src` does not govern it.
+
+**Why hash sources do not fit:**
+- The hashes can only be known *after* the build.
+- The headers in `next.config.ts` are fixed *before* pages are generated.
+- Serving per-page hashes would need either a post-build rewrite of deployment headers, or per-request code (`proxy.ts` / nonces). Per-request code ends static rendering and CDN caching (see Alternatives).
+- A partial hash list breaks hydration.
+
+**Decision:** keep `'unsafe-inline'` (owner decision 5, Phase 11). The mitigations stand:
+- no user content is ever rendered;
+- third-party script origins are blocked;
+- `dangerouslySetInnerHTML` is still limited to the two reviewed uses planned in ENGINEERING_GUIDELINES §3: the static theme script, and, from Phase 11, the JSON-LD data block. JSON-LD is built from typed content and serialised with `<` escaped (`lib/structured-data.ts`, unit-tested).
+
+**SRI (`experimental.sri`):** not adopted. Every script is same-origin and served from the app's own deployment, so SRI would add build complexity without a meaningful threat to mitigate. Revisit if third-party scripts are ever added.

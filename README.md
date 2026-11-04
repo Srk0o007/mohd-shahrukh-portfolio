@@ -38,7 +38,7 @@ Details: [docs/ROADMAP.md](docs/ROADMAP.md). Process and conventions: [docs/ENGI
 
 ## Getting started
 
-> **Status:** Phase 09. The home page is complete: site header with theme switcher, mobile menu, Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band, Testimonials and Contact (Formspree form), plus current-section highlighting, legacy-anchor redirects and back-to-top. Phase 10 audited accessibility (WCAG 2.2 AA) and responsiveness in Chromium, Firefox and WebKit: see `docs/quality/`. Performance/SEO and deployment follow in Phases 11–12.
+> **Status:** Phase 09. The home page is complete: site header with theme switcher, mobile menu, Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band, Testimonials and Contact (Formspree form), plus current-section highlighting, legacy-anchor redirects and back-to-top. Phase 10 audited accessibility (WCAG 2.2 AA) and responsiveness; Phase 11 added performance, SEO (social image, structured data, icons) and quality work, and runs every browser test in Chromium, Firefox and WebKit. Reports are in `docs/quality/`. Deployment follows in Phase 12.
 
 ### Prerequisites
 
@@ -63,8 +63,8 @@ npm run start          # serve the production build
 | `npm run lint` | ESLint 9 (Next.js core-web-vitals + TypeScript + jsx-a11y) |
 | `npm run typecheck` | `next typegen` + `tsc --noEmit` (TypeScript 6.0.3, strict) |
 | `npm test` | Vitest unit, component and content-invariant tests |
-| `npm run size` | First-load JS budget for `/` (run after `build`) |
-| `npm run test:e2e` | Playwright E2E + axe accessibility scans (run after `build`; first time: `npx playwright install chromium`) |
+| `npm run size` | First-load JS for `/`: fails above 150 KB gzip; reports project code above the framework baseline (run after `build`) |
+| `npm run test:e2e` | Playwright E2E + axe accessibility in Chromium, Firefox and WebKit (run after `build`; first time: `npx playwright install chromium firefox webkit`; one engine: `--project=chromium`) |
 
 CI (`.github/workflows/ci.yml`) runs all of the above on every pull request, plus `npm audit --audit-level=high`.
 
@@ -107,9 +107,13 @@ All copy, links and images live in `src/content/` (typed, single source). For ex
 │   │   ├── COLOR_TOKENS.md
 │   │   ├── TYPOGRAPHY.md
 │   │   └── COMPONENT_VISUAL_SPEC.md
-│   ├── quality/              # Phase 10: test reports
+│   ├── quality/              # Phases 10–11: test and readiness reports
 │   │   ├── ACCESSIBILITY_REPORT.md
-│   │   └── RESPONSIVE_TEST_REPORT.md
+│   │   ├── RESPONSIVE_TEST_REPORT.md
+│   │   ├── PERFORMANCE_REPORT.md
+│   │   ├── SEO_CHECKLIST.md
+│   │   ├── TEST_REPORT.md
+│   │   └── PRODUCTION_READINESS.md
 │   ├── requirements/         # Phase 03: product specification
 │   │   ├── PRD.md
 │   │   ├── FUNCTIONAL_REQUIREMENTS.md

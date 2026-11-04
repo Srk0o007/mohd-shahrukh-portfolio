@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, WEBKIT_TAB_SKIPS_LINKS, type Page } from '../fixtures'
 
 /**
  * Phase 10 — keyboard walk (WCAG 2.1.1, 2.1.2, 2.4.3, 2.4.7, 2.4.11; NFR-A11Y-05).
@@ -59,6 +59,7 @@ async function walk(page: Page, max = 120): Promise<Stop[]> {
 for (const width of [375, 1280]) {
   test.describe(`keyboard walk at ${width}px`, () => {
     test.use({ viewport: { width, height: 800 }, reducedMotion: 'reduce' })
+    test.skip(({ browserName }) => browserName === 'webkit', WEBKIT_TAB_SKIPS_LINKS)
 
     test('every stop is visible, outlined, unobscured and in DOM order', async ({ page }) => {
       await page.goto('/')

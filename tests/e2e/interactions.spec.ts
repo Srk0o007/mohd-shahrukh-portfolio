@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page, type Route } from '@playwright/test'
+import { applyWebKitHarness, expect, test, type Page, type Route } from '../fixtures'
 
 /** Phase 09 — theme switching, current-section navigation, legacy anchors, back to top, contact. */
 
@@ -25,7 +25,9 @@ test.describe('theme switcher (FR-THM-01–04)', () => {
     await page.goto('/')
     await expect(html(page)).toHaveAttribute('data-theme', 'light')
     await expect(themeButton(page)).toHaveAccessibleName('Switch to dark theme')
-    await themeButton(page).click()
+    // Keyboard activation (Safari/WebKit does not focus buttons on mouse click by design).
+    await themeButton(page).focus()
+    await page.keyboard.press('Enter')
     await expect(html(page)).toHaveAttribute('data-theme', 'dark')
     await expect(themeButton(page)).toHaveAccessibleName('Switch to light theme')
     await expect(themeButton(page)).toBeFocused()
@@ -82,7 +84,11 @@ test.describe('theme switcher (FR-THM-01–04)', () => {
     await expect(html(page)).toHaveAttribute('data-theme', 'dark')
   })
 
-  test('is also in the mobile menu, and is hidden without JS', async ({ page, browser }) => {
+  test('is also in the mobile menu, and is hidden without JS', async ({
+    page,
+    browser,
+    browserName,
+  }) => {
     await page.setViewportSize({ width: 375, height: 800 })
     await page.goto('/')
     await page.getByRole('button', { name: 'Open menu' }).click()
@@ -91,6 +97,7 @@ test.describe('theme switcher (FR-THM-01–04)', () => {
     await expect(html(page)).toHaveAttribute('data-theme', /dark|light/)
 
     const noJs = await browser.newContext({ javaScriptEnabled: false })
+    await applyWebKitHarness(noJs, browserName)
     const plain = await noJs.newPage()
     await plain.goto(page.url())
     await expect(plain.getByRole('button', { name: /theme/ })).toHaveCount(0)

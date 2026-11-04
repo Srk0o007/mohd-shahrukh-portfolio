@@ -1,4 +1,4 @@
-import { expect, test, type ConsoleMessage } from '@playwright/test'
+import { expect, test, WEBKIT_TAB_SKIPS_LINKS, type ConsoleMessage } from '../fixtures'
 
 /** Phase 06 foundation checks: rendering, theme bootstrap, fonts, metadata, headers, no-JS. */
 
@@ -22,7 +22,9 @@ test.describe('home page', () => {
 
   test('skip link is first in tab order and moves focus to <main> (FR-NAV-03)', async ({
     page,
+    browserName,
   }) => {
+    test.skip(browserName === 'webkit', WEBKIT_TAB_SKIPS_LINKS)
     await page.goto('/')
     await page.keyboard.press('Tab')
     const skip = page.getByRole('link', { name: 'Skip to main content' })
@@ -95,8 +97,49 @@ test.describe('metadata foundations (ARCHITECTURE §11)', () => {
       'content',
       'Mohd Shahrukh | Software Development Engineer – Frontend',
     )
-    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary')
+    // Phase 11: large social card with the build-time preview image.
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      'content',
+      'summary_large_image',
+    )
     await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveCount(1)
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('sizes', '180x180')
+  })
+
+  test('the social preview image is a 1200×630 PNG with alt text (Phase 11)', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/')
+    const og = page.locator('meta[property="og:image"]')
+    const url = new URL((await og.getAttribute('content')) ?? '')
+    expect(url.origin).toBe('https://mohdshahrukh.in')
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200')
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630')
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+      'content',
+      'Mohd Shahrukh — Software Development Engineer | Frontend',
+    )
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+      'content',
+      url.toString(),
+    )
+    // The same image is served by this build (path relative to the test server).
+    const image = await request.get(url.pathname + url.search)
+    expect(image.status()).toBe(200)
+    expect(image.headers()['content-type']).toBe('image/png')
+  })
+
+  test('structured data: WebSite and Person, without phone or email (Phase 11)', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const json = await page.locator('script[type="application/ld+json"]').textContent()
+    const data = JSON.parse(json ?? '{}') as { '@graph': { '@type': string }[] }
+    expect(data['@graph'].map((node) => node['@type'])).toEqual(['WebSite', 'Person'])
+    expect(json).toContain('"jobTitle":"Software Development Engineer | Frontend"')
+    expect(json).toContain('https://github.com/Srk0o007')
+    expect(json).not.toMatch(/telephone|email|mailto|9760787661|khan\.shahrukh156/i)
   })
 
   test('robots.txt, sitemap.xml and the web manifest are generated', async ({ request }) => {
@@ -106,6 +149,14 @@ test.describe('metadata foundations (ARCHITECTURE §11)', () => {
     expect(sitemap).toContain('<loc>https://mohdshahrukh.in/</loc>')
     const manifest = await (await request.get('/manifest.webmanifest')).json()
     expect(manifest.short_name).toBe('Mohd Shahrukh')
+    // Phase 11: PNG manifest icons exist at the advertised sizes.
+    for (const size of ['192', '512']) {
+      const icon = manifest.icons.find((i: { sizes: string }) => i.sizes === `${size}x${size}`)
+      expect(icon?.type).toBe('image/png')
+      const response = await request.get(icon.src)
+      expect(response.status()).toBe(200)
+      expect(response.headers()['content-type']).toBe('image/png')
+    }
   })
 })
 

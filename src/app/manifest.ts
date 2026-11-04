@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { profile, siteMeta } from '@/content'
 
-/** NFR-SEO-07 — PNG icons (192/512) are added in Phase 11 with the apple-icon. */
+/** NFR-SEO-07 — SVG favicon plus 192/512 PNG icons (Phase 11, generated at build time). */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteMeta.title,
@@ -11,6 +11,10 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'browser',
     background_color: '#f5f2ea',
     theme_color: '#f5f2ea',
-    icons: [{ src: '/icon.svg', sizes: 'any', type: 'image/svg+xml' }],
+    icons: [
+      { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml' },
+      { src: '/icons/192', sizes: '192x192', type: 'image/png' },
+      { src: '/icons/512', sizes: '512x512', type: 'image/png' },
+    ],
   }
 }
