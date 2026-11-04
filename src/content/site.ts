@@ -1,5 +1,5 @@
 import { siteConfig } from '@/config/site'
-import type { CvDocument, NavItem, SectionHeading, SiteMeta } from './types'
+import type { CvDocument, NavItem, SectionHeading, SectionId, SiteMeta } from './types'
 
 /** CONTENT_SCHEMA §1 — title from the live site [S]; description built only from [R] facts. */
 export const siteMeta = {
@@ -33,6 +33,13 @@ export const sectionHeadings = [
   { id: 'testimonials', index: '08', eyebrow: 'Testimonials', heading: 'What My Colleagues Say' },
   { id: 'contact', index: '09', eyebrow: 'Contact', heading: "Let's get in touch" },
 ] as const satisfies readonly SectionHeading[]
+
+/** Heading data for one section; the content tests guarantee every id exists (I-10). */
+export function getSectionHeading(id: SectionId): SectionHeading {
+  const heading = sectionHeadings.find((section) => section.id === id)
+  if (!heading) throw new Error(`Missing section heading: ${id}`)
+  return heading
+}
 
 /** CONTENT_SCHEMA §11 — D7 (03 Nov 2026 resume, 72,379 bytes). */
 export const cv = {

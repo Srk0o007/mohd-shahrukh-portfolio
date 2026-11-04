@@ -40,6 +40,10 @@ The live site ships about 9.73 MB of PNG/JPEG with no responsive sizes (audit P1
 
 **No blur placeholders by default:** they add inline base64 to the HTML for little perceived benefit with fixed-ratio frames. This can be revisited in Phase 11.
 
+## Addendum (Phase 07, 2026-11-04)
+
+Server-rendered images use **`getImageProps()`** (exported by `next/image`) with a plain `<img>` (`src/components/ui/ResponsiveImage.tsx`). It is the same optimisation pipeline (`/_next/image` srcset, `sizes`, `fetchPriority`, intrinsic `width`/`height`), but without the `next/image` **client component**. Measured in Phase 07, the client component added about 6 KB gzip to first-load JS (NFR-PERF-05). The `@next/next/no-img-element` lint rule is disabled on that one line, with this justification.
+
 ## Alternatives considered
 
 | Option | Why not |

@@ -17,7 +17,9 @@ export function Section({ id, labelledBy, className, children }: SectionProps) {
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={cn('border-t border-rule py-(--space-section)', className)}
+      // Programmatic focus target for in-page navigation (FR-NAV-02); not in the tab order.
+      tabIndex={-1}
+      className={cn('border-t border-rule py-(--space-section) focus:outline-none', className)}
     >
       <Container>{children}</Container>
     </section>

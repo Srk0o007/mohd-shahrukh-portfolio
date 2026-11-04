@@ -39,6 +39,14 @@ export const uiCopy = {
   errorText: 'This page could not be displayed. Please try again.',
   errorRetry: 'Try again',
   statLabel: 'Years of Experience',
+  // Phase 07 — approved by the owner on 2026-11-04 (neutral interface labels).
+  heroEyebrow: 'Portfolio',
+  factRole: 'Role',
+  factLocation: 'Based in',
+  factExperience: 'Experience',
+  primaryNavLabel: 'Primary',
+  // Wording from the 03 Nov 2026 resume ("Graduated 2019").
+  graduated: 'Graduated {year}',
 } as const satisfies UiCopy
 
 /** Replaces `{key}` placeholders in UI copy. */

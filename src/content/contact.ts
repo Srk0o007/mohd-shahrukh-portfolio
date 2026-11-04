@@ -20,13 +20,14 @@ export const contactDetails = {
 } as const satisfies ContactDetails
 
 export const socialLinks = [
+  // Text-labelled links in the owner's order (2026-11-04): no brand logos are used.
+  { id: 'github', label: 'GitHub', href: 'https://github.com/Srk0o007' },
   {
     id: 'linkedin',
-    label: 'LinkedIn profile',
+    label: 'LinkedIn',
     href: 'https://www.linkedin.com/in/mohd-shah-rukh-703aa3153/',
   },
-  { id: 'github', label: 'GitHub profile', href: 'https://github.com/Srk0o007' },
-  { id: 'email', label: 'Email Mohd Shahrukh', href: 'mailto:khan.shahrukh156@gmail.com' },
+  { id: 'email', label: 'Email', href: 'mailto:khan.shahrukh156@gmail.com' },
 ] as const satisfies readonly SocialLink[]
 
 /** [S] heading and labels; D19 (Call Me! → tel:). */

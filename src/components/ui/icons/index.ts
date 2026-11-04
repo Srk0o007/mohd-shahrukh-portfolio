@@ -1,5 +1,12 @@
 /** Inline SVG icons (ADR 0009). One component per file; licences in LICENSES.md. */
+export { AccessibilityIcon } from './AccessibilityIcon'
 export { ArrowRightIcon } from './ArrowRightIcon'
 export { ArrowUpRightIcon } from './ArrowUpRightIcon'
+export { ChevronDownIcon } from './ChevronDownIcon'
+export { CloseIcon } from './CloseIcon'
 export { DownloadIcon } from './DownloadIcon'
+export { FlaskConicalIcon } from './FlaskConicalIcon'
+export { MenuIcon } from './MenuIcon'
+export { MonitorIcon } from './MonitorIcon'
+export { PencilRulerIcon } from './PencilRulerIcon'
 export type { IconProps, IconSize } from './IconBase'

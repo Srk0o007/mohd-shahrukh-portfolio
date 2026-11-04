@@ -260,11 +260,13 @@ Instances: Sowmit Nag ("Sr. Web Designer \| Co-Owner") and Divesh Kumar ("CTO \|
 
 ### `SocialLink[]`
 
-| id | label (accessible name) | url |
+| id | label (visible text and accessible name) | url |
 |---|---|---|
-| `linkedin` | LinkedIn profile | `https://www.linkedin.com/in/mohd-shah-rukh-703aa3153/` |
-| `github` | GitHub profile | `https://github.com/Srk0o007` |
-| `email` | Email Mohd Shahrukh | `mailto:khan.shahrukh156@gmail.com` |
+| `github` | GitHub | `https://github.com/Srk0o007` |
+| `linkedin` | LinkedIn | `https://www.linkedin.com/in/mohd-shah-rukh-703aa3153/` |
+| `email` | Email | `mailto:khan.shahrukh156@gmail.com` |
+
+Rendered as text links in this order everywhere (About shows GitHub and LinkedIn; footer and mobile menu show all three). There are no brand logos (owner decision, 2026-11-04). External links add the announced "(opens in new tab)".
 
 Twitter/X is excluded (D4).
 
@@ -308,6 +310,12 @@ This is new text needed for functionality and accessibility. It contains **no pe
 | `errorHeading` | Something went wrong (added in Phase 06 for the error boundaries) |
 | `errorText` | This page could not be displayed. Please try again. (Phase 06) |
 | `errorRetry` | Try again (Phase 06) |
+| `heroEyebrow` | Portfolio (Phase 07, owner-approved) |
+| `factRole` | Role (Phase 07, owner-approved) |
+| `factLocation` | Based in (Phase 07, owner-approved) |
+| `factExperience` | Experience (Phase 07, owner-approved) |
+| `primaryNavLabel` | Primary: accessible name of the primary navigation (Phase 07, owner-approved) |
+| `graduated` | Graduated {year}: wording from the 03 Nov 2026 resume ("Graduated 2019"), Phase 07 |
 
 ## 14. `Image` type
 

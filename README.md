@@ -38,7 +38,7 @@ Details: [docs/ROADMAP.md](docs/ROADMAP.md). Process and conventions: [docs/ENGI
 
 ## Getting started
 
-> **Status:** Phase 06 foundation. The home page (`/`) is a **temporary component preview** of the design system; Phase 07 replaces it with the portfolio.
+> **Status:** Phase 07. The home page has the site header, mobile menu and footer, plus Hero, About, Services, Experience, Skills, Certifications and Education. Projects, testimonials and contact arrive in Phases 08–09.
 
 ### Prerequisites
 
@@ -79,7 +79,7 @@ All copy, links and images live in `src/content/` (typed, single source). For ex
 ├── .github/                  # PR template, CI workflow
 ├── src/
 │   ├── app/                  # Routes, root layout, metadata files, globals.css (tokens)
-│   ├── components/           # ui/ primitives, layout/ (SkipLink, ThemeScript)
+│   ├── components/           # ui/ primitives, layout/ (header, menu, footer), sections/, experience/
 │   ├── content/              # Typed content (single source) + invariant tests
 │   ├── config/               # Public, non-secret site configuration
 │   ├── lib/                  # Pure helpers (cn, dates, theme script)
