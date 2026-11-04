@@ -44,6 +44,12 @@ The live site ships about 9.73 MB of PNG/JPEG with no responsive sizes (audit P1
 
 Server-rendered images use **`getImageProps()`** (exported by `next/image`) with a plain `<img>` (`src/components/ui/ResponsiveImage.tsx`). It is the same optimisation pipeline (`/_next/image` srcset, `sizes`, `fetchPriority`, intrinsic `width`/`height`), but without the `next/image` **client component**. Measured in Phase 07, the client component added about 6 KB gzip to first-load JS (NFR-PERF-05). The `@next/next/no-img-element` lint rule is disabled on that one line, with this justification.
 
+## Addendum (Phase 11, 2026-11-04)
+
+The LCP portrait (`ResponsiveImage` with `priority`) also hoists a responsive `<link rel="preload" as="image" imagesrcset imagesizes fetchpriority="high">` into `<head>` through React 19's `preload()`. This is what `next/image`'s `priority` used to do. It lets the browser request the portrait while it is still parsing `<head>`.
+
+Measured effect in Lighthouse (PERFORMANCE_REPORT.md): neutral within run-to-run noise. It is kept as standard practice.
+
 ## Alternatives considered
 
 | Option | Why not |

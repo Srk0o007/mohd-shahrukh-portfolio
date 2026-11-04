@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 10 — Accessibility & Responsive Engineering 🔍 Implementation in review (PR on `phase/10-accessibility-responsive`)
-**Next phase:** Phase 11 — Performance, SEO & Quality Assurance ⏸️ Awaiting approval
+**Current phase:** Phase 11 — Performance, SEO & Quality Assurance 🔍 Implementation in review (PR on `phase/11-performance-seo-qa`)
+**Next phase:** Phase 12 — Deployment & Domain Configuration ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 10 PR. It is **not** merged without the owner's approval. Phase 11 stays unstarted until explicitly approved. |
+| **Next approved action** | Owner reviews the Phase 11 PR (final approval before deployment). It is **not** merged without the owner's approval. Phase 12 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 10 PR review. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
+| **Pending work** | Phase 11 PR review. Before launch (PRODUCTION_READINESS §9): Vercel account and Hostinger DNS access for Phase 12. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
 
 ## Phase tracker
 
@@ -25,11 +25,66 @@
 | 07 | Core Portfolio Development | ✅ Complete | 2026-11-04 |
 | 08 | Projects & Content Showcase | ✅ Complete | 2026-11-04 |
 | 09 | Contact & Interactive Features | ✅ Complete | 2026-11-04 |
-| 10 | Accessibility & Responsive Engineering | 🔍 In review | — |
-| 11 | Performance, SEO & Quality Assurance | ⏳ Not started | — |
+| 10 | Accessibility & Responsive Engineering | ✅ Complete | 2026-11-04 |
+| 11 | Performance, SEO & Quality Assurance | 🔍 In review | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 11 summary
+
+**Reports delivered** (`docs/quality/`):
+- PERFORMANCE_REPORT.md
+- SEO_CHECKLIST.md
+- TEST_REPORT.md
+- PRODUCTION_READINESS.md
+
+**Verdict:** ready for Phase 12; owner actions are listed in PRODUCTION_READINESS §9.
+
+**Performance:**
+- **Lighthouse 12.8.2, measured** (medians of 3–5 runs):
+  - **desktop:** 100 / 100 / 100 / 100 (Performance / Accessibility / Best Practices / SEO);
+  - **mobile at full host speed:** 90–91 / 100 / 100 / 100.
+  - **When the host slowed to half speed:** mobile measured 80–81 for both `main` and Phase 11 in an interleaved A/B run, so there was no regression.
+- **CLS 0.** Fixed the hydration shift of the Experience highlights (collapsed before first paint).
+- **LCP portrait:** preloaded with a responsive srcset.
+- **Experiments measured and reverted:** inline CSS (worse), no Inter preload (no gain), `browserslist` (no effect).
+- **First-load JS:** 144.8 KB. Project code is about 7.9 KB above the 136.9 KB framework baseline.
+- **Page weight:** about 0.5 MB transferred after a full scroll.
+
+**SEO:**
+- 1200×630 social image built with `next/og` from content;
+- `summary_large_image` card;
+- Apple icon and 192 / 512 manifest icons;
+- JSON-LD `WebSite` + `Person` (no phone or email);
+- Lighthouse SEO 100.
+
+**Testing:**
+- **Engines:** Firefox and WebKit added to the Playwright suite and CI (owner decision 4).
+- **Shared fixtures:** a WebKit CSP harness for plain-HTTP localhost; WebKit focus checks activate controls by keyboard.
+- **Results:** 344 passed, 7 skipped with reasons, 0 failed across 3 engines; 187 unit and component tests.
+
+**Security review:**
+- no secrets in any of the 41 commits; no environment variables;
+- production dependencies have 0 advisories;
+- headers verified;
+- CSP `'unsafe-inline'` kept with a documented evaluation (ADR 0008 addendum, owner decision 5).
+
+**Documentation:**
+- NFR-PERF-05 target replaced: project code ≤ 15 KB above the framework baseline, plus the hard 150 KB budget (owner decision 1); `npm run size` reports both;
+- ADR 0008 and ADR 0010 addenda;
+- ARCHITECTURE, COMPONENT_ARCHITECTURE and FOLDER_STRUCTURE updated.
+
+**Validation (2026-11-04):**
+
+| Check | Result |
+|---|---|
+| Build | ✅ 10 static outputs |
+| TypeScript, ESLint, Prettier | ✅ 0 errors |
+| Unit, component and content tests | ✅ 187 passed (29 files) |
+| E2E + a11y (Chromium, Firefox, WebKit) | ✅ 344 passed, 7 skipped, 0 failed |
+| First-load JS | ✅ 144.8 KB gzip (project code about 7.9 KB) |
+| `npm audit --audit-level=high` | ✅ 0 high or critical; production dependencies 0 |
 
 ## Phase 10 summary
 
@@ -406,6 +461,8 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 10: fix accessibility failures within the approved design; test in Firefox and WebKit locally; owner runs the screen-reader smoke test after the PR | Owner: "keep the recommended approach" |
 | 2026-11-04 | Mobile menu overlay is a modal dialog named by the wordmark (no new copy) | Matches its behaviour (focus trap, inert page); fixes axe `region` |
 | 2026-11-04 | WebKit tests on plain-HTTP localhost strip CSP `upgrade-insecure-requests` in the test harness only | Production is HTTPS; the security header is unchanged |
+| 2026-11-04 | Phase 11 decisions:<br>1. JS target = project code ≤ 15 KB above the framework baseline (150 KB hard budget kept)<br>2. Social image built at build time<br>3. JSON-LD Person + WebSite without phone or email<br>4. Firefox and WebKit in CI<br>5. Keep CSP `'unsafe-inline'` | Owner: "all approved" |
+| 2026-11-04 | Lighthouse results are reported with the host benchmark index; regressions are judged by interleaved A/B runs on the same host | The development machine's speed changed during the session (index about 2,100 → about 950) |
 
 ## Risks & dependencies
 
@@ -424,12 +481,12 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R13 | The skills strip adds motion and a control (WCAG 2.2.2) | — | ✅ Closed: not built (owner decision, 2026-11-04) | 09 |
 | R14 | TypeScript pinned below the latest major (7.x) | Low | ADR 0011; upgrade when typescript-eslint supports 7 | 06+ |
 | R15 | Formspree account access (existing form `xleyzgzo`) | Low | ✅ Owner confirmed access (2026-11-04); fallback remains a new free form, config-only change | 09 |
-| R22 | Firefox/WebKit not yet in CI; WebKit needs the CSP harness on plain-HTTP localhost | Low | Phase 11 browser matrix; real Safari over HTTPS in Phase 12 | 11–12 |
+| R22 | Firefox/WebKit testing | Low | ✅ In CI since Phase 11 (shared fixture with the WebKit CSP harness); ⏳ real Safari over HTTPS in Phase 12 | 11–12 |
 | R23 | No real screen-reader or real-device testing yet | Low | Accessibility tree verified; owner smoke test (report §7); devices on the Phase 12 preview | 10–12 |
 | R21 | Formspree settings may block in-page submissions (reCAPTCHA was on by default for forms created before Feb 2020) or reject the domain | Medium | The site shows the error with the email fallback, never a false success; owner checklist (reCAPTCHA off, notification email, allowed domain); owner's real test after deployment | 09 → 12 |
-| R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
+| R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | ⚠ Accepted after evaluation (ADR 0008 addendum, Phase 11): Next.js inline RSC scripts change every build, so hash sources would need per-request code; no user content is rendered; two reviewed inline uses | 11 |
 | R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
-| R18 | First-load JS (136.9 KB after Phase 06; 139.5 after Phase 07; 140.2 after Phase 08; **143.9 KB after Phase 09**) is above the 120 KB target, though within the 150 KB budget (6.1 KB headroom); the framework runtime dominates | Medium | CI budget gate (`npm run size`); server-rendered cards and slots (ADR 0013), `getImageProps()`, CSS-driven toggle label; optimisation in Phase 11 (owner decision) | 11 |
+| R18 | First-load JS above the original 120 KB target | Low | ✅ Resolved by owner decision 1 (Phase 11): the 136.9 KB framework baseline exceeds 120 KB on its own; the rule is now project code ≤ 15 KB above the baseline (about 7.9 KB) and ≤ 150 KB total (144.8 KB), enforced by `npm run size` | 11 |
 | R19 | 17 moderate `npm audit` advisories in the ESLint dev toolchain (none in runtime deps) | Low | Not shipped to users; CI fails only on high or critical; re-check when updating the lint stack | 06+ |
 | R20 | Local machine memory pressure caused a transient Turbopack build crash (`os error 1450`) and Vitest worker OOMs | Low | Worker limits set; retry succeeded; CI runners are unaffected | 06+ |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
@@ -461,3 +518,5 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 09: theme switcher, current-section navigation, legacy anchors, back to top, 09 Contact and the Formspree form implemented on `phase/09-contact-interactions`; sticky-header focus-scroll bug fixed; docs updated; PR opened for review |
 | 2026-11-04 | Phase 09 approved by owner; PR #8 merged into `main`; branch `phase/09-contact-interactions` deleted after verifying it was fully merged |
 | 2026-11-04 | Phase 10: accessibility and responsive audit (3 engines, 12 widths, 10 devices); 6 findings fixed; ACCESSIBILITY_REPORT.md and RESPONSIVE_TEST_REPORT.md written; regression specs added; PR opened for review |
+| 2026-11-04 | Phase 10 approved by owner; PR #9 merged into `main`; branch `phase/10-accessibility-responsive` deleted after verifying it was fully merged |
+| 2026-11-04 | Phase 11: performance (CLS fix, LCP preload, measured experiments), SEO (social image, icons, JSON-LD), three-engine tests and CI, security review; four reports written; PR opened for review |
