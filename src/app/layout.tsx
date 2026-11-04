@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { ParticleWaveLayer } from '@/components/layout/ParticleWaveLayer'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SkipLink } from '@/components/layout/SkipLink'
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeScript />
       </head>
       <body>
+        <ParticleWaveLayer />
         <SkipLink label={uiCopy.skipLink} />
         <SiteHeader />
         {children}

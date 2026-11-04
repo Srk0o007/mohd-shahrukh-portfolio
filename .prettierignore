@@ -9,6 +9,9 @@ node_modules/
 package-lock.json
 next-env.d.ts
 
+# Local design handoff (git-excluded reference material, never committed)
+.handoff/
+
 # Binary or third-party assets
 public/
 src/assets/

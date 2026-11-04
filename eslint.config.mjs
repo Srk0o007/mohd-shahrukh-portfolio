@@ -31,6 +31,8 @@ const eslintConfig = defineConfig([
     'playwright-report/**',
     'test-results/**',
     'next-env.d.ts',
+    // Local design handoff: git-excluded reference material, never committed.
+    '.handoff/**',
   ]),
 ])
 
