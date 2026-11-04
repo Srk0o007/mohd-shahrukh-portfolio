@@ -3,6 +3,7 @@ import { Andika } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { ParticleWaveLayer } from '@/components/layout/ParticleWaveLayer'
 import { JsFlagScript } from '@/components/layout/JsFlagScript'
+import { MotionLayer } from '@/components/layout/MotionLayer'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SkipLink } from '@/components/layout/SkipLink'
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <ParticleWaveLayer />
+        <MotionLayer />
         <SkipLink label={uiCopy.skipLink} />
         {/*
           Content column (1240 px): solid black from 1024 px so the wave shows only in the side
