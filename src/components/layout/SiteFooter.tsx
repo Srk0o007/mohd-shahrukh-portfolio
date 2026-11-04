@@ -1,20 +1,18 @@
 import { Container } from '@/components/ui/Container'
-import { footer, formatCopy, socialLinks, uiCopy } from '@/content'
-import { SocialLinks } from './SocialLinks'
+import { footer, formatCopy } from '@/content'
 
 /**
- * Site footer (FR-FTR-01, COMPONENT_VISUAL_SPEC §23). The year is computed at build time.
- * From 768 px the social links sit at the right edge, under the fixed back-to-top button
- * when scrolled to the end; the larger bottom padding keeps them clear of it (Phase 10).
+ * Site footer (FR-FTR-01, COMPONENT_VISUAL_SPEC §23, Phase 11.5): only the copyright line and
+ * the credit (owner decision 2026-11-05; the social links live in About and Contact). The year
+ * is computed at build time. Bottom padding keeps the text clear of the back-to-top button.
  */
 export function SiteFooter() {
   const year = new Date().getFullYear()
   return (
-    <footer className="border-rule border-t">
-      <Container className="text-text-muted flex flex-col gap-6 pt-12 pb-10 text-small md:flex-row md:flex-wrap md:items-center md:justify-between md:pb-24">
-        <p>{formatCopy(footer.copyrightTemplate, { year })}</p>
-        <p>{footer.credit}</p>
-        <SocialLinks links={socialLinks} newTabLabel={uiCopy.newTab} className="text-text" />
+    <footer className="mt-10 border-t border-line">
+      <Container className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2.5 pt-9 pb-[calc(48px+env(safe-area-inset-bottom,0px))] text-small">
+        <p data-reveal="">{formatCopy(footer.copyrightTemplate, { year })}</p>
+        <p data-reveal="">{footer.credit}</p>
       </Container>
     </footer>
   )

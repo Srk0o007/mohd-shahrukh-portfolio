@@ -1,32 +1,40 @@
 import { ButtonLink } from '@/components/ui/ButtonLink'
+import { Card } from '@/components/ui/Card'
 import { Container } from '@/components/ui/Container'
 import { ctaBand } from '@/content'
 
 const HEADING_ID = 'hire-heading'
 
 /**
- * Hire CTA band (FR-CTA-01, DS-10, COMPONENT_VISUAL_SPEC §18). Full-bleed accent in both themes
- * with ink content and an ink focus ring; no parallax or motion. "Call Me!" is a tel: link (D19);
- * "Hire Me!" targets #contact, which ships in Phase 09 (tracked by the anchors E2E test).
+ * Hire band (FR-CTA-01, DS-10, COMPONENT_VISUAL_SPEC §18, Phase 11.5): a card with a faint
+ * cyan radial glow (parallax) and two CTAs. "Call Me!" is a tel: link (D19); "Hire Me!" targets
+ * #contact.
  */
 export function HireCta() {
   return (
-    <section
-      aria-labelledby={HEADING_ID}
-      className="bg-accent py-[calc(var(--space-section)*0.75)] text-on-accent [--color-focus:var(--c-on-accent)]"
-    >
-      <Container className="xl:gap-x-8 flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-6">
-        <h2 id={HEADING_ID} className="font-display text-h2 font-medium lg:col-span-8">
-          {ctaBand.heading}
-        </h2>
-        <div className="flex flex-wrap gap-4 lg:col-span-4 lg:justify-end">
-          <ButtonLink href={ctaBand.call.href} variant="ink" size="lg">
-            {ctaBand.call.label}
-          </ButtonLink>
-          <ButtonLink href={ctaBand.hire.href} variant="ink-outline" size="lg">
-            {ctaBand.hire.label}
-          </ButtonLink>
-        </div>
+    <section aria-labelledby={HEADING_ID} className="py-7.5">
+      <Container>
+        <Card
+          hover={false}
+          className="flex flex-wrap items-center justify-between gap-x-10 gap-y-6 overflow-hidden rounded-panel p-[clamp(36px,5vw,64px)]"
+        >
+          <div
+            aria-hidden="true"
+            data-speed="0.15"
+            className="hire-glow pointer-events-none absolute -top-75 -right-40 size-130 rounded-full"
+          />
+          <h2 id={HEADING_ID} className="relative max-w-[16ch] text-hire">
+            {ctaBand.heading}
+          </h2>
+          <div className="relative flex flex-wrap gap-3.5">
+            <ButtonLink href={ctaBand.call.href} size="lg">
+              {ctaBand.call.label}
+            </ButtonLink>
+            <ButtonLink href={ctaBand.hire.href} variant="ghost" size="lg">
+              {ctaBand.hire.label}
+            </ButtonLink>
+          </div>
+        </Card>
       </Container>
     </section>
   )

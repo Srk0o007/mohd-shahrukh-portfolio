@@ -43,8 +43,6 @@ export const uiCopy = {
   factLocation: 'Based in',
   factExperience: 'Experience',
   primaryNavLabel: 'Primary',
-  // Wording from the 03 Nov 2026 resume ("Graduated 2019").
-  graduated: 'Graduated {year}',
   // Phase 08 — category tag labels from DATA_MODEL §4 (`ProjectView.groupLabel`, DS-09).
   tagEnterprise: 'Enterprise product',
   tagWebsite: 'Website',
@@ -52,6 +50,21 @@ export const uiCopy = {
   // (shown with factLocation "Based in").
   contactPhone: 'Phone',
   contactEmail: 'Email',
+  // Phase 11.5 — from the owner's frozen prototype (2026-11-05).
+  // Project filter: accessible name of the chip group.
+  filterGroupLabel: 'Filter projects',
+  // Hero: decorative stack chip (aria-hidden; the stack is listed under Skills).
+  heroStackTitle: 'Frontend',
+  heroStackLine: 'React · Next.js · TypeScript',
+  // Skills editor: tab-list name and the editor's meta line.
+  skillsTabsLabel: 'Skill groups',
+  skillsMeta: '{skills} skills · {groups} groups',
+  // Testimonial slider (ARIA carousel pattern).
+  carouselLabel: 'Testimonials',
+  slideLabel: '{n} of {total}',
+  slidePrevious: 'Previous testimonial',
+  slideNext: 'Next testimonial',
+  slideShow: 'Show testimonial {n}',
 } as const satisfies UiCopy
 
 /** Replaces `{key}` placeholders in UI copy. */

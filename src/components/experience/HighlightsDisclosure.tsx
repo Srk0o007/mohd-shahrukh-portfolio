@@ -40,16 +40,16 @@ export function HighlightsDisclosure({
 
   return (
     <>
-      <ul
-        id={listId}
-        className="marker:text-text-muted flex max-w-[72ch] list-['—__'] flex-col gap-2.5 pl-7"
-      >
+      <ul id={listId} className="mt-4 grid max-w-[72ch] gap-2.5">
         {highlights.map((highlight, index) => {
           const collapsed = collapsible && !expanded && index >= visible
           return (
             <li
               key={highlight}
-              className={cn(collapsed && 'js-collapsed')}
+              className={cn(
+                "relative pl-5.5 before:absolute before:top-[0.75em] before:left-0.5 before:h-0.5 before:w-2 before:bg-accent before:content-['']",
+                collapsed && 'js-collapsed',
+              )}
               hidden={hydrated && collapsed}
             >
               {highlight}
@@ -63,10 +63,10 @@ export function HighlightsDisclosure({
           aria-expanded={expanded}
           aria-controls={listId}
           onClick={() => setExpanded((value) => !value)}
-          className="js-only mt-5 inline-flex min-h-11 items-center gap-2 font-semibold underline decoration-1 underline-offset-4 hover:decoration-2"
+          className="js-only mt-3.5 inline-flex min-h-11 cursor-pointer items-center gap-1.5 font-bold text-heading underline decoration-accent decoration-2 underline-offset-[5px] transition-colors duration-400 ease-soft hover:text-accent"
         >
           {expanded ? labels.less : labels.more}
-          <ChevronDownIcon size={16} className={cn(expanded && 'rotate-180')} />
+          <ChevronDownIcon size={16} className={cn('text-accent', expanded && 'rotate-180')} />
         </button>
       ) : null}
     </>

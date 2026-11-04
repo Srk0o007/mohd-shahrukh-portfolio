@@ -8,12 +8,12 @@ export interface ContainerProps {
 }
 
 /**
- * Grid margins and max width (DESIGN_SYSTEM §3): 20 / 32 / 40 / 64 px outer margins;
- * capped at 1440 px (1312 px content) from the xl breakpoint.
+ * Content width inside the 1240 px column (DESIGN_SYSTEM §3, Phase 11.5): 1180 px of content
+ * with 20 px gutters (or the device safe-area inset, whichever is larger).
  */
 export function Container({ as: Tag = 'div', className, children }: ContainerProps) {
   return (
-    <Tag className={cn('xl:px-16 mx-auto w-full max-w-360 px-5 md:px-8 lg:px-10', className)}>
+    <Tag className={cn('mx-auto w-full max-w-305 pr-(--gutter-r) pl-(--gutter)', className)}>
       {children}
     </Tag>
   )

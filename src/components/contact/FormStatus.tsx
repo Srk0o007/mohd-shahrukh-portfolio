@@ -8,7 +8,7 @@ export interface FormStatusProps {
   email: string
 }
 
-const panel = 'mt-6 flex items-start gap-3 rounded-sm bg-surface-2 p-4'
+const panel = 'mt-5 flex items-start gap-3 rounded-md border border-line bg-fill p-4 text-heading'
 
 /**
  * Submission feedback (COMPONENT_VISUAL_SPEC §22, FR-CON-04). Both live regions exist from the
@@ -35,7 +35,10 @@ export function FormStatus({ status, successText, errorText, email }: FormStatus
               {before}
               {after === null ? null : (
                 <>
-                  <a href={`mailto:${email}`} className="font-medium underline underline-offset-4">
+                  <a
+                    href={`mailto:${email}`}
+                    className="font-bold underline decoration-accent decoration-2 underline-offset-4"
+                  >
                     {email}
                   </a>
                   {after}

@@ -5,31 +5,50 @@ import { Certifications } from './Certifications'
 import { Education } from './Education'
 import { Skills } from './Skills'
 
-describe('04 — Skills (FR-RES-03, D5)', () => {
+describe('04 — Skills (FR-RES-03, D5, Phase 11.5)', () => {
   it('is a labelled region with the numbered eyebrow', () => {
     render(<Skills />)
     expect(screen.getByRole('region', { name: 'My Skills' })).toHaveAttribute('id', 'skills')
     expect(screen.getByText('04 — Skills')).toBeInTheDocument()
   })
 
-  it('shows the nine groups in resume order as h3 labels', () => {
+  it('has one tab per group in resume order, with skill counts', () => {
     render(<Skills />)
-    expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(
-      skillGroups.map((g) => g.label),
+    const tabs = within(screen.getByRole('tablist', { name: 'Skill groups' })).getAllByRole('tab')
+    expect(tabs.map((tab) => tab.textContent)).toEqual(
+      skillGroups.map((g, i) => `${String(i + 1).padStart(2, '0')}${g.label}${g.skills.length}`),
     )
+    expect(screen.getByText('50 skills · 9 groups')).toBeInTheDocument()
   })
 
-  it('lists every skill as a list item, with separators hidden from assistive technology', () => {
-    const { container } = render(<Skills />)
+  it('lists every skill in a plain list per group for assistive technology', () => {
+    render(<Skills />)
     for (const group of skillGroups) {
-      const groupItem = screen.getByRole('heading', { level: 3, name: group.label }).closest('li')
-      if (!groupItem) throw new Error(`No list item for ${group.label}`)
-      const skills = within(groupItem.querySelector('ul') as HTMLElement).getAllByRole('listitem')
-      expect(skills.map((s) => s.textContent?.replace(' · ', ''))).toEqual([...group.skills])
+      const heading = screen.getByRole('heading', { level: 3, name: group.label, hidden: true })
+      const list = heading.parentElement?.querySelector('ul') as HTMLElement
+      expect(
+        within(list)
+          .getAllByRole('listitem', { hidden: true })
+          .map((li) => li.textContent),
+      ).toEqual([...group.skills])
     }
-    for (const sep of container.querySelectorAll('span[aria-hidden="true"]')) {
-      expect(sep.textContent).toBe(' · ')
-    }
+  })
+
+  it('hides the decorative code view and the ticker from assistive technology', () => {
+    const { container } = render(<Skills />)
+    const pres = container.querySelectorAll('pre')
+    expect(pres).toHaveLength(9)
+    for (const pre of pres) expect(pre).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.ticker')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('renders each group as a TypeScript constant with the context as a comment', () => {
+    const { container } = render(<Skills />)
+    const testing = container.querySelectorAll('pre')[2]?.textContent ?? ''
+    expect(testing).toContain('// unit, component, UI/API integration and end-to-end testing')
+    expect(testing).toContain('export const testing = [')
+    expect(testing).toContain("'React Testing Library',")
+    expect(testing).toContain('] as const')
   })
 
   it('shows the verified context lines and no percentages', () => {
@@ -70,18 +89,31 @@ describe('05 — Certifications (FR-RES-04, D3)', () => {
   })
 })
 
-describe('06 — Education (FR-RES-05, D2)', () => {
-  it('shows the B.Tech only, with institution and graduation year', () => {
+describe('06 — Education (FR-RES-05, owner decision 2026-11-05)', () => {
+  it('shows the three entries, newest first, with institutions and years', () => {
     const { container } = render(<Education />)
     expect(screen.getByRole('region', { name: 'My Education' })).toHaveAttribute('id', 'education')
     expect(screen.getByText('06 — Education')).toBeInTheDocument()
     expect(screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
-      'B.Tech, Electronics & Communication Engineering',
+      'Bachelor in Electronics & Communication Engineering',
+      'Diploma in Electronics Engineering',
+      'Intermediate',
     ])
-    expect(
-      screen.getByText('Bipin Tripathi Kumaon Institute of Technology, Dwarahat'),
-    ).toBeInTheDocument()
-    expect(screen.getByText('Graduated 2019')).toBeInTheDocument()
-    expect(container.textContent).not.toMatch(/Diploma|Intermediate/)
+    for (const institution of [
+      'Bipin Tripathi Kumaon Institute Of Technology',
+      'Government Polytechnic Nainital',
+      'Mahatma Gandhi Inter College',
+    ]) {
+      expect(screen.getByText(institution)).toBeInTheDocument()
+    }
+    const times = [...container.querySelectorAll('time')].map((t) => t.getAttribute('datetime'))
+    expect(times).toEqual(['2016', '2019', '2012', '2015', '2010', '2012'])
+  })
+
+  it('keeps the journey line, nodes and ghost years decorative', () => {
+    const { container } = render(<Education />)
+    expect(container.querySelector('[data-journey]')).not.toBeNull()
+    expect(container.querySelectorAll('.journey-node[aria-hidden="true"]')).toHaveLength(3)
+    expect(container.querySelectorAll('.ghost-year[aria-hidden="true"]')).toHaveLength(3)
   })
 })

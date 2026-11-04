@@ -6,6 +6,7 @@ import {
   PencilRulerIcon,
   type IconProps,
 } from '@/components/ui/icons'
+import { Card } from '@/components/ui/Card'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { getSectionHeading, services, type ServiceIcon } from '@/content'
@@ -21,7 +22,10 @@ const SERVICE_ICONS: Record<ServiceIcon, ComponentType<IconProps>> = {
   flask: FlaskConicalIcon,
 }
 
-/** 02 — Services (FR-SRV-01, COMPONENT_VISUAL_SPEC §11). Copy verbatim from the live site (D20). */
+/**
+ * 02 — Services (FR-SRV-01, COMPONENT_VISUAL_SPEC §11, Phase 11.5): 2×2 cards, each icon in a
+ * cyan-rimmed rounded square. Copy verbatim from the live site (D20).
+ */
 export function Services() {
   const heading = getSectionHeading('services')
   const headingId = `${heading.id}-heading`
@@ -33,21 +37,22 @@ export function Services() {
         eyebrow={heading.eyebrow}
         heading={heading.heading}
         headingId={headingId}
+        className="mb-11"
       />
-      <div className="xl:gap-x-8 mt-12 lg:grid lg:grid-cols-12 lg:gap-x-6">
-        <ul className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:col-span-9 lg:col-start-4">
-          {services.map((service) => {
-            const Icon = SERVICE_ICONS[service.icon]
-            return (
-              <li key={service.title} className="border-rule border-t pt-6">
+      <ul data-stagger="" className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {services.map((service) => {
+          const Icon = SERVICE_ICONS[service.icon]
+          return (
+            <Card as="li" key={service.title} className="p-5.5 sm:p-7.5">
+              <span className="inline-grid size-13 place-items-center rounded-lg border border-rim bg-accent/8 text-accent">
                 <Icon size={24} />
-                <h3 className="font-display mt-4 text-h3 font-medium">{service.title}</h3>
-                <p className="text-text-muted mt-3 max-w-[48ch]">{service.description}</p>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
+              </span>
+              <h3 className="mt-5 text-h3">{service.title}</h3>
+              <p className="mt-2.5">{service.description}</p>
+            </Card>
+          )
+        })}
+      </ul>
     </Section>
   )
 }

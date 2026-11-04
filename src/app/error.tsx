@@ -14,7 +14,7 @@ export default function ErrorBoundary({
   return (
     <main id="main" tabIndex={-1} className="focus:outline-none">
       <Container className="py-(--space-section)">
-        <h1 className="font-display text-h2 font-medium">{uiCopy.errorHeading}</h1>
+        <h1 className="text-h2">{uiCopy.errorHeading}</h1>
         <p className="mt-4 text-lead">{uiCopy.errorText}</p>
         <Button size="lg" className="mt-10" onClick={() => reset()}>
           {uiCopy.errorRetry}

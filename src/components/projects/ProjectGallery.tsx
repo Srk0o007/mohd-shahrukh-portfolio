@@ -13,8 +13,10 @@ export interface FilterOption {
 }
 
 export interface ProjectGalleryProps {
-  /** The section header; the filter chips sit beside the heading (COMPONENT_VISUAL_SPEC §15). */
-  header: Omit<SectionHeaderProps, 'aside' | 'intro' | 'className'>
+  /** The section header; the filter chips sit beside it (COMPONENT_VISUAL_SPEC §15). */
+  header: Omit<SectionHeaderProps, 'intro' | 'center' | 'className'>
+  /** Accessible name of the chip group. */
+  groupLabel: string
   filters: readonly FilterOption[]
   /** Server-rendered <li> cards carrying their classes for every filter state. */
   children: ReactNode
@@ -26,13 +28,13 @@ export interface ProjectGalleryProps {
  * The chips are server-rendered but `js-only`, so they reserve their space (no layout shift);
  * without JS they are hidden and all ten cards are shown in the "All" layout.
  */
-export function ProjectGallery({ header, filters, children }: ProjectGalleryProps) {
+export function ProjectGallery({ header, groupLabel, filters, children }: ProjectGalleryProps) {
   const [filter, setFilter] = useState<FilterValue>('all')
   const status = filters.find((option) => option.value === filter)?.status ?? ''
 
   const chips = (
-    <div className="js-only">
-      <div className="flex flex-wrap gap-2">
+    <div className="js-only" data-reveal="">
+      <div role="group" aria-label={groupLabel} className="flex flex-wrap gap-2">
         {filters.map((option) => {
           const pressed = option.value === filter
           return (
@@ -42,12 +44,13 @@ export function ProjectGallery({ header, filters, children }: ProjectGalleryProp
               aria-pressed={pressed}
               onClick={() => setFilter(option.value)}
               className={cn(
-                'ease-standard min-h-11 rounded-pill border px-4.5 text-ui font-medium transition-colors duration-150',
-                // Forced colours remove fills: the pressed chip uses the system highlight pair so
-                // its state stays visible there (NFR-BRW-04); the border keeps every chip outlined.
+                'min-h-11 cursor-pointer rounded-pill border px-4.5 text-small font-bold transition-[color,border-color,background] duration-400 ease-soft',
+                // Pressed: a gradient border on black. Forced colours remove fills, so the pressed
+                // chip uses the system highlight pair there (NFR-BRW-04); the border keeps every
+                // chip outlined.
                 pressed
-                  ? 'bg-primary text-on-primary border-transparent forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none'
-                  : 'border-border text-text hover:bg-surface-2',
+                  ? 'chip-pressed text-heading forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none'
+                  : 'border-line-strong bg-[rgb(255_255_255/0.03)] text-sub hover:border-accent hover:text-heading',
               )}
             >
               {option.label}
@@ -63,10 +66,14 @@ export function ProjectGallery({ header, filters, children }: ProjectGalleryProp
 
   return (
     <>
-      <SectionHeader {...header} aside={chips} />
+      <div className="mb-11 flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
+        <SectionHeader {...header} />
+        {chips}
+      </div>
       <ul
         data-filter={filter}
-        className="group/gallery xl:gap-x-8 mt-12 grid items-start gap-y-12 md:grid-cols-2 md:gap-x-6 md:gap-y-16 lg:mt-16 lg:grid-cols-12 lg:gap-y-24"
+        data-stagger=""
+        className="group/gallery grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2"
       >
         {children}
       </ul>

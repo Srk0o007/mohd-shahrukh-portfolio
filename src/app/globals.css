@@ -580,10 +580,6 @@
     animation: dot-progress var(--autoplay, 7s) linear forwards;
   }
 
-  [data-paused] .dot-progress::after {
-    animation-play-state: paused;
-  }
-
   /* Hire band glow. */
   .hire-glow {
     background: radial-gradient(circle, rgb(0 194 255 / 0.12), transparent 65%);

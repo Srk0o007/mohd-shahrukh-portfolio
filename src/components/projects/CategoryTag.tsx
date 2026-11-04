@@ -7,29 +7,18 @@ export interface CategoryTagProps {
 }
 
 /**
- * DS-09 (COMPONENT_VISUAL_SPEC §16): enterprise = filled tag with ■, website = outlined with □.
- * Shape and fill differ, not only colour (NFR-A11Y-04); the glyph is decorative.
+ * DS-09 (COMPONENT_VISUAL_SPEC §16, Phase 11.5): an outlined uppercase pill. Enterprise products
+ * use a cyan rim and cyan text; websites a white rim. The label text names the group, so the
+ * colour is never the only cue (NFR-A11Y-04).
  */
 export function CategoryTag({ group, label }: CategoryTagProps) {
-  const enterprise = group === 'enterprise'
   return (
     <span
       className={cn(
-        'inline-flex h-6 items-center gap-2 rounded-pill px-2.5 text-label font-medium uppercase',
-        enterprise
-          ? 'bg-tag-enterprise-bg text-tag-enterprise-fg border border-transparent'
-          : 'border-border text-text border',
+        'inline-flex items-center rounded-pill border px-2.5 py-0.75 text-xs font-bold tracking-[0.1em] uppercase',
+        group === 'enterprise' ? 'border-rim text-accent' : 'border-line-strong text-heading',
       )}
     >
-      {/* Forced colours remove fills; opting the glyph out keeps the filled ■ (currentColor)
-          distinct from the outlined □ (NFR-BRW-04). */}
-      <span
-        aria-hidden="true"
-        className={cn(
-          'size-2',
-          enterprise ? 'bg-current forced-color-adjust-none' : 'border border-current',
-        )}
-      />
       {label}
     </span>
   )

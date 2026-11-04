@@ -36,7 +36,7 @@ export function ExternalLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={cn(styled && textLinkClasses, 'inline-flex items-center gap-1.5', className)}
+      className={cn(styled && textLinkClasses, 'inline-flex items-center gap-1', className)}
       {...rest}
     >
       {children}

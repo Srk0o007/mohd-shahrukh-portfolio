@@ -1,10 +1,12 @@
+import { Card } from '@/components/ui/Card'
 import type { Experience } from '@/content'
 import { formatYearMonth } from '@/lib/dates'
 import { HighlightsDisclosure } from './HighlightsDisclosure'
 
 /**
- * One role (FR-RES-01, COMPONENT_VISUAL_SPEC §12): dates in <time>, company (+ note), role,
- * tagline and highlights. ≥ 1024 px: dates in columns 1–3, content in 4–12; stacked below.
+ * One role on the timeline (FR-RES-01, COMPONENT_VISUAL_SPEC §12, Phase 11.5): dates in <time>
+ * and the location on the left with a glowing node on the line; the card on the right with
+ * company (+ note), role, tagline and highlights. Stacked below 960 px, line on the left.
  */
 export interface ExperienceEntryProps {
   role: Experience
@@ -14,30 +16,27 @@ export interface ExperienceEntryProps {
 
 export function ExperienceEntry({ role, labels }: ExperienceEntryProps) {
   return (
-    <article className="border-rule xl:gap-x-8 grid gap-x-6 gap-y-3 border-t py-8 lg:grid-cols-12">
-      <p className="text-ui font-medium tabular-nums lg:col-span-3">
+    <li className="grid grid-cols-1 gap-2.5 pl-7 mid:grid-cols-[190px_minmax(0,1fr)] mid:gap-9 mid:pl-0">
+      <p data-reveal="" className="relative font-bold text-heading tabular-nums mid:pt-6.5">
+        <span
+          aria-hidden="true"
+          className="timeline-node absolute top-1.75 -left-7 size-2.75 rounded-full border-2 border-accent bg-bg mid:top-8.5 mid:right-[-24px] mid:left-auto"
+        />
         <time dateTime={role.start}>{formatYearMonth(role.start)}</time> –{' '}
         <time dateTime={role.end}>{formatYearMonth(role.end)}</time>
-        <span aria-hidden="true" className="text-text-muted lg:hidden">
-          {' · '}
-        </span>
-        <span className="text-text-muted lg:mt-1 lg:block lg:text-small lg:font-normal">
-          {role.location}
-        </span>
+        <span className="block text-small font-normal text-sub">{role.location}</span>
       </p>
-      <div className="lg:col-span-9">
-        <h3 className="font-display text-h3-lg font-medium">
+      <Card as="article" className="p-5.5 sm:px-7.5 sm:py-7">
+        <h3 className="text-h3-lg">
           {role.company}
           {role.companyNote ? (
-            <span className="text-text-muted font-normal"> ({role.companyNote})</span>
+            <span className="font-normal text-sub"> ({role.companyNote})</span>
           ) : null}
         </h3>
-        <p className="text-text-muted mt-1.5">{role.role}</p>
-        {role.tagline ? <p className="text-text-muted mt-1 text-small">{role.tagline}</p> : null}
-        <div className="mt-5">
-          <HighlightsDisclosure highlights={role.highlights} labels={labels} />
-        </div>
-      </div>
-    </article>
+        <p className="mt-1 font-bold text-accent">{role.role}</p>
+        {role.tagline ? <p className="text-small">{role.tagline}</p> : null}
+        <HighlightsDisclosure highlights={role.highlights} labels={labels} />
+      </Card>
+    </li>
   )
 }

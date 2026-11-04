@@ -9,7 +9,7 @@ export function SkipLink({ label, href = '#main' }: SkipLinkProps) {
   return (
     <a
       href={href}
-      className="bg-primary text-on-primary fixed top-4 left-4 z-60 inline-flex min-h-11 -translate-y-24 items-center rounded-pill border border-transparent px-5 text-ui font-semibold focus-visible:translate-y-0"
+      className="fixed top-4 left-4 z-100 inline-flex min-h-11 -translate-y-24 items-center rounded-[10px] border border-transparent bg-accent px-4 font-bold text-on-accent focus-visible:translate-y-0"
     >
       {label}
     </a>
