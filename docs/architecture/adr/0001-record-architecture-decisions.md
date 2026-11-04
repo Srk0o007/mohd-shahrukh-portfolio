@@ -50,3 +50,4 @@ Record significant decisions as lightweight Architecture Decision Records in `do
 | 0010 | Image handling | Accepted |
 | 0011 | Pin TypeScript to 6.0 | Accepted |
 | 0012 | Use ESLint 9 | Accepted |
+| 0013 | Server-rendered project cards with a CSS-driven filter | Accepted (amends the `ProjectGallery` contract) |

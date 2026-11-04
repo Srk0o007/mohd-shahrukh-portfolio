@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 07 — Core Portfolio Development 🔍 Implementation in review (PR on `phase/07-core-portfolio`)
-**Next phase:** Phase 08 — Projects & Content Showcase ⏸️ Awaiting approval
+**Current phase:** Phase 08 — Projects & Content Showcase 🔍 Implementation in review (PR on `phase/08-projects-showcase`)
+**Next phase:** Phase 09 — Contact & Interactive Features ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 07 PR. It is **not** merged without the owner's approval. Phase 08 stays unstarted until explicitly approved. |
+| **Next approved action** | Owner reviews the Phase 08 PR. It is **not** merged without the owner's approval. Phase 09 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 07 PR review; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 07–12 not started |
+| **Pending work** | Phase 08 PR review. Formspree access ✅ confirmed by the owner (2026-11-04), so Phase 09 is unblocked. Q8 (extra project details) and Q11 (new project URLs) are deferred by the owner until the site is complete and deployed. First-load JS optimisation is scheduled for Phase 11 (owner, 2026-11-04). |
 
 ## Phase tracker
 
@@ -22,14 +22,57 @@
 | 04 | UI/UX Research & Design System | ✅ Complete | 2026-11-03 |
 | 05 | Technical Architecture | ✅ Complete | 2026-11-04 |
 | 06 | Foundation & Design System Implementation | ✅ Complete | 2026-11-04 |
-| 07 | Core Portfolio Development | 🔍 In review | — |
-| 08 | Projects & Content Showcase | ⏸️ Awaiting approval | — |
-| 09 | Contact & Interactive Features | ⏳ Not started | — |
+| 07 | Core Portfolio Development | ✅ Complete | 2026-11-04 |
+| 08 | Projects & Content Showcase | 🔍 In review | — |
+| 09 | Contact & Interactive Features | ⏸️ Awaiting approval | — |
 | 10 | Accessibility & Responsive Engineering | ⏳ Not started | — |
 | 11 | Performance, SEO & Quality Assurance | ⏳ Not started | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 08 summary
+
+**Delivered** (page order: … 06 Education → 07 Projects → hire band → 08 Testimonials):
+
+- **07 Projects:**
+  - all ten projects in content order with their original images;
+  - titles, subtitles and notes word for word; numbered 01–10 (fixed, not renumbered by the filter);
+  - category tags: filled ■ "Enterprise product", outlined □ "Website" (DS-09).
+- **Links and notes:**
+  - only SOSUDATECH links out ("Visit SOSUDATECH Pvt. Ltd. website ↗", new tab announced) and shows its verified date and stack;
+  - the three internal products show "Internal product — no public link";
+  - the six projects without a URL show neither (D6). No descriptions were invented.
+- **Images (DS-08):** wide captures fill a 16:10 / 4:3 frame (`cover`, top-aligned); the three 375×393 captures are shown whole on `surface-2` (`contain`), not upscaled. All lazy-load with intrinsic dimensions.
+- **Filter (ADR 0013, owner-approved lighter approach):**
+  - all ten cards are server-rendered with their layout for every filter state;
+  - the `ProjectGallery` island only switches `data-filter`;
+  - chips sit to the right of the heading at ≥ 1024 px and below it on smaller screens (spec §15);
+  - `aria-pressed`, focus kept on the chip, polite "Showing n of 10 projects";
+  - without JS: all ten cards, no chips.
+- **Asymmetric grid (DS-07):**
+  - by visible index in every state: 7 + 5 / 5 + 7 pairs with +96 / +64 px offsets; an unpaired final card spans 7;
+  - 2-up with +48 px on tablet; 1-up on mobile.
+- **Hover (FR-PRJ-07):**
+  - only the linked card responds: its image zooms 1.02 on link hover or focus;
+  - none under reduced motion; unlinked cards have no hover effect.
+- **Hire band (FR-CTA-01):** full-bleed accent in both themes, ink focus ring, "Call Me!" → `tel:+919760787661`, "Hire Me!" → `#contact` (Phase 09). No parallax.
+- **08 Testimonials (FR-TST-01):** both endorsements word for word as `<figure>`/`<blockquote>`/`<figcaption>` with photo, name and role; static, no carousel; no company names.
+- **Test tooling:** Vitest resolves image imports to real `{ src, width, height }`, so image fit and dimensions are unit-tested.
+
+**Validation (2026-11-04):**
+
+| Check | Result |
+|---|---|
+| Build | ✅ All 6 routes static (○) |
+| TypeScript, ESLint, Prettier | ✅ 0 errors |
+| Unit, component and content tests | ✅ 132 passed (23 files) |
+| E2E + axe (Chromium) | ✅ 60 passed (17 new). New coverage: filter at 375 / 800 / 1280 (counts, status, focus, no overflow); grid geometry and frame ratios per breakpoint and filter state; single external link and lazy images; hover zoom and reduced motion; "View My Work" / nav landing; hire band; testimonials; no-JS (10 cards, no chips); axe with a filter applied in both themes at 375 / 1280 |
+| First-load JS | ✅ 140.2 KB gzip (+0.7 KB for Phase 08; budget 150; ⚠ above the 120 KB target, optimisation scheduled for Phase 11) |
+| `npm audit --audit-level=high` | ✅ 0 high or critical |
+| Visual review | ✅ Screenshots reviewed at 375 / 800 / 1024 / 1280 / 1440 px, light and dark, every filter state |
+
+**Pending internal targets:** only `#contact` (Phase 09). The E2E test fails on any other missing target.
 
 ## Phase 07 summary
 
@@ -258,6 +301,11 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Server images via `getImageProps()` + `<img>` (ADR 0010 addendum) | About 6 KB less first-load JS than the `next/image` client component |
 | 2026-11-04 | `agentRules: false` in `next.config.ts`; the auto-generated `AGENTS.md` is not committed | Next.js 16 `next dev` writes AI-agent instructions into the repo root by default; not an approved deliverable (owner may reverse) |
 | 2026-11-04 | Test runner: Vitest (Jest-compatible API) | ADR 0007 |
+| 2026-11-04 | Phase 07 review answers: icon menu buttons approved; "Graduated {year}" approved; JS optimisation in Phase 11; Q8 / Q11 project details and URLs to be supplied after the site is complete and deployed | Owner |
+| 2026-11-04 | Project filter: server-rendered cards with per-state layout classes and a minimal client island (ADR 0013) | Owner-approved lighter approach; +0.7 KB JS |
+| 2026-11-04 | "Existing Work CTA" = the hire band ("Interested in working with me?", Call Me! → phone, Hire Me! → Contact) | Owner |
+| 2026-11-04 | Project cards numbered 01–10 by content order (not renumbered when filtered); no invented descriptions; no link or note on the six unlinked projects; testimonials word for word | Owner |
+| 2026-11-04 | Hover zoom only on the linked card (link hover/focus); unlinked cards have no hover effect | A hover effect would suggest they are clickable (spec §17) |
 
 ## Risks & dependencies
 
@@ -268,17 +316,17 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R3 | Custom domain DNS depends on Hostinger account access | High | Confirm access before Phase 12 starts | 12 |
 | R4 | Content fidelity: existing site content must be preserved without fabrication | High | Full verified inventory in Phase 02; content spec sign-off in Phase 03 | 02–03 |
 | R5 | Existing-site assets (headshot, project screenshots, resume PDF) must be obtained in usable quality | Medium | ✅ Inventoried in Phase 02; all 17 images are available. Three project images are low resolution (375×393). | 02 → 06 |
-| R6 | 6 project demo links are dead | Medium | D6: render without links until the owner supplies new URLs (Q11) | 08 |
+| R6 | 6 project demo links are dead | Medium | D6: ✅ rendered without links or notes in Phase 08; the owner supplies new URLs after deployment (Q11), a content-only change | 08 → post-12 |
 | R7 | Testimonials and photos are third-party personal data | Medium | ✅ Owner confirmed continued publication (D18); company names omitted | 03 |
 | R10 | First-load JS budget (≤ 150 KB gzip) with the App Router | Medium | Server Components by default; client components only for interactive parts | 05–06 |
 | R11 | Contact form provider limits (rate limits, free tier) | Low | Provider chosen in Phase 05; failure state offers an email fallback | 05, 09 |
-| R12 | The asymmetric project grid can create awkward gaps with filtered subsets on tablet and desktop | Low | Layout by visible index; unpaired card spans 7; verify every filter state in Phase 08 | 08 |
+| R12 | The asymmetric project grid can create awkward gaps with filtered subsets on tablet and desktop | Low | ✅ Layout by visible index; unpaired card spans 7; every filter state verified by unit tests, E2E geometry tests and screenshots in Phase 08 | 08 |
 | R13 | The skills strip adds motion and a control (WCAG 2.2.2) | Low | Pause control, static under reduced motion, `aria-hidden` duplicate; can be dropped without layout impact | 09 |
 | R14 | TypeScript pinned below the latest major (7.x) | Low | ADR 0011; upgrade when typescript-eslint supports 7 | 06+ |
-| R15 | Formspree account access unconfirmed (existing form `xleyzgzo`) | Medium | Owner confirms before Phase 09; fallback: new free form, config-only change | 09 |
+| R15 | Formspree account access (existing form `xleyzgzo`) | Low | ✅ Owner confirmed access (2026-11-04); fallback remains a new free form, config-only change | 09 |
 | R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
 | R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
-| R18 | First-load JS (136.9 KB after Phase 06; **139.5 KB after Phase 07**) is above the 120 KB target, though within the 150 KB budget; the framework runtime dominates, and the Phase 08–09 islands (project gallery, contact form, theme toggle, active section, back-to-top, skills strip) add to it | Medium | CI budget gate (`npm run size`); server-rendered slots and `getImageProps()` patterns; keep islands small; review in Phase 11 | 08–11 |
+| R18 | First-load JS (136.9 KB after Phase 06; 139.5 KB after Phase 07; **140.2 KB after Phase 08**) is above the 120 KB target, though within the 150 KB budget; the framework runtime dominates, and the Phase 09 islands (contact form, theme toggle, active section, back-to-top, skills strip) add to it | Medium | CI budget gate (`npm run size`); server-rendered cards and slots (ADR 0013), `getImageProps()`; keep islands small; optimisation in Phase 11 (owner decision) | 09–11 |
 | R19 | 17 moderate `npm audit` advisories in the ESLint dev toolchain (none in runtime deps) | Low | Not shipped to users; CI fails only on high or critical; re-check when updating the lint stack | 06+ |
 | R20 | Local machine memory pressure caused a transient Turbopack build crash (`os error 1450`) and Vitest worker OOMs | Low | Worker limits set; retry succeeded; CI runners are unaffected | 06+ |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
@@ -304,3 +352,5 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | First CI run failed at the type check: the git-ignored `next-env.d.ts` (image-import declarations) did not exist on a clean checkout. Fixed with `typecheck: next typegen && tsc --noEmit`; the full pipeline was re-run on a fresh clone and CI now passes |
 | 2026-11-04 | Phase 06 approved by owner; PR #5 merged into `main` (`agentRules: false` accepted with the merge); branch `phase/06-foundation` deleted |
 | 2026-11-04 | Phase 07: site shell (header, mobile menu, footer) and sections Hero → 06 Education implemented on `phase/07-core-portfolio`, one commit per section, each tested; specs and docs updated; PR opened for review |
+| 2026-11-04 | Phase 07 approved by owner; PR #6 merged into `main`; branch `phase/07-core-portfolio` deleted after verifying it was fully merged |
+| 2026-11-04 | Phase 08: 07 Projects (filter, asymmetric grid), hire band and 08 Testimonials implemented on `phase/08-projects-showcase`; ADR 0013; architecture, data model and content schema updated; PR opened for review |

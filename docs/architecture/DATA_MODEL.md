@@ -175,17 +175,17 @@ export interface ProjectView {
   title: string
   subtitle: string
   group: ProjectGroup
-  groupLabel: 'Enterprise product' | 'Website'
+  groupLabel: string                // UiCopy.tagEnterprise / tagWebsite: 'Enterprise product' | 'Website'
   image: { src: StaticImageData; alt: string; fit: 'cover' | 'contain' }   // DS-08
   meta?: string                     // date · stack, when verified
   link?: { href: HttpsUrl; text: string }      // only when live
   note?: string                     // only when linkStatus = 'none'
 }
 
-export interface FilterOption { value: 'all' | ProjectGroup; label: string }
+export interface FilterOption { value: 'all' | ProjectGroup; label: string; status: string }  // status pre-formatted
 ```
 
-`toProjectView(project, index)` lives in `lib/` and is unit-tested. It derives `fit` from `width / height ≥ 1.4`.
+`toProjectView(project, index, copy)` lives in `lib/project-view.ts` and is unit-tested. It derives `fit` from `width / height ≥ 1.4`; `copy` supplies the group labels and link text so `lib/` never imports content. Since [ADR 0013](adr/0013-server-rendered-project-filter.md), `ProjectView` is consumed by the server-rendered `ProjectCard`; only `FilterOption[]` crosses into the client island.
 
 ## 5. Invariants and validation
 

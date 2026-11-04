@@ -12,8 +12,6 @@ const CV_PATH = '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf'
  * Phase 09 this list must be empty and the test must report zero unresolved links.
  */
 const PENDING_TARGETS: Record<string, string> = {
-  projects: 'Phase 08',
-  testimonials: 'Phase 08',
   contact: 'Phase 09',
 }
 
@@ -22,7 +20,10 @@ const menuButton = (page: Page) => page.getByRole('button', { name: 'Open menu' 
 
 test('sections render in the approved order with no separate Resume section', async ({ page }) => {
   await page.goto('/')
-  const ids = await page.locator('main > section').evaluateAll((els) => els.map((el) => el.id))
+  // The hire band has no anchor of its own; it is identified by its heading.
+  const ids = await page
+    .locator('main > section')
+    .evaluateAll((els) => els.map((el) => el.id || el.getAttribute('aria-labelledby')))
   expect(ids).toEqual([
     'top',
     'about',
@@ -31,6 +32,9 @@ test('sections render in the approved order with no separate Resume section', as
     'skills',
     'certifications',
     'education',
+    'projects',
+    'hire-heading',
+    'testimonials',
   ])
   await expect(page.getByRole('heading', { level: 2, name: /resume/i })).toHaveCount(0)
 })

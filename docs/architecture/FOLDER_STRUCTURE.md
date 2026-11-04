@@ -51,15 +51,15 @@ mohd-shahrukh-portfolio/
 │   │   │   ├── Certifications.tsx
 │   │   │   ├── CredentialRow.tsx        # shared row + section for Certifications / Education
 │   │   │   ├── Education.tsx
-│   │   │   ├── Projects.tsx             # server shell + ProjectGallery (client)
+│   │   │   ├── Projects.tsx             # server: builds ProjectViews + layouts; cards as children
 │   │   │   ├── HireCta.tsx
 │   │   │   ├── Testimonials.tsx
 │   │   │   └── Contact.tsx              # server shell + ContactForm (client)
-│   │   ├── projects/
-│   │   │   ├── ProjectGallery.tsx       # client: filter state + grid
-│   │   │   ├── ProjectFilter.tsx
-│   │   │   ├── ProjectCard.tsx
-│   │   │   └── CategoryTag.tsx
+│   │   ├── projects/                    # ADR 0013
+│   │   │   ├── ProjectGallery.tsx       # client: filter chips + status + <ul data-filter>
+│   │   │   ├── ProjectCard.tsx          # server
+│   │   │   ├── CategoryTag.tsx
+│   │   │   └── layout-classes.ts        # per-filter-state Tailwind classes (DS-07)
 │   │   ├── experience/
 │   │   │   ├── ExperienceEntry.tsx
 │   │   │   └── HighlightsDisclosure.tsx # client
@@ -98,7 +98,8 @@ mohd-shahrukh-portfolio/
 │   ├── lib/                             # framework-free, pure, unit-tested
 │   │   ├── cn.ts                        # tiny className joiner (no dependency)
 │   │   ├── dates.ts                     # YearMonth → "May 2024", <time> values
-│   │   ├── project-layout.ts            # visible index → spans/offsets (DS-07)
+│   │   ├── project-layout.ts            # visible index → spans/offsets, per filter state (DS-07)
+│   │   ├── project-view.ts              # Project → ProjectView; image fit (DS-08)
 │   │   ├── validate-contact.ts          # FR-CON-03 rules
 │   │   ├── theme.ts                     # storage key, read/write helpers
 │   │   ├── links.ts                     # siteAnchor("#id") → "/#id"; anchorId()
