@@ -42,10 +42,12 @@ export function ProjectGallery({ header, filters, children }: ProjectGalleryProp
               aria-pressed={pressed}
               onClick={() => setFilter(option.value)}
               className={cn(
-                'min-h-11 rounded-pill px-4.5 text-ui font-medium transition-colors duration-150 ease-standard',
+                'min-h-11 rounded-pill border px-4.5 text-ui font-medium transition-colors duration-150 ease-standard',
+                // Forced colours remove fills: the pressed chip uses the system highlight pair so
+                // its state stays visible there (NFR-BRW-04); the border keeps every chip outlined.
                 pressed
-                  ? 'bg-primary text-on-primary'
-                  : 'border border-border text-text hover:bg-surface-2',
+                  ? 'border-transparent bg-primary text-on-primary forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none'
+                  : 'border-border text-text hover:bg-surface-2',
               )}
             >
               {option.label}
