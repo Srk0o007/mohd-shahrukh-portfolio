@@ -1,6 +1,7 @@
 import { cn } from '@/lib/cn'
 
-export type ButtonVariant = 'primary' | 'secondary'
+/** `ink` / `ink-outline` are only for the accent band (COMPONENT_VISUAL_SPEC §18). */
+export type ButtonVariant = 'primary' | 'secondary' | 'ink' | 'ink-outline'
 export type ButtonSize = 'md' | 'lg'
 
 const base =
@@ -11,6 +12,9 @@ const base =
 const variants: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-on-primary hover:bg-primary-hover',
   secondary: 'border border-border text-text hover:bg-surface-2',
+  // Ink on the yellow accent in both themes; contrast is the on-accent pair (COLOR_TOKENS).
+  ink: 'bg-on-accent text-accent hover:bg-on-accent/85',
+  'ink-outline': 'border border-on-accent text-on-accent hover:bg-on-accent/10',
 }
 
 /** md = 44 px, lg = 52 px tall (COMPONENT_VISUAL_SPEC §6; targets ≥ 44 px). */

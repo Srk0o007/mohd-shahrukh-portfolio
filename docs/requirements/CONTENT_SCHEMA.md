@@ -316,6 +316,7 @@ This is new text needed for functionality and accessibility. It contains **no pe
 | `factExperience` | Experience (Phase 07, owner-approved) |
 | `primaryNavLabel` | Primary: accessible name of the primary navigation (Phase 07, owner-approved) |
 | `graduated` | Graduated {year}: wording from the 03 Nov 2026 resume ("Graduated 2019"), Phase 07 |
+| `tagEnterprise` / `tagWebsite` | Enterprise product / Website: project category tag (DS-09), from DATA_MODEL §4 `ProjectView.groupLabel`, Phase 08 |
 
 ## 14. `Image` type
 

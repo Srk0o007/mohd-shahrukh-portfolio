@@ -38,7 +38,7 @@ Details: [docs/ROADMAP.md](docs/ROADMAP.md). Process and conventions: [docs/ENGI
 
 ## Getting started
 
-> **Status:** Phase 07. The home page has the site header, mobile menu and footer, plus Hero, About, Services, Experience, Skills, Certifications and Education. Projects, testimonials and contact arrive in Phases 08–09.
+> **Status:** Phase 08. The home page has the site header, mobile menu and footer, plus Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band and Testimonials. Contact arrives in Phase 09.
 
 ### Prerequisites
 
@@ -70,7 +70,7 @@ CI (`.github/workflows/ci.yml`) runs all of the above on every pull request, plu
 
 ### Updating content
 
-All copy, links and images live in `src/content/` (typed, single source). For example, when a re-deployed project gets a URL, set `linkStatus: 'live'` and `url` on its entry in `src/content/projects.ts`; no component changes are needed. The content tests (`src/content/content.test.ts`) guard the approved facts: ten projects, employment dates, and the owner decisions.
+All copy, links and images live in `src/content/` (typed, single source). For example, when a re-deployed project gets a URL, set `linkStatus: 'live'` and `url` on its entry in `src/content/projects.ts`; no component changes are needed. The card then shows "Visit … website ↗" and the hover zoom automatically. Also update the approved link statuses in `src/content/content.test.ts` (I-2/I-3), which pin which projects are live. The content tests (`src/content/content.test.ts`) guard the approved facts: ten projects, employment dates, and the owner decisions.
 
 ## Repository structure
 
@@ -94,7 +94,7 @@ All copy, links and images live in `src/content/` (typed, single source). For ex
 │   │   ├── COMPONENT_ARCHITECTURE.md
 │   │   ├── DATA_MODEL.md
 │   │   ├── ENGINEERING_GUIDELINES.md
-│   │   └── adr/              # Architecture decision records 0001–0012
+│   │   └── adr/              # Architecture decision records 0001–0013
 │   ├── audit/                # Phase 02: audit and inventories of the existing site
 │   │   ├── WEBSITE_AUDIT.md
 │   │   ├── CONTENT_INVENTORY.md

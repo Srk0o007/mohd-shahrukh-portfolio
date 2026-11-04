@@ -43,11 +43,11 @@ RootLayout [S]                                   app/layout.tsx
 │   ├── Skills [S] {skillGroups}
 │   ├── Certifications [S] {certifications}
 │   ├── Education [S] {education}
-│   ├── Projects [S] {heading}
-│   │   └── ProjectGallery [C] {projects: ProjectView[], filters, labels}
-│   │       ├── ProjectFilter {value, onChange, options}
-│   │       └── ProjectCard ×n {project: ProjectView, layout: CardLayout}
-│   │           └── CategoryTag {group}
+│   ├── Projects [S] {heading}                          (ADR 0013)
+│   │   └── ProjectGallery [C] {filters: FilterOption[], children}
+│   │       └── <li> ×10 [S] (classes for every filter state)
+│   │           └── ProjectCard [S] {project: ProjectView, frameClassName, sizes}
+│   │               └── CategoryTag [S] {group, label}
 │   ├── HireCta [S] {cta}
 │   ├── Testimonials [S] {testimonials}
 │   ├── Contact [S] {contact, social}
@@ -65,7 +65,7 @@ RootLayout [S]                                   app/layout.tsx
 | **ThemeToggle** | `labels: {toDark, toLight}` | `theme: 'light'\|'dark'` (initialised from `document.documentElement.dataset.theme`) | Toggles `data-theme` and `color-scheme`; persists to `localStorage['theme']` (try/catch); while no stored choice, listens to `matchMedia('(prefers-color-scheme: dark)')` changes; `aria-label` describes the action | FR-THM-01–04 |
 | **MobileMenu** | `items`, `cv`, `social`, `labels` | `open: boolean` | Button with `aria-expanded`/`aria-controls`; on open: focus the first link, contain Tab, `inert` on `<main>`/footer, lock scroll; Esc/Close → close and return focus; selecting a link → close and let the anchor scroll | FR-NAV-02 |
 | **ActiveSectionObserver** | `sectionIds: string[]` | none (DOM only) | One IntersectionObserver; sets `aria-current="true"` on the matching nav link (desktop and menu); maps legacy hashes (`#home → #top`, `#resume → #experience`, `#portfolio → #projects`, `#testimonial → #testimonials`) on load and `hashchange` | FR-NAV-04, FR-NAV-06 |
-| **ProjectGallery** | `projects: ProjectView[]`, `filters: FilterOption[]`, `labels` | `filter: 'all'\|ProjectGroup` | Filter buttons with `aria-pressed`; `aria-live="polite"` status "Showing n of total projects"; layout from `projectLayout(index, breakpoint-agnostic)` → CSS classes; renders filter chips only after mount | FR-PRJ-01–07, DS-07 |
+| **ProjectGallery** | `filters: FilterOption[]` (value, label, pre-formatted status), `children` (server-rendered `<li>` cards) | `filter: 'all'\|ProjectGroup` | Writes `data-filter` on `<ul class="group/gallery">`; cards carry precomputed classes for every state (`layoutsByFilter` → `cardLayoutClasses`), so CSS shows and lays them out. Filter buttons with `aria-pressed`, focus stays on the button; `aria-live="polite"` status "Showing n of total projects". Chips are server-rendered in a `js-only` wrapper (no layout shift; hidden without JS). Amended by [ADR 0013](adr/0013-server-rendered-project-filter.md). | FR-PRJ-01–07, DS-07 |
 | **HighlightsDisclosure** | `total`, `visible` (default 4), `labels`, `children` (server-rendered `<li>`s) | `expanded` | Before hydration all items are shown; after mount, collapses to `visible` and renders a button with `aria-expanded` and `aria-controls`; keeps focus on the button | FR-RES-02, DS-13 |
 | **SkillsStripControl** | `labels: {pause, play}` | `paused` | Toggles `data-paused` on the strip; IntersectionObserver starts motion only when ≥ 50% visible; not rendered under reduced motion (CSS hides it) | FR-INT-03/06, DS-12 |
 | **ContactForm** | `endpoint`, `copy: ContactFormCopy`, `limits` | `status: 'idle'\|'sending'\|'success'\|'error'`, `errors: FieldErrors`, `submitted: boolean` | See §5 | FR-CON-02–07 |
@@ -123,15 +123,17 @@ onSubmit(e):
 
 ## 7. Project layout logic (DS-07)
 
-`lib/project-layout.ts` is a pure function that maps a **visible index** to layout tokens. It is unit-tested for every filter state (all 10, 3, 7).
+`lib/project-layout.ts` is a pure function that maps a **visible index** to layout tokens. It is unit-tested for every filter state (all 10, 3, 7). `layoutsByFilter(items)` precomputes each item's layout in every state (`null` = hidden), which `components/projects/layout-classes.ts` turns into state-keyed Tailwind classes ([ADR 0013](adr/0013-server-rendered-project-filter.md)).
 
 ```ts
 type CardLayout = {
   span: 'wide' | 'narrow'          // 7 or 5 columns at ≥1024
-  offset: 'none' | 'sm' | 'lg'     // 0 / +64 / +96 px at ≥1024; +48 px for odd items at 768–1023
-  frame: '16/10' | '4/3'
+  offset: 'none' | 'sm' | 'lg'     // 0 / +64 / +96 px at ≥1024
+  frame: '16/10' | '4/3'           // at ≥1024 (tablet 4:3, mobile 16:10)
+  tabletShift: boolean             // +48 px for odd visible items at 768–1023
 }
 projectLayout(index: number, total: number): CardLayout
+layoutsByFilter(items): Record<'all' | ProjectGroup, CardLayout | null>[]
 ```
 
 Image fit (`cover` vs `contain`) comes from the image's intrinsic ratio (DS-08), computed from `StaticImageData.width/height`, so there is no per-project flag.
