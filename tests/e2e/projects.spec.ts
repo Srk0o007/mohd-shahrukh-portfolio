@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from '../fixtures'
 
 /** Phase 08 — projects, hire band and testimonials. */
 
@@ -44,7 +44,10 @@ test.describe('project filter (FR-PRJ-02, AC-PRJ-2)', () => {
       await page.goto('/')
       const status = section(page).locator('[aria-live="polite"]')
       for (const f of FILTERS) {
-        await chip(page, f.name).click()
+        // Keyboard activation: focus must stay on the chip (FR-PRJ-02). Mouse clicks are covered
+        // elsewhere; Safari/WebKit does not focus buttons on click by design.
+        await chip(page, f.name).focus()
+        await page.keyboard.press('Enter')
         await expect(chip(page, f.name)).toHaveAttribute('aria-pressed', 'true')
         await expect(chip(page, f.name)).toBeFocused()
         await expect(visibleCards(page)).toHaveCount(f.count)

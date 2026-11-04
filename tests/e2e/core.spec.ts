@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from '../fixtures'
 
 /** Phase 07 — core portfolio: shell, navigation, sections, CV, no-JS, layout. */
 
@@ -209,7 +209,9 @@ test.describe('experience content and disclosure (FR-RES-01/02)', () => {
     await expect(button).toHaveCount(1)
     await expect(button).toHaveAccessibleName('Show all 11 highlights')
     await expect(button).toHaveAttribute('aria-expanded', 'false')
-    await button.click()
+    // Keyboard activation: Safari/WebKit does not focus buttons on mouse click by design.
+    await button.focus()
+    await page.keyboard.press('Enter')
     await expect(roles.nth(0).locator('li:visible')).toHaveCount(11)
     await expect(button).toHaveAttribute('aria-expanded', 'true')
     await expect(button).toHaveAccessibleName('Show fewer highlights')

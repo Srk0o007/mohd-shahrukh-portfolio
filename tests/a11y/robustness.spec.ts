@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from '../fixtures'
 
 /** Phase 10 — target size, forced colours, text spacing, zoom, orientation and landmarks. */
 

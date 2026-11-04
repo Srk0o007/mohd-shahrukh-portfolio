@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, test } from '@playwright/test'
+import { expect, test } from '../fixtures'
 
 /**
  * NFR-A11Y-02 / AC-Q-1: zero axe violations (WCAG 2.0–2.2 A/AA rules) on the home page and the
