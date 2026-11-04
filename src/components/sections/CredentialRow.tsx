@@ -6,9 +6,9 @@ import { getSectionHeading, type SectionId } from '@/content'
 /** Table-like credential row (COMPONENT_VISUAL_SPEC §14): name 4–9, detail 10–12 at ≥ 1024. */
 export function CredentialRow({ title, detail }: { title: ReactNode; detail: ReactNode }) {
   return (
-    <li className="grid gap-x-6 gap-y-1 border-t border-rule py-6 md:grid-cols-12 xl:gap-x-8">
+    <li className="border-rule xl:gap-x-8 grid gap-x-6 gap-y-1 border-t py-6 md:grid-cols-12">
       <div className="md:col-span-8 lg:col-span-6 lg:col-start-4">{title}</div>
-      <div className="text-small text-text-muted md:col-span-4 md:text-right lg:col-span-3">
+      <div className="text-text-muted text-small md:col-span-4 md:text-right lg:col-span-3">
         {detail}
       </div>
     </li>
@@ -27,7 +27,7 @@ export function CredentialSection({ id, children }: { id: SectionId; children: R
         heading={heading.heading}
         headingId={headingId}
       />
-      <ul className="mt-12 border-b border-rule">{children}</ul>
+      <ul className="border-rule mt-12 border-b">{children}</ul>
     </Section>
   )
 }

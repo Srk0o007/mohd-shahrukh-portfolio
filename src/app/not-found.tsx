@@ -17,10 +17,10 @@ export default function NotFound() {
   return (
     <main id="main" tabIndex={-1} className="focus:outline-none">
       <Container className="py-(--space-section)">
-        <p aria-hidden="true" className="font-display text-display-2 font-medium text-text-muted">
+        <p aria-hidden="true" className="font-display text-display-2 text-text-muted font-medium">
           404
         </p>
-        <h1 className="mt-6 font-display text-h2 font-medium">{uiCopy.notFoundHeading}</h1>
+        <h1 className="font-display mt-6 text-h2 font-medium">{uiCopy.notFoundHeading}</h1>
         <p className="mt-4 text-lead">{uiCopy.notFoundText}</p>
         <Link href="/" className={buttonClasses('primary', 'lg', 'mt-10')}>
           {uiCopy.notFoundLink}

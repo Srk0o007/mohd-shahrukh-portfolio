@@ -16,20 +16,20 @@ export function Hero() {
   return (
     <section id="top" aria-labelledby={HEADING_ID} tabIndex={-1} className="focus:outline-none">
       {/* grid-cols-1 (minmax(0, 1fr)): a very long word can never widen the column (1.4.12). */}
-      <Container className="grid grid-cols-1 items-end gap-x-6 gap-y-12 pt-10 pb-(--space-section) md:grid-cols-8 md:pt-16 lg:grid-cols-12 lg:pt-20 xl:gap-x-8">
+      <Container className="xl:gap-x-8 grid grid-cols-1 items-end gap-x-6 gap-y-12 pt-10 pb-(--space-section) md:grid-cols-8 md:pt-16 lg:grid-cols-12 lg:pt-20">
         <div className="md:col-span-5 lg:col-span-8">
-          <p className="text-label font-medium text-text-muted uppercase">{uiCopy.heroEyebrow}</p>
+          <p className="text-text-muted text-label font-medium uppercase">{uiCopy.heroEyebrow}</p>
           {/* Two lines visually; the space keeps the accessible name "Mohd Shahrukh". */}
-          <h1 id={HEADING_ID} className="mt-7 font-display text-display font-medium">
+          <h1 id={HEADING_ID} className="font-display text-display mt-7 font-medium">
             <span className="block">{firstName}</span>{' '}
             <span className="block">{rest.join(' ')}</span>
           </h1>
-          <p className="mt-6 text-title-line font-medium md:mt-9">
+          <p className="text-title-line mt-6 font-medium md:mt-9">
             <span className="bg-accent box-decoration-clone px-2.5 py-0.5 text-on-accent">
               {profile.title}
             </span>
           </p>
-          <p className="mt-4 text-lead text-text-muted">{profile.heroLocationLine}</p>
+          <p className="text-text-muted mt-4 text-lead">{profile.heroLocationLine}</p>
           <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4 md:mt-10">
             <ButtonLink href={heroActions.primary.href} size="lg">
               {heroActions.primary.label}
@@ -46,9 +46,9 @@ export function Hero() {
             alt={profile.portrait.alt}
             sizes="(min-width: 1280px) 400px, (min-width: 1024px) 30vw, (min-width: 768px) 36vw, min(100vw, 360px)"
             priority
-            className="aspect-4/5 w-full border border-rule object-cover object-[50%_20%]"
+            className="border-rule aspect-4/5 w-full border object-cover object-[50%_20%]"
           />
-          <figcaption className="mt-3 text-small text-text-muted">
+          <figcaption className="text-text-muted mt-3 text-small">
             {profile.yearsOfExperience} {uiCopy.statLabel}
           </figcaption>
         </figure>

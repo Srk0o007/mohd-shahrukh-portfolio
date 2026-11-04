@@ -34,15 +34,15 @@ export function Services() {
         heading={heading.heading}
         headingId={headingId}
       />
-      <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8">
+      <div className="xl:gap-x-8 mt-12 lg:grid lg:grid-cols-12 lg:gap-x-6">
         <ul className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:col-span-9 lg:col-start-4">
           {services.map((service) => {
             const Icon = SERVICE_ICONS[service.icon]
             return (
-              <li key={service.title} className="border-t border-rule pt-6">
+              <li key={service.title} className="border-rule border-t pt-6">
                 <Icon size={24} />
-                <h3 className="mt-4 font-display text-h3 font-medium">{service.title}</h3>
-                <p className="mt-3 max-w-[48ch] text-text-muted">{service.description}</p>
+                <h3 className="font-display mt-4 text-h3 font-medium">{service.title}</h3>
+                <p className="text-text-muted mt-3 max-w-[48ch]">{service.description}</p>
               </li>
             )
           })}

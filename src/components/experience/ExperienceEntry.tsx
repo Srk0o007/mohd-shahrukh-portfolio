@@ -14,7 +14,7 @@ export interface ExperienceEntryProps {
 
 export function ExperienceEntry({ role, labels }: ExperienceEntryProps) {
   return (
-    <article className="grid gap-x-6 gap-y-3 border-t border-rule py-8 lg:grid-cols-12 xl:gap-x-8">
+    <article className="border-rule xl:gap-x-8 grid gap-x-6 gap-y-3 border-t py-8 lg:grid-cols-12">
       <p className="text-ui font-medium tabular-nums lg:col-span-3">
         <time dateTime={role.start}>{formatYearMonth(role.start)}</time> –{' '}
         <time dateTime={role.end}>{formatYearMonth(role.end)}</time>
@@ -29,11 +29,11 @@ export function ExperienceEntry({ role, labels }: ExperienceEntryProps) {
         <h3 className="font-display text-h3-lg font-medium">
           {role.company}
           {role.companyNote ? (
-            <span className="font-normal text-text-muted"> ({role.companyNote})</span>
+            <span className="text-text-muted font-normal"> ({role.companyNote})</span>
           ) : null}
         </h3>
-        <p className="mt-1.5 text-text-muted">{role.role}</p>
-        {role.tagline ? <p className="mt-1 text-small text-text-muted">{role.tagline}</p> : null}
+        <p className="text-text-muted mt-1.5">{role.role}</p>
+        {role.tagline ? <p className="text-text-muted mt-1 text-small">{role.tagline}</p> : null}
         <div className="mt-5">
           <HighlightsDisclosure highlights={role.highlights} labels={labels} />
         </div>

@@ -19,7 +19,7 @@ export function Section({ id, labelledBy, className, children }: SectionProps) {
       aria-labelledby={labelledBy}
       // Programmatic focus target for in-page navigation (FR-NAV-02); not in the tab order.
       tabIndex={-1}
-      className={cn('border-t border-rule py-(--space-section) focus:outline-none', className)}
+      className={cn('border-rule border-t py-(--space-section) focus:outline-none', className)}
     >
       <Container>{children}</Container>
     </section>

@@ -13,7 +13,7 @@ export interface PrimaryNavProps {
  */
 export function PrimaryNav({ label, items, className }: PrimaryNavProps) {
   return (
-    <nav aria-label={label} className={cn('nojs-flex hidden xl:flex', className)}>
+    <nav aria-label={label} className={cn('nojs-flex xl:flex hidden', className)}>
       <ul className="flex flex-wrap items-center gap-x-7 gap-y-2">
         {items.map((item) => (
           <li key={item.href}>

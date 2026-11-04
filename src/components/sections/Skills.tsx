@@ -20,8 +20,8 @@ export function Skills() {
       />
       <ul className="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
         {skillGroups.map((group) => (
-          <li key={group.label} className="border-t border-rule pt-6">
-            <h3 className="text-label font-medium text-text-muted uppercase">{group.label}</h3>
+          <li key={group.label} className="border-rule border-t pt-6">
+            <h3 className="text-text-muted text-label font-medium uppercase">{group.label}</h3>
             <ul className="mt-3">
               {group.skills.map((skill, index) => (
                 <li key={skill} className="inline">
@@ -35,7 +35,7 @@ export function Skills() {
               ))}
             </ul>
             {'context' in group ? (
-              <p className="mt-2 text-small text-text-muted">{group.context}</p>
+              <p className="text-text-muted mt-2 text-small">{group.context}</p>
             ) : null}
           </li>
         ))}

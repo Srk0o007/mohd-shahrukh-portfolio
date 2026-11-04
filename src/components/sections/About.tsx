@@ -27,15 +27,15 @@ export function About() {
         headingId={headingId}
         intro={<p>{profile.summary}</p>}
       />
-      <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8">
+      <div className="xl:gap-x-8 mt-12 lg:grid lg:grid-cols-12 lg:gap-x-6">
         <div className="lg:col-span-9 lg:col-start-4">
-          <dl className="grid border-t border-rule md:grid-cols-3">
+          <dl className="border-rule grid border-t md:grid-cols-3">
             {facts.map((fact) => (
               <div
                 key={fact.term}
-                className="border-b border-rule py-4 md:border-b-0 md:pr-6 md:not-first:border-l md:not-first:pl-6"
+                className="border-rule border-b py-4 md:border-b-0 md:pr-6 md:not-first:border-l md:not-first:pl-6"
               >
-                <dt className="text-label font-medium text-text-muted uppercase">{fact.term}</dt>
+                <dt className="text-text-muted text-label font-medium uppercase">{fact.term}</dt>
                 <dd className="mt-2 font-medium">{fact.value}</dd>
               </div>
             ))}

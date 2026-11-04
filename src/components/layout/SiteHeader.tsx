@@ -5,7 +5,6 @@ import { CvLink } from './CvLink'
 import { MobileMenu } from './MobileMenu'
 import { PrimaryNav } from './PrimaryNav'
 import { SocialLinks } from './SocialLinks'
-import { ThemeToggle } from './ThemeToggle'
 
 /**
  * Sticky site header (FR-NAV-01, COMPONENT_VISUAL_SPEC §2). Responsive contract:
@@ -17,20 +16,18 @@ import { ThemeToggle } from './ThemeToggle'
 export function SiteHeader() {
   const items = navItems.map((item) => ({ label: item.label, href: siteAnchor(item.href) }))
   const cvSuffix = formatCopy(uiCopy.cvAccessibleSuffix, { size: cv.sizeLabel })
-  const themeLabels = { toDark: uiCopy.themeToDark, toLight: uiCopy.themeToLight }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-rule bg-bg">
+    <header className="border-rule sticky top-0 z-40 border-b bg-bg">
       {/* 12 px gaps below 768 px keep wordmark + two 44 px controls within 320 px. */}
       <Container className="flex min-h-16 flex-wrap items-center gap-x-3 gap-y-2 py-2.5 md:min-h-18 md:gap-x-6">
         <a
           href={siteAnchor('#top')}
-          className="mr-auto inline-flex min-h-11 items-center font-display text-wordmark font-semibold no-underline"
+          className="font-display mr-auto inline-flex min-h-11 items-center text-wordmark font-semibold no-underline"
         >
           {profile.name}
         </a>
         <PrimaryNav label={uiCopy.primaryNavLabel} items={items} />
-        <ThemeToggle labels={themeLabels} />
         {/* Visibility lives on a wrapper: CvLink's own `inline-flex` must not compete with `hidden`. */}
         <div className="nojs-flex hidden md:flex">
           <CvLink href={cv.path} label={cv.label} accessibleSuffix={cvSuffix} />
@@ -49,7 +46,6 @@ export function SiteHeader() {
               />
               <div className="flex flex-wrap items-center justify-between gap-6">
                 <SocialLinks links={socialLinks} newTabLabel={uiCopy.newTab} />
-                <ThemeToggle labels={themeLabels} />
               </div>
             </div>
           }

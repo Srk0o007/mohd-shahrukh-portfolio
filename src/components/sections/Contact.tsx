@@ -15,24 +15,24 @@ export function Contact() {
 
   return (
     <Section id={heading.id} labelledBy={headingId}>
-      <div className="grid gap-16 lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8">
+      <div className="xl:gap-x-8 grid gap-16 lg:grid-cols-12 lg:gap-x-6">
         <div className="lg:col-span-5">
-          <p className="text-label font-medium text-text-muted uppercase tabular-nums">
+          <p className="text-text-muted text-label font-medium uppercase tabular-nums">
             {heading.index} — {heading.eyebrow}
           </p>
-          <h2 id={headingId} className="mt-4 font-display text-display-2 font-medium">
+          <h2 id={headingId} className="font-display text-display-2 mt-4 font-medium">
             {heading.heading}
           </h2>
           <p className="mt-6 max-w-[48ch] text-lead">{contactDetails.intro}</p>
           <dl className="mt-10 flex flex-col gap-5">
             <div>
-              <dt className="text-label font-medium text-text-muted uppercase">
+              <dt className="text-text-muted text-label font-medium uppercase">
                 {uiCopy.factLocation}
               </dt>
               <dd className="mt-1 font-medium">{contactDetails.location}</dd>
             </div>
             <div>
-              <dt className="text-label font-medium text-text-muted uppercase">
+              <dt className="text-text-muted text-label font-medium uppercase">
                 {uiCopy.contactPhone}
               </dt>
               <dd className="mt-1 font-medium">
@@ -45,7 +45,7 @@ export function Contact() {
               </dd>
             </div>
             <div>
-              <dt className="text-label font-medium text-text-muted uppercase">
+              <dt className="text-text-muted text-label font-medium uppercase">
                 {uiCopy.contactEmail}
               </dt>
               <dd className="mt-1 font-medium">

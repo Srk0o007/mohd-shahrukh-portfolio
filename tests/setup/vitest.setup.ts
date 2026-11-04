@@ -8,8 +8,8 @@ afterEach(() => {
 })
 
 /**
- * jsdom has no matchMedia. This stub reports "light" and "no reduced motion" by default;
- * tests that need system changes replace it (see ThemeToggle.test.tsx).
+ * jsdom has no matchMedia. This stub reports "no match" (e.g. no reduced motion) by default;
+ * tests that need a matching query replace it (see TestimonialSlider.test.tsx).
  */
 if (typeof window !== 'undefined' && !window.matchMedia) {
   window.matchMedia = (query: string) =>

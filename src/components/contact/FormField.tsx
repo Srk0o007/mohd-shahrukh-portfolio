@@ -62,7 +62,7 @@ export function FormField({
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-ui font-medium">
-        {label} <span className="font-normal text-text-muted">{requiredLabel}</span>
+        {label} <span className="text-text-muted font-normal">{requiredLabel}</span>
       </label>
       {multiline ? (
         <textarea

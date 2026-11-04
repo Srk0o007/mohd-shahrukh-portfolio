@@ -19,13 +19,13 @@ export function Testimonials() {
         heading={heading.heading}
         headingId={headingId}
       />
-      <ul className="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-x-6 xl:gap-x-8">
+      <ul className="xl:gap-x-8 mt-12 grid gap-12 lg:grid-cols-2 lg:gap-x-6">
         {testimonials.map((testimonial) => (
-          <li key={testimonial.name} className="border-t border-rule pt-8">
+          <li key={testimonial.name} className="border-rule border-t pt-8">
             <figure className="flex h-full flex-col">
               <span
                 aria-hidden="true"
-                className="h-9 font-display text-[4rem] leading-none text-text-muted"
+                className="font-display text-text-muted h-9 text-[4rem] leading-none"
               >
                 “
               </span>
@@ -37,11 +37,11 @@ export function Testimonials() {
                   src={testimonial.photo.src}
                   alt={testimonial.photo.alt}
                   sizes="56px"
-                  className="size-14 shrink-0 rounded-pill border border-rule object-cover"
+                  className="border-rule size-14 shrink-0 rounded-pill border object-cover"
                 />
                 <span className="flex flex-col">
                   <span className="text-ui font-semibold">{testimonial.name}</span>
-                  <span className="mt-1 text-small text-text-muted">{testimonial.role}</span>
+                  <span className="text-text-muted mt-1 text-small">{testimonial.role}</span>
                 </span>
               </figcaption>
             </figure>

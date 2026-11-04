@@ -42,11 +42,11 @@ export function ProjectGallery({ header, filters, children }: ProjectGalleryProp
               aria-pressed={pressed}
               onClick={() => setFilter(option.value)}
               className={cn(
-                'min-h-11 rounded-pill border px-4.5 text-ui font-medium transition-colors duration-150 ease-standard',
+                'ease-standard min-h-11 rounded-pill border px-4.5 text-ui font-medium transition-colors duration-150',
                 // Forced colours remove fills: the pressed chip uses the system highlight pair so
                 // its state stays visible there (NFR-BRW-04); the border keeps every chip outlined.
                 pressed
-                  ? 'border-transparent bg-primary text-on-primary forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none'
+                  ? 'bg-primary text-on-primary border-transparent forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-colors:forced-color-adjust-none'
                   : 'border-border text-text hover:bg-surface-2',
               )}
             >
@@ -66,7 +66,7 @@ export function ProjectGallery({ header, filters, children }: ProjectGalleryProp
       <SectionHeader {...header} aside={chips} />
       <ul
         data-filter={filter}
-        className="group/gallery mt-12 grid items-start gap-y-12 md:grid-cols-2 md:gap-x-6 md:gap-y-16 lg:mt-16 lg:grid-cols-12 lg:gap-y-24 xl:gap-x-8"
+        className="group/gallery xl:gap-x-8 mt-12 grid items-start gap-y-12 md:grid-cols-2 md:gap-x-6 md:gap-y-16 lg:mt-16 lg:grid-cols-12 lg:gap-y-24"
       >
         {children}
       </ul>

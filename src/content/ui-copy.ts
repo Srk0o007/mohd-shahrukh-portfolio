@@ -8,8 +8,6 @@ export const uiCopy = {
   skipLink: 'Skip to main content',
   menuOpen: 'Open menu',
   menuClose: 'Close menu',
-  themeToDark: 'Switch to dark theme',
-  themeToLight: 'Switch to light theme',
   cvAccessibleSuffix: '(PDF, {size})',
   newTab: '(opens in new tab)',
   filterAll: 'All',

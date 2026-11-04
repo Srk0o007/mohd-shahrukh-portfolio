@@ -184,8 +184,6 @@ export interface UiCopy {
   skipLink: string
   menuOpen: string
   menuClose: string
-  themeToDark: string
-  themeToLight: string
   cvAccessibleSuffix: string
   newTab: string
   filterAll: string

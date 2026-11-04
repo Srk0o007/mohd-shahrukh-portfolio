@@ -6,13 +6,15 @@ import { join } from 'node:path'
  * icons; Phase 11). Everything here runs during `next build` only — the outputs are static PNGs.
  */
 
-/** Phase 04 tokens (COLOR_TOKENS.md), light theme. */
+/** Phase 11.5 tokens (COLOR_TOKENS.md, ADR 0014): dark only. */
 export const BRAND = {
-  paper: '#f5f2ea',
-  ink: '#161513',
-  muted: '#5c584f',
-  rule: '#d9d3c4',
-  accent: '#f5df4e',
+  frame: '#000000',
+  heading: '#ffffff',
+  sub: '#969696',
+  line: '#1f1f1f',
+  accent: '#00c2ff',
+  accent2: '#0077ff',
+  onAccent: '#00131c',
 } as const
 
 /**
@@ -33,7 +35,7 @@ export async function monogramDataUri(): Promise<string> {
   return `data:image/svg+xml;base64,${svg.toString('base64')}`
 }
 
-/** A square PNG of the monogram filling the canvas (ink background is part of the SVG). */
+/** A square PNG of the monogram filling the canvas (black background is part of the SVG). */
 export async function monogramElement(size: number) {
   const src = await monogramDataUri()
   // eslint-disable-next-line @next/next/no-img-element -- Satori renders plain <img> only

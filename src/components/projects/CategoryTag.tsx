@@ -17,8 +17,8 @@ export function CategoryTag({ group, label }: CategoryTagProps) {
       className={cn(
         'inline-flex h-6 items-center gap-2 rounded-pill px-2.5 text-label font-medium uppercase',
         enterprise
-          ? 'border border-transparent bg-tag-enterprise-bg text-tag-enterprise-fg'
-          : 'border border-border text-text',
+          ? 'bg-tag-enterprise-bg text-tag-enterprise-fg border border-transparent'
+          : 'border-border text-text border',
       )}
     >
       {/* Forced colours remove fills; opting the glyph out keeps the filled ■ (currentColor)

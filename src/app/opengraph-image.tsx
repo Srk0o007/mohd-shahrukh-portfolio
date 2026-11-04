@@ -15,11 +15,11 @@ export const contentType = 'image/png'
 const host = new URL(siteConfig.url).host
 
 export default async function OpenGraphImage() {
-  const [fraunces, inter, interBold] = await Promise.all([
-    loadGoogleFont('Fraunces', 500, profile.name),
-    loadGoogleFont('Inter', 500, `${profile.location}${host}`),
-    loadGoogleFont('Inter', 600, profile.title),
+  const [andikaBold, andika] = await Promise.all([
+    loadGoogleFont('Andika', 700, `${profile.name}${profile.title}`),
+    loadGoogleFont('Andika', 400, `${profile.location}${host}`),
   ])
+  const [firstName, ...rest] = profile.name.split(' ')
 
   return new ImageResponse(
     <div
@@ -30,23 +30,34 @@ export default async function OpenGraphImage() {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: '72px 80px',
-        background: BRAND.paper,
-        color: BRAND.ink,
-        fontFamily: 'Inter',
+        background: BRAND.frame,
+        color: BRAND.heading,
+        fontFamily: 'Andika',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ fontFamily: 'Fraunces', fontSize: 132, lineHeight: 1, letterSpacing: -3 }}>
-          {profile.name}
+        <div style={{ display: 'flex', fontSize: 132, fontWeight: 700, lineHeight: 1 }}>
+          <span>{firstName}</span>
+          <span
+            style={{
+              marginLeft: 32,
+              backgroundImage: `linear-gradient(110deg, ${BRAND.accent}, ${BRAND.accent2})`,
+              backgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            {rest.join(' ')}
+          </span>
         </div>
-        <div style={{ display: 'flex', marginTop: 40 }}>
+        <div style={{ display: 'flex', marginTop: 44 }}>
           <div
             style={{
-              fontSize: 40,
-              fontWeight: 600,
+              fontSize: 38,
+              fontWeight: 700,
               background: BRAND.accent,
-              color: BRAND.ink,
-              padding: '6px 18px',
+              color: BRAND.onAccent,
+              padding: '8px 26px',
+              borderRadius: 999,
             }}
           >
             {profile.title}
@@ -57,22 +68,21 @@ export default async function OpenGraphImage() {
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          borderTop: `2px solid ${BRAND.rule}`,
+          borderTop: `2px solid ${BRAND.line}`,
           paddingTop: 28,
           fontSize: 30,
-          color: BRAND.muted,
+          color: BRAND.sub,
         }}
       >
         <span>{profile.location}</span>
-        <span style={{ color: BRAND.ink }}>{host}</span>
+        <span style={{ color: BRAND.accent }}>{host}</span>
       </div>
     </div>,
     {
       ...size,
       fonts: [
-        { name: 'Fraunces', data: fraunces, weight: 500, style: 'normal' },
-        { name: 'Inter', data: inter, weight: 500, style: 'normal' },
-        { name: 'Inter', data: interBold, weight: 600, style: 'normal' },
+        { name: 'Andika', data: andikaBold, weight: 700, style: 'normal' },
+        { name: 'Andika', data: andika, weight: 400, style: 'normal' },
       ],
     },
   )

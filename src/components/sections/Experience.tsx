@@ -32,7 +32,7 @@ export function Experience() {
           />
         ))}
       </div>
-      <div className="border-t border-rule pt-8 lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8">
+      <div className="border-rule xl:gap-x-8 border-t pt-8 lg:grid lg:grid-cols-12 lg:gap-x-6">
         <div className="lg:col-span-9 lg:col-start-4">
           <CvLink
             href={cv.path}

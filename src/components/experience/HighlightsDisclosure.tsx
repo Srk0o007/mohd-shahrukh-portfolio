@@ -42,7 +42,7 @@ export function HighlightsDisclosure({
     <>
       <ul
         id={listId}
-        className="flex max-w-[72ch] list-['—__'] flex-col gap-2.5 pl-7 marker:text-text-muted"
+        className="marker:text-text-muted flex max-w-[72ch] list-['—__'] flex-col gap-2.5 pl-7"
       >
         {highlights.map((highlight, index) => {
           const collapsed = collapsible && !expanded && index >= visible

@@ -34,8 +34,8 @@ export function SectionHeader({
     </h2>
   )
   return (
-    <div className={cn('grid gap-4 lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8', className)}>
-      <p className="text-label font-medium text-text-muted uppercase tabular-nums lg:col-span-3 lg:pt-3">
+    <div className={cn('xl:gap-x-8 grid gap-4 lg:grid-cols-12 lg:gap-x-6', className)}>
+      <p className="text-text-muted text-label font-medium uppercase tabular-nums lg:col-span-3 lg:pt-3">
         {index} — {eyebrow}
       </p>
       <div className="lg:col-span-9">

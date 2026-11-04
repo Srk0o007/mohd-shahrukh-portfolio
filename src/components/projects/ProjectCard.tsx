@@ -24,7 +24,7 @@ export function ProjectCard({ project, frameClassName, sizes, newTabLabel }: Pro
     <article aria-labelledby={headingId} className="group/card">
       <div
         className={cn(
-          'aspect-16/10 overflow-hidden border border-rule md:aspect-4/3',
+          'border-rule aspect-16/10 overflow-hidden border md:aspect-4/3',
           project.image.fit === 'contain' ? 'bg-surface-2' : 'bg-surface',
           frameClassName,
         )}
@@ -37,19 +37,19 @@ export function ProjectCard({ project, frameClassName, sizes, newTabLabel }: Pro
             'size-full',
             project.image.fit === 'cover' ? 'object-cover object-top' : 'object-contain p-6',
             linked &&
-              'transition-transform duration-300 ease-standard motion-safe:group-has-[a:focus-visible]/card:scale-102 motion-safe:group-has-[a:hover]/card:scale-102',
+              'ease-standard transition-transform duration-300 motion-safe:group-has-[a:focus-visible]/card:scale-102 motion-safe:group-has-[a:hover]/card:scale-102',
           )}
         />
       </div>
       <div className="mt-5 flex items-center gap-3">
-        <span className="text-label font-medium text-text-muted tabular-nums">{project.index}</span>
+        <span className="text-text-muted text-label font-medium tabular-nums">{project.index}</span>
         <CategoryTag group={project.group} label={project.groupLabel} />
       </div>
-      <h3 id={headingId} className="mt-2 font-display text-h3 font-medium">
+      <h3 id={headingId} className="font-display mt-2 text-h3 font-medium">
         {project.title}
       </h3>
-      <p className="mt-1.5 text-text-muted">{project.subtitle}</p>
-      {project.meta ? <p className="mt-2 text-small text-text-muted">{project.meta}</p> : null}
+      <p className="text-text-muted mt-1.5">{project.subtitle}</p>
+      {project.meta ? <p className="text-text-muted mt-2 text-small">{project.meta}</p> : null}
       {project.link ? (
         <p className="mt-4">
           <ExternalLink href={project.link.href} newTabLabel={newTabLabel} className="min-h-11">
@@ -57,7 +57,7 @@ export function ProjectCard({ project, frameClassName, sizes, newTabLabel }: Pro
           </ExternalLink>
         </p>
       ) : null}
-      {project.note ? <p className="mt-4 text-small text-text-muted">{project.note}</p> : null}
+      {project.note ? <p className="text-text-muted mt-4 text-small">{project.note}</p> : null}
     </article>
   )
 }

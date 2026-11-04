@@ -19,7 +19,7 @@ export default function GlobalError({
           <button
             type="button"
             onClick={() => reset()}
-            className="mt-10 inline-flex min-h-13 items-center rounded-pill bg-primary px-7 text-ui font-semibold text-on-primary"
+            className="bg-primary text-on-primary mt-10 inline-flex min-h-13 items-center rounded-pill px-7 text-ui font-semibold"
           >
             {uiCopy.errorRetry}
           </button>

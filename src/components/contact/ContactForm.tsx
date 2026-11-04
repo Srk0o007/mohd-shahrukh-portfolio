@@ -178,7 +178,7 @@ export function ContactForm({ endpoint, copy }: ContactFormProps) {
           onBlur={(event) => revalidate('message', event.target.value)}
         >
           {/* DS-15: passive counter; read with the field, not live-announced (FR-CON-07). */}
-          <p id={counterId} className="text-right text-small text-text-muted tabular-nums">
+          <p id={counterId} className="text-text-muted text-right text-small tabular-nums">
             {values.message.length} / {CONTACT_LIMITS.message}
           </p>
         </FormField>

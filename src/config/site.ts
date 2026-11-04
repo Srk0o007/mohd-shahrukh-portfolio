@@ -9,6 +9,4 @@ export const siteConfig = {
   formEndpoint: 'https://formspree.io/f/xleyzgzo',
   /** CV served from /public (FR-RES-06, D7). */
   cvPath: '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf',
-  /** localStorage key for the theme preference (ADR 0005). */
-  themeStorageKey: 'theme',
 } as const

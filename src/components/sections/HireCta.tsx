@@ -15,7 +15,7 @@ export function HireCta() {
       aria-labelledby={HEADING_ID}
       className="bg-accent py-[calc(var(--space-section)*0.75)] text-on-accent [--color-focus:var(--c-on-accent)]"
     >
-      <Container className="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-6 xl:gap-x-8">
+      <Container className="xl:gap-x-8 flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-6">
         <h2 id={HEADING_ID} className="font-display text-h2 font-medium lg:col-span-8">
           {ctaBand.heading}
         </h2>

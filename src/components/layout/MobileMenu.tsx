@@ -133,7 +133,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
         aria-expanded={open}
         {...(open ? { 'aria-controls': panelId } : {})}
         onClick={openMenu}
-        className="js-only inline-flex size-11 items-center justify-center rounded-pill border border-border text-text transition-colors duration-150 ease-standard hover:bg-surface-2 xl:hidden"
+        className="js-only border-border text-text ease-standard hover:bg-surface-2 xl:hidden inline-flex size-11 items-center justify-center rounded-pill border transition-colors duration-150"
       >
         <MenuIcon size={20} />
       </button>
@@ -148,10 +148,10 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
               role="dialog"
               aria-modal="true"
               aria-labelledby={`${panelId}-title`}
-              className="fixed inset-0 z-50 overflow-y-auto bg-bg text-text"
+              className="text-text fixed inset-0 z-50 overflow-y-auto bg-bg"
             >
               <div className="mx-auto flex min-h-full w-full max-w-360 flex-col px-5 pb-10 md:px-8 lg:px-10">
-                <div className="flex h-16 items-center justify-between border-b border-rule md:h-18">
+                <div className="border-rule flex h-16 items-center justify-between border-b md:h-18">
                   <span
                     id={`${panelId}-title`}
                     className="font-display text-wordmark font-semibold"
@@ -162,7 +162,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
                     type="button"
                     aria-label={labels.close}
                     onClick={() => close({ kind: 'restore' })}
-                    className="inline-flex size-11 items-center justify-center rounded-pill border border-border transition-colors duration-150 ease-standard hover:bg-surface-2"
+                    className="border-border ease-standard hover:bg-surface-2 inline-flex size-11 items-center justify-center rounded-pill border transition-colors duration-150"
                   >
                     <CloseIcon size={20} />
                   </button>
@@ -171,7 +171,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
                 <nav aria-label={labels.nav} className="mt-6">
                   <ul>
                     {items.map((item, index) => (
-                      <li key={item.href} className="border-b border-rule">
+                      <li key={item.href} className="border-rule border-b">
                         <a
                           href={item.href}
                           onClick={(event) => onLinkClick(event, item.href)}
@@ -182,7 +182,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
                         >
                           <span
                             aria-hidden="true"
-                            className="text-label font-medium text-text-muted tabular-nums"
+                            className="text-text-muted text-label font-medium tabular-nums"
                           >
                             {String(index + 1).padStart(2, '0')}
                           </span>
