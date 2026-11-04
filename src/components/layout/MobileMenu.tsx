@@ -12,6 +12,7 @@ import {
 import { createPortal } from 'react-dom'
 import { CloseIcon, MenuIcon } from '@/components/ui/icons'
 import { anchorId } from '@/lib/links'
+import { goToSection } from '@/lib/section-nav'
 
 export interface MobileMenuProps {
   name: string
@@ -35,6 +36,8 @@ type AfterClose = { kind: 'restore' } | { kind: 'section'; id: string } | null
  */
 export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
   const [open, setOpen] = useState(false)
+  /** Section being read when the menu opened (set by ActiveSectionObserver, FR-NAV-04). */
+  const [currentId, setCurrentId] = useState('')
   const panelId = useId()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -102,12 +105,13 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
       buttonRef.current?.focus()
       return
     }
-    const target = document.getElementById(next.id)
-    if (!target) return
-    window.history.pushState(null, '', `#${next.id}`)
-    target.scrollIntoView({ block: 'start' })
-    target.focus({ preventScroll: true })
+    goToSection(next.id)
   }, [open])
+
+  const openMenu = () => {
+    setCurrentId(document.documentElement.dataset.section ?? '')
+    setOpen(true)
+  }
 
   const onLinkClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     const id = anchorId(href)
@@ -128,7 +132,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
         aria-label={labels.open}
         aria-expanded={open}
         {...(open ? { 'aria-controls': panelId } : {})}
-        onClick={() => setOpen(true)}
+        onClick={openMenu}
         className="js-only inline-flex size-11 items-center justify-center rounded-pill border border-border text-text transition-colors duration-150 ease-standard hover:bg-surface-2 xl:hidden"
       >
         <MenuIcon size={20} />
@@ -161,7 +165,10 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
                         <a
                           href={item.href}
                           onClick={(event) => onLinkClick(event, item.href)}
-                          className="flex min-h-14 items-baseline gap-4 py-3"
+                          {...(currentId !== '' && anchorId(item.href) === currentId
+                            ? { 'aria-current': 'true' as const }
+                            : {})}
+                          className="group/item flex min-h-14 items-baseline gap-4 py-3"
                         >
                           <span
                             aria-hidden="true"
@@ -169,7 +176,10 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
                           >
                             {String(index + 1).padStart(2, '0')}
                           </span>
-                          <span className="font-display text-h2 font-medium">{item.label}</span>
+                          {/* Current section (FR-NAV-04): 2 px underline on the label only. */}
+                          <span className="font-display text-h2 font-medium decoration-2 underline-offset-8 group-aria-current/item:underline">
+                            {item.label}
+                          </span>
                         </a>
                       </li>
                     ))}

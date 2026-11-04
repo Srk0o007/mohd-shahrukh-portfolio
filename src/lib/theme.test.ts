@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { THEME_SCRIPT } from './theme'
+import { applyTheme, currentTheme, readStoredTheme, storeTheme, THEME_SCRIPT } from './theme'
 
 /** Runs the pre-paint script against a stubbed browser environment (ADR 0005). */
 function run(options: {
@@ -52,5 +52,54 @@ describe('THEME_SCRIPT', () => {
 
   it('does not throw when storage is blocked', () => {
     expect(run({ stored: null, systemDark: true, storageThrows: true })['data-theme']).toBe('dark')
+  })
+})
+
+describe('theme helpers (FR-THM-02)', () => {
+  const memory = () => {
+    const data = new Map<string, string>()
+    return {
+      getItem: (key: string) => data.get(key) ?? null,
+      setItem: (key: string, value: string) => void data.set(key, value),
+    }
+  }
+  const blocked = {
+    getItem: () => {
+      throw new Error('blocked')
+    },
+    setItem: () => {
+      throw new Error('blocked')
+    },
+  }
+
+  it('stores and reads back a valid choice under the "theme" key', () => {
+    const storage = memory()
+    expect(readStoredTheme(storage)).toBeNull()
+    expect(storeTheme(storage, 'dark')).toBe(true)
+    expect(storage.getItem('theme')).toBe('dark')
+    expect(readStoredTheme(storage)).toBe('dark')
+  })
+
+  it('ignores invalid stored values', () => {
+    const storage = memory()
+    storage.setItem('theme', 'blue')
+    expect(readStoredTheme(storage)).toBeNull()
+  })
+
+  it('never throws when storage is blocked or missing', () => {
+    expect(readStoredTheme(blocked)).toBeNull()
+    expect(storeTheme(blocked, 'light')).toBe(false)
+    expect(readStoredTheme(undefined)).toBeNull()
+    expect(storeTheme(undefined, 'light')).toBe(false)
+  })
+
+  it('applies the same attributes as the pre-paint script', () => {
+    const root = document.createElement('html')
+    applyTheme(root, 'dark')
+    expect(root.getAttribute('data-theme')).toBe('dark')
+    expect(root.style.colorScheme).toBe('dark')
+    expect(currentTheme(root)).toBe('dark')
+    applyTheme(root, 'light')
+    expect(currentTheme(root)).toBe('light')
   })
 })

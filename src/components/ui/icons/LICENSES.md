@@ -14,8 +14,13 @@ Icon paths in this folder are copied (not installed as a dependency) per [ADR 00
 | `ChevronDownIcon` (chevron-down) | [Lucide](https://lucide.dev) | ISC |
 | `MenuIcon` (menu) | [Lucide](https://lucide.dev) | ISC |
 | `CloseIcon` (x) | [Lucide](https://lucide.dev) | ISC |
+| `SunIcon` (sun) | [Lucide](https://lucide.dev) | ISC |
+| `MoonIcon` (moon) | [Lucide](https://lucide.dev) | ISC |
+| `ArrowUpIcon` (arrow-up) | [Lucide](https://lucide.dev) | ISC |
+| `CircleCheckIcon` (circle-check) | [Lucide](https://lucide.dev) | ISC |
+| `CircleAlertIcon` (circle-alert) | [Lucide](https://lucide.dev) | ISC |
 
-All paths are copied verbatim from `lucide-static` 1.67.0; the Phase 06 icons were re-verified against it in Phase 07.
+All paths are copied verbatim from `lucide-static` 1.67.0; the Phase 06 icons were re-verified against it in Phase 07, and the Phase 09 icons were copied from it directly.
 
 **No brand marks.** Lucide no longer ships brand icons, and Simple Icons no longer includes LinkedIn, so social links use text labels (GitHub, LinkedIn, Email), as approved by the owner on 2026-11-04.
 

@@ -21,7 +21,7 @@ The target stack names Tailwind CSS. Phase 04 defined colour, type, spacing, mot
 5. `@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));`
 
 **Other rules:**
-- The base layer sets `:focus-visible`, `::selection`, `scroll-padding-top`, the reduced-motion overrides and the no-JS rules (`html:not([data-js]) …`).
+- The base layer sets `:focus-visible`, `::selection`, `scroll-margin-top` on page content (Phase 09; previously `scroll-padding-top`), the reduced-motion overrides and the no-JS rules (`html:not([data-js]) …`).
 - `prettier-plugin-tailwindcss` orders class names.
 
 ## Alternatives considered

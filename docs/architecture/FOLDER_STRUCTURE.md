@@ -34,7 +34,7 @@ mohd-shahrukh-portfolio/
 │   │   │   ├── PrimaryNav.tsx
 │   │   │   ├── MobileMenu.tsx           # client
 │   │   │   ├── ThemeScript.tsx          # inline pre-paint script
-│   │   │   ├── ThemeToggle.tsx          # client
+│   │   │   ├── ThemeToggle.tsx          # client; label/icon chosen by CSS from data-theme
 │   │   │   ├── ActiveSectionObserver.tsx # client
 │   │   │   ├── SiteFooter.tsx
 │   │   │   ├── SocialLinks.tsx          # text-labelled social links (pure; also used in the menu)
@@ -43,7 +43,6 @@ mohd-shahrukh-portfolio/
 │   │   │   └── BackToTop.tsx            # client
 │   │   ├── sections/
 │   │   │   ├── Hero.tsx
-│   │   │   ├── SkillsStrip.tsx          # server shell + SkillsStripControl (client)
 │   │   │   ├── About.tsx
 │   │   │   ├── Services.tsx
 │   │   │   ├── Experience.tsx           # uses HighlightsDisclosure (client)
@@ -101,7 +100,9 @@ mohd-shahrukh-portfolio/
 │   │   ├── project-layout.ts            # visible index → spans/offsets, per filter state (DS-07)
 │   │   ├── project-view.ts              # Project → ProjectView; image fit (DS-08)
 │   │   ├── validate-contact.ts          # FR-CON-03 rules
-│   │   ├── theme.ts                     # storage key, read/write helpers
+│   │   ├── submit-contact.ts            # Formspree POST; success only on 2xx + ok:true (ADR 0006)
+│   │   ├── section-nav.ts               # goToSection, current section, legacy anchors
+│   │   ├── theme.ts                     # pre-paint script; storage and apply helpers
 │   │   ├── links.ts                     # siteAnchor("#id") → "/#id"; anchorId()
 │   │   └── *.test.ts                    # colocated unit tests
 │   └── assets/

@@ -185,10 +185,19 @@
   }
 
   html {
-    /* Focus not obscured by the sticky header (WCAG 2.4.11) */
-    scroll-padding-top: calc(var(--header-h) + 16px);
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /*
+   * Focus and anchor targets are not obscured by the sticky header (WCAG 2.4.11, FR-NAV-05).
+   * A scroll margin on page content, not `scroll-padding` on <html>: scroll-padding also applies
+   * to the header's own controls, which always sit inside that padded band, so focusing them
+   * (Tab, or focus returning to the menu button) scrolled the page toward the top.
+   */
+  :where(main, footer),
+  :where(main, footer) * {
+    scroll-margin-top: calc(var(--header-h) + 16px);
   }
 
   body {
