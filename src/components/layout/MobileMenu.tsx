@@ -140,14 +140,24 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
 
       {open
         ? createPortal(
+            // A modal dialog (Phase 10): focus is contained and the page behind is inert, so the
+            // overlay is announced as a dialog, named by the wordmark it shows (no new copy).
             <div
               ref={panelRef}
               id={panelId}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={`${panelId}-title`}
               className="fixed inset-0 z-50 overflow-y-auto bg-bg text-text"
             >
               <div className="mx-auto flex min-h-full w-full max-w-360 flex-col px-5 pb-10 md:px-8 lg:px-10">
                 <div className="flex h-16 items-center justify-between border-b border-rule md:h-18">
-                  <span className="font-display text-wordmark font-semibold">{name}</span>
+                  <span
+                    id={`${panelId}-title`}
+                    className="font-display text-wordmark font-semibold"
+                  >
+                    {name}
+                  </span>
                   <button
                     type="button"
                     aria-label={labels.close}

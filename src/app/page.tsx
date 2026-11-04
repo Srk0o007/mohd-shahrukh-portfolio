@@ -35,8 +35,9 @@ export default function HomePage() {
         <HireCta />
         <Testimonials />
         <Contact />
+        {/* Inside <main> so all content sits in a landmark; fixed positioning is unaffected. */}
+        <BackToTop label={uiCopy.backToTop} />
       </main>
-      <BackToTop label={uiCopy.backToTop} />
       <ActiveSectionObserver navIds={navIds} />
     </>
   )

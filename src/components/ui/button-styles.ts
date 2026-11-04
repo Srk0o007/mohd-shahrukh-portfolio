@@ -9,11 +9,16 @@ const base =
   'transition-colors duration-150 ease-standard motion-reduce:transition-none ' +
   'aria-disabled:cursor-progress'
 
+/*
+ * Filled variants carry a transparent border: invisible normally, but forced-colours mode
+ * (Windows High Contrast) paints borders in the system text colour while removing fills,
+ * so the button outline stays visible (NFR-BRW-04, Phase 10). Same box size as outlined.
+ */
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-on-primary hover:bg-primary-hover',
+  primary: 'border border-transparent bg-primary text-on-primary hover:bg-primary-hover',
   secondary: 'border border-border text-text hover:bg-surface-2',
   // Ink on the yellow accent in both themes; contrast is the on-accent pair (COLOR_TOKENS).
-  ink: 'bg-on-accent text-accent hover:bg-on-accent/85',
+  ink: 'border border-transparent bg-on-accent text-accent hover:bg-on-accent/85',
   'ink-outline': 'border border-on-accent text-on-accent hover:bg-on-accent/10',
 }
 

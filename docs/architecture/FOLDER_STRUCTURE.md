@@ -11,7 +11,7 @@ mohd-shahrukh-portfolio/
 │   ├── pull_request_template.md
 │   └── workflows/
 │       └── ci.yml                       # format, lint, typecheck, test, build, e2e (Phase 06)
-├── docs/                                # audit, requirements, design, architecture (+ adr/)
+├── docs/                                # audit, requirements, design, architecture (+ adr/), quality
 ├── public/
 │   └── Mohd_Shahrukh_Resume_03_Nov_2026.pdf   # CV (FR-RES-06)
 ├── src/

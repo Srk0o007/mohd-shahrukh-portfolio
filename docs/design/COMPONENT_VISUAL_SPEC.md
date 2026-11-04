@@ -78,7 +78,7 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 | Property | Spec |
 |---|---|
 | Trigger | 44 px outline circle with the Lucide `menu` icon; accessible name "Open menu" (approved UI copy, no new visible text); `aria-expanded`; `aria-controls` only while open (so it never points at a missing element) |
-| Surface | Full viewport, `bg`, `z-menu`; header row: wordmark + 44 px close button (Lucide `x`, accessible name "Close menu") |
+| Surface | Full viewport, `bg`, `z-menu`; header row: wordmark + 44 px close button (Lucide `x`, accessible name "Close menu"). A modal dialog: `role="dialog"`, `aria-modal="true"`, named by the wordmark (Phase 10) |
 | Items | Numbered list, each 56 px min height: index in `label` `text-muted` + label in Fraunces 500 at 36 px (`h2` min); `rule` separators |
 | Order | 01 About … 07 Contact (nav order, D15). The menu's own 01–07 numbering may differ from section indices; screen readers announce only the labels (numbers `aria-hidden`). |
 | Footer of menu | Download CV (primary, lg, full width) · **text links: GitHub, LinkedIn, Email** (owner decision, 2026-11-04) · theme toggle (right-aligned, Phase 09) |
@@ -104,6 +104,10 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 | **Disclosure** | Text link + chevron-down (rotates 180° when expanded; instant under reduced motion) | — | 2 px underline | "Show all 11 highlights" |
 
 **Icons in buttons:** 16 px, 8 px gap. **External links:** ↗ glyph plus visually hidden "(opens in new tab)".
+
+**Forced colours (Phase 10, NFR-BRW-04):** filled variants (primary, ink, pressed chip, skip link, enterprise tag) carry a transparent 1 px border. It is invisible normally, but forced-colours mode paints it, so the outline survives when fills are removed. The pressed filter chip uses `Highlight` / `HighlightText` there.
+
+**Social text links** (About, Contact, footer, menu): 44 px minimum height (WCAG 2.5.8; they form a list, not inline text).
 
 ## 7. Section header (numbered)
 
@@ -278,7 +282,7 @@ Glyphs are `aria-hidden`; the visible text carries the meaning. Height 24 px; pa
 |---|---|
 | Layout | 1 px `rule` top; copyright · "Designed by Mohd Shahrukh" · social **text links** (GitHub, LinkedIn, Email); stacked < 768 |
 | Type | `small`, `text-muted` |
-| Spacing | 48 px top padding, 40 px bottom |
+| Spacing | 48 px top padding; 40 px bottom below 768 px, 96 px from 768 px, so the right-aligned links stay clear of the fixed back-to-top button at the end of the page (Phase 10) |
 
 ## 24. Back to top
 

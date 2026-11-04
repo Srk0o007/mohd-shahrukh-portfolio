@@ -15,7 +15,8 @@ export function Hero() {
   const [firstName, ...rest] = profile.name.split(' ')
   return (
     <section id="top" aria-labelledby={HEADING_ID} tabIndex={-1} className="focus:outline-none">
-      <Container className="grid items-end gap-x-6 gap-y-12 pt-10 pb-(--space-section) md:grid-cols-8 md:pt-16 lg:grid-cols-12 lg:pt-20 xl:gap-x-8">
+      {/* grid-cols-1 (minmax(0, 1fr)): a very long word can never widen the column (1.4.12). */}
+      <Container className="grid grid-cols-1 items-end gap-x-6 gap-y-12 pt-10 pb-(--space-section) md:grid-cols-8 md:pt-16 lg:grid-cols-12 lg:pt-20 xl:gap-x-8">
         <div className="md:col-span-5 lg:col-span-8">
           <p className="text-label font-medium text-text-muted uppercase">{uiCopy.heroEyebrow}</p>
           {/* Two lines visually; the space keeps the accessible name "Mohd Shahrukh". */}

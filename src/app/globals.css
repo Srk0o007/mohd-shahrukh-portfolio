@@ -198,6 +198,8 @@
   :where(main, footer),
   :where(main, footer) * {
     scroll-margin-top: calc(var(--header-h) + 16px);
+    /* Clear of the fixed back-to-top button (48 px + 24 px inset) when focus scrolls down. */
+    scroll-margin-bottom: 88px;
   }
 
   body {
@@ -214,6 +216,8 @@
   h2,
   h3 {
     text-wrap: balance;
+    /* Break a word only if it cannot fit at all (320 px with text-spacing overrides, 1.4.12). */
+    overflow-wrap: break-word;
   }
 
   p {

@@ -25,7 +25,7 @@ export function SiteHeader() {
       <Container className="flex min-h-16 flex-wrap items-center gap-x-3 gap-y-2 py-2.5 md:min-h-18 md:gap-x-6">
         <a
           href={siteAnchor('#top')}
-          className="mr-auto font-display text-wordmark font-semibold no-underline"
+          className="mr-auto inline-flex min-h-11 items-center font-display text-wordmark font-semibold no-underline"
         >
           {profile.name}
         </a>

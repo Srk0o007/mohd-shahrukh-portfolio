@@ -3,14 +3,15 @@ import { expect, test } from '@playwright/test'
 
 /**
  * NFR-A11Y-02 / AC-Q-1: zero axe violations (WCAG 2.0–2.2 A/AA rules) on the home page and the
- * 404 page, in both themes, at 375 px and 1280 px.
+ * 404 page, in both themes. Phase 10 widened the matrix from 375 / 1280 px to every layout
+ * breakpoint; interactive states (menu, filter, form) are covered in the e2e specs.
  */
 const PAGES = [
   { name: 'home', path: '/' },
   { name: '404', path: '/this-page-does-not-exist' },
 ] as const
 const SCHEMES = ['light', 'dark'] as const
-const WIDTHS = [375, 1280] as const
+const WIDTHS = [320, 375, 768, 1024, 1280, 1440] as const
 
 for (const { name, path } of PAGES) {
   for (const scheme of SCHEMES) {

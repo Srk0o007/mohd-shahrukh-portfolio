@@ -38,7 +38,7 @@ Details: [docs/ROADMAP.md](docs/ROADMAP.md). Process and conventions: [docs/ENGI
 
 ## Getting started
 
-> **Status:** Phase 09. The home page is complete: site header with theme switcher, mobile menu, Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band, Testimonials and Contact (Formspree form), plus current-section highlighting, legacy-anchor redirects and back-to-top. Accessibility hardening, performance/SEO and deployment follow in Phases 10–12.
+> **Status:** Phase 09. The home page is complete: site header with theme switcher, mobile menu, Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band, Testimonials and Contact (Formspree form), plus current-section highlighting, legacy-anchor redirects and back-to-top. Phase 10 audited accessibility (WCAG 2.2 AA) and responsiveness in Chromium, Firefox and WebKit: see `docs/quality/`. Performance/SEO and deployment follow in Phases 11–12.
 
 ### Prerequisites
 
@@ -107,6 +107,9 @@ All copy, links and images live in `src/content/` (typed, single source). For ex
 │   │   ├── COLOR_TOKENS.md
 │   │   ├── TYPOGRAPHY.md
 │   │   └── COMPONENT_VISUAL_SPEC.md
+│   ├── quality/              # Phase 10: test reports
+│   │   ├── ACCESSIBILITY_REPORT.md
+│   │   └── RESPONSIVE_TEST_REPORT.md
 │   ├── requirements/         # Phase 03: product specification
 │   │   ├── PRD.md
 │   │   ├── FUNCTIONAL_REQUIREMENTS.md

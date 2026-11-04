@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 09 — Contact & Interactive Features 🔍 Implementation in review (PR on `phase/09-contact-interactions`)
-**Next phase:** Phase 10 — Accessibility & Responsive Engineering ⏸️ Awaiting approval
+**Current phase:** Phase 10 — Accessibility & Responsive Engineering 🔍 Implementation in review (PR on `phase/10-accessibility-responsive`)
+**Next phase:** Phase 11 — Performance, SEO & Quality Assurance ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 09 PR. It is **not** merged without the owner's approval. Phase 10 stays unstarted until explicitly approved. |
+| **Next approved action** | Owner reviews the Phase 10 PR. It is **not** merged without the owner's approval. Phase 11 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 09 PR review. **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
+| **Pending work** | Phase 10 PR review. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
 
 ## Phase tracker
 
@@ -24,12 +24,60 @@
 | 06 | Foundation & Design System Implementation | ✅ Complete | 2026-11-04 |
 | 07 | Core Portfolio Development | ✅ Complete | 2026-11-04 |
 | 08 | Projects & Content Showcase | ✅ Complete | 2026-11-04 |
-| 09 | Contact & Interactive Features | 🔍 In review | — |
-| 10 | Accessibility & Responsive Engineering | ⏸️ Awaiting approval | — |
+| 09 | Contact & Interactive Features | ✅ Complete | 2026-11-04 |
+| 10 | Accessibility & Responsive Engineering | 🔍 In review | — |
 | 11 | Performance, SEO & Quality Assurance | ⏳ Not started | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 10 summary
+
+**Delivered:**
+- [docs/quality/ACCESSIBILITY_REPORT.md](docs/quality/ACCESSIBILITY_REPORT.md): every WCAG 2.2 A/AA criterion with method and result, the contrast table, findings fixed, open items and the owner's screen-reader checklist.
+- [docs/quality/RESPONSIVE_TEST_REPORT.md](docs/quality/RESPONSIVE_TEST_REPORT.md): 12 widths × 3 engines, 10 device profiles, component checks.
+
+**Audit results (after fixes):**
+- **axe:** 0 violations in 68 runs (6 widths × 2 themes × home, menu open, filter, form errors, form failure, 404; best-practice rules included).
+- **Firefox and WebKit:** clean.
+- **Contrast:** 22 / 22 token pairs pass in both themes.
+- **Keyboard walk:** clean at 375 and 1280 px.
+- **Responsive:** no horizontal scrolling in 36 width runs and on 10 devices; engines identical.
+- **No open AA failures.**
+
+**Fixed:**
+- **A11Y-01 forced colours:** filled buttons, skip link, pressed chip and enterprise tag now keep visible boundaries and states.
+- **A11Y-02 menu dialog:** the menu overlay is now a modal dialog (`role="dialog"`, `aria-modal`, named by the wordmark).
+- **A11Y-03 landmark:** back-to-top moved inside `<main>`.
+- **A11Y-04 back-to-top overlap:** it no longer covers footer links (footer padding) or focused content (`scroll-margin-bottom`).
+- **A11Y-05 touch targets:** social links and the wordmark are now 44 px.
+- **A11Y-06 long words at 320 px:** text-spacing at 320 px no longer causes horizontal scrolling (hero grid `minmax(0, 1fr)`, headings `overflow-wrap`).
+
+**Tooling:**
+- Firefox 157 and WebKit 27.2 test engines installed locally (owner decision 2).
+- WebKit needs a test-harness workaround on plain-HTTP localhost: CSP `upgrade-insecure-requests` blocks its CSS. Production is HTTPS.
+
+**New regression specs:**
+- `tests/a11y/keyboard.spec.ts`;
+- `tests/a11y/robustness.spec.ts`;
+- `tests/a11y/axe.spec.ts`, widened to 6 widths.
+
+**Open, not AA failures:**
+- the owner's screen-reader smoke test;
+- real devices and Safari over HTTPS (Phase 12);
+- Lighthouse, and Firefox/WebKit in CI (Phase 11);
+- the cosmetic and stability notes OI-5 to OI-8 in the report.
+
+**Validation (2026-11-04):**
+
+| Check | Result |
+|---|---|
+| Build | ✅ All 6 routes static (○) |
+| TypeScript, ESLint, Prettier | ✅ 0 errors |
+| Unit, component and content tests | ✅ 183 passed (28 files) |
+| E2E + a11y (Chromium) | ✅ 112 passed (31 new: axe matrix 16, keyboard 4, robustness 11) |
+| First-load JS | ✅ 144.0 KB gzip (+0.1 KB; budget 150) |
+| `npm audit --audit-level=high` | ✅ 0 high or critical |
 
 ## Phase 09 summary
 
@@ -355,6 +403,9 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 09: theme switcher included; skills strip (FR-INT-06, DS-12) excluded; "Phone" label approved; the real Formspree test is sent by the owner from the live site after deployment (option b) | Owner decisions 1–4 |
 | 2026-11-04 | Contact form success only after Formspree confirms (2xx + `"ok": true`); every failure keeps input and offers email; honeypot handled by Formspree, never a faked success | Owner requirement; ADR 0006 implementation notes |
 | 2026-11-04 | Focus-not-obscured offset moved from `scroll-padding-top` on `<html>` to `scroll-margin-top` on content | Sticky-header controls scrolled the page on focus (bug since Phase 07) |
+| 2026-11-04 | Phase 10: fix accessibility failures within the approved design; test in Firefox and WebKit locally; owner runs the screen-reader smoke test after the PR | Owner: "keep the recommended approach" |
+| 2026-11-04 | Mobile menu overlay is a modal dialog named by the wordmark (no new copy) | Matches its behaviour (focus trap, inert page); fixes axe `region` |
+| 2026-11-04 | WebKit tests on plain-HTTP localhost strip CSP `upgrade-insecure-requests` in the test harness only | Production is HTTPS; the security header is unchanged |
 
 ## Risks & dependencies
 
@@ -373,6 +424,8 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R13 | The skills strip adds motion and a control (WCAG 2.2.2) | — | ✅ Closed: not built (owner decision, 2026-11-04) | 09 |
 | R14 | TypeScript pinned below the latest major (7.x) | Low | ADR 0011; upgrade when typescript-eslint supports 7 | 06+ |
 | R15 | Formspree account access (existing form `xleyzgzo`) | Low | ✅ Owner confirmed access (2026-11-04); fallback remains a new free form, config-only change | 09 |
+| R22 | Firefox/WebKit not yet in CI; WebKit needs the CSP harness on plain-HTTP localhost | Low | Phase 11 browser matrix; real Safari over HTTPS in Phase 12 | 11–12 |
+| R23 | No real screen-reader or real-device testing yet | Low | Accessibility tree verified; owner smoke test (report §7); devices on the Phase 12 preview | 10–12 |
 | R21 | Formspree settings may block in-page submissions (reCAPTCHA was on by default for forms created before Feb 2020) or reject the domain | Medium | The site shows the error with the email fallback, never a false success; owner checklist (reCAPTCHA off, notification email, allowed domain); owner's real test after deployment | 09 → 12 |
 | R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
 | R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
@@ -406,3 +459,5 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 08: 07 Projects (filter, asymmetric grid), hire band and 08 Testimonials implemented on `phase/08-projects-showcase`; ADR 0013; architecture, data model and content schema updated; PR opened for review |
 | 2026-11-04 | Phase 08 approved by owner; PR #7 merged into `main`; branch `phase/08-projects-showcase` deleted after verifying it was fully merged |
 | 2026-11-04 | Phase 09: theme switcher, current-section navigation, legacy anchors, back to top, 09 Contact and the Formspree form implemented on `phase/09-contact-interactions`; sticky-header focus-scroll bug fixed; docs updated; PR opened for review |
+| 2026-11-04 | Phase 09 approved by owner; PR #8 merged into `main`; branch `phase/09-contact-interactions` deleted after verifying it was fully merged |
+| 2026-11-04 | Phase 10: accessibility and responsive audit (3 engines, 12 widths, 10 devices); 6 findings fixed; ACCESSIBILITY_REPORT.md and RESPONSIVE_TEST_REPORT.md written; regression specs added; PR opened for review |
