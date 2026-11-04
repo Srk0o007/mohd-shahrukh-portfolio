@@ -47,6 +47,9 @@ export const uiCopy = {
   primaryNavLabel: 'Primary',
   // Wording from the 03 Nov 2026 resume ("Graduated 2019").
   graduated: 'Graduated {year}',
+  // Phase 08 — category tag labels from DATA_MODEL §4 (`ProjectView.groupLabel`, DS-09).
+  tagEnterprise: 'Enterprise product',
+  tagWebsite: 'Website',
 } as const satisfies UiCopy
 
 /** Replaces `{key}` placeholders in UI copy. */

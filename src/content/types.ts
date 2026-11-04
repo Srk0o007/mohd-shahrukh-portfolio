@@ -220,4 +220,6 @@ export interface UiCopy {
   factExperience: string
   primaryNavLabel: string
   graduated: string
+  tagEnterprise: string
+  tagWebsite: string
 }
