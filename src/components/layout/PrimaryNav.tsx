@@ -19,7 +19,8 @@ export function PrimaryNav({ label, items, className }: PrimaryNavProps) {
           <li key={item.href}>
             <a
               href={item.href}
-              className="inline-flex min-h-11 items-center text-ui font-medium underline-offset-[6px] hover:underline"
+              // Hover: 1 px underline; current section (aria-current, FR-NAV-04): 2 px (spec §3).
+              className="inline-flex min-h-11 items-center text-ui font-medium decoration-1 underline-offset-[6px] hover:underline aria-current:underline aria-current:decoration-2"
             >
               {item.label}
             </a>
