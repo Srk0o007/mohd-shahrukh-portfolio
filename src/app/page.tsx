@@ -3,13 +3,16 @@ import { Certifications } from '@/components/sections/Certifications'
 import { Education } from '@/components/sections/Education'
 import { Experience } from '@/components/sections/Experience'
 import { Hero } from '@/components/sections/Hero'
+import { HireCta } from '@/components/sections/HireCta'
+import { Projects } from '@/components/sections/Projects'
 import { Services } from '@/components/sections/Services'
 import { Skills } from '@/components/sections/Skills'
+import { Testimonials } from '@/components/sections/Testimonials'
 
 /**
  * Home page in the approved order (PRD §7, D15, DS-02): Hero, 01 About, 02 Services,
- * 03 Experience, 04 Skills, 05 Certifications, 06 Education. No separate Resume section.
- * Projects, the hire band and testimonials arrive in Phase 08; contact in Phase 09.
+ * 03 Experience, 04 Skills, 05 Certifications, 06 Education, 07 Projects, the hire band,
+ * 08 Testimonials. No separate Resume section. Contact arrives in Phase 09.
  */
 export default function HomePage() {
   return (
@@ -21,6 +24,9 @@ export default function HomePage() {
       <Skills />
       <Certifications />
       <Education />
+      <Projects />
+      <HireCta />
+      <Testimonials />
     </main>
   )
 }
