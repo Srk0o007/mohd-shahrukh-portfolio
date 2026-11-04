@@ -1,16 +1,16 @@
 # Project Status
 
-**Last updated:** 2026-11-04
-**Current phase:** Phase 11 — Performance, SEO & Quality Assurance 🔍 Implementation in review (PR on `phase/11-performance-seo-qa`)
-**Next phase:** Phase 12 — Deployment & Domain Configuration ⏸️ Awaiting approval
+**Last updated:** 2026-11-05
+**Current phase:** Phase 11.5 — Dark Redesign & Particle Wave 🚧 In progress (branch `phase/11.5-dark-redesign`)
+**Next phase:** Phase 12 — Deployment & Domain Configuration ⏳ Not started
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 11 PR (final approval before deployment). It is **not** merged without the owner's approval. Phase 12 stays unstarted until explicitly approved. |
+| **Next approved action** | Implement Phase 11.5 per the approved plan (owner approved 2026-11-05). Nothing is pushed and no PR is opened until the owner says so. Phase 12 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 11 PR review. Before launch (PRODUCTION_READINESS §9): Vercel account and Hostinger DNS access for Phase 12. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
+| **Pending work** | Phase 11.5 implementation. Before launch (PRODUCTION_READINESS §9): Vercel account and Hostinger DNS access for Phase 12. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
 
 ## Phase tracker
 
@@ -26,7 +26,8 @@
 | 08 | Projects & Content Showcase | ✅ Complete | 2026-11-04 |
 | 09 | Contact & Interactive Features | ✅ Complete | 2026-11-04 |
 | 10 | Accessibility & Responsive Engineering | ✅ Complete | 2026-11-04 |
-| 11 | Performance, SEO & Quality Assurance | 🔍 In review | — |
+| 11 | Performance, SEO & Quality Assurance | ✅ Complete (PR #10 merged) | 2026-11-04 |
+| 11.5 | Dark Redesign & Particle Wave (inserted 2026-11-05) | 🚧 In progress | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started

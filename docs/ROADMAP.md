@@ -77,6 +77,16 @@ Lighthouse, Core Web Vitals, metadata, testing, security and production build.
 
 - **Exit criteria:** performance and SEO targets met, tests passing, production build verified, and the CSP hash-source evaluation completed and recorded ([ADR 0008](architecture/adr/0008-csp-for-static-pages.md)).
 
+## Phase 11.5 — Dark Redesign & Particle Wave
+
+Inserted by the owner on 2026-11-05, before deployment. Rebuild the visual design to match the frozen prototype: dark-only palette, Andika, a glass header, a 3D particle-wave background, and new treatments for skills, education and testimonials. Uses the existing components, typed content and tests.
+
+- **Exit criteria:**
+  - The site matches the frozen prototype at 1920, 1440, 1024, 768 and 390 px.
+  - `npm run check`, `npm run build`, `npm run size` (≤ 150 KB) and `npm run test:e2e` pass in all three engines, with axe at 0 violations.
+  - Lighthouse is no worse than Phase 11.
+  - ADRs 0014–0016 are recorded.
+
 ## Phase 12 — Deployment & Domain Configuration
 
 Vercel deployment, Hostinger DNS, custom domain, SSL and production verification.
