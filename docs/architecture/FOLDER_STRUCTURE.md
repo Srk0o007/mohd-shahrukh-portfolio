@@ -37,6 +37,8 @@ mohd-shahrukh-portfolio/
 │   │   │   ├── ThemeToggle.tsx          # client
 │   │   │   ├── ActiveSectionObserver.tsx # client
 │   │   │   ├── SiteFooter.tsx
+│   │   │   ├── SocialLinks.tsx          # text-labelled social links (pure; also used in the menu)
+│   │   │   ├── CvLink.tsx               # CV download link (header, menu, Experience)
 │   │   │   ├── SkipLink.tsx
 │   │   │   └── BackToTop.tsx            # client
 │   │   ├── sections/
@@ -47,6 +49,7 @@ mohd-shahrukh-portfolio/
 │   │   │   ├── Experience.tsx           # uses HighlightsDisclosure (client)
 │   │   │   ├── Skills.tsx
 │   │   │   ├── Certifications.tsx
+│   │   │   ├── CredentialRow.tsx        # shared row + section for Certifications / Education
 │   │   │   ├── Education.tsx
 │   │   │   ├── Projects.tsx             # server shell + ProjectGallery (client)
 │   │   │   ├── HireCta.tsx
@@ -73,6 +76,7 @@ mohd-shahrukh-portfolio/
 │   │       ├── Section.tsx
 │   │       ├── Container.tsx
 │   │       ├── VisuallyHidden.tsx
+│   │       ├── ResponsiveImage.tsx      # getImageProps() + <img> (no client JS; ADR 0010 addendum)
 │   │       └── icons/                   # one file per icon (inline SVG) + index.ts + LICENSES.md
 │   ├── content/                         # SINGLE content source (DATA_MODEL.md)
 │   │   ├── types.ts
@@ -97,6 +101,7 @@ mohd-shahrukh-portfolio/
 │   │   ├── project-layout.ts            # visible index → spans/offsets (DS-07)
 │   │   ├── validate-contact.ts          # FR-CON-03 rules
 │   │   ├── theme.ts                     # storage key, read/write helpers
+│   │   ├── links.ts                     # siteAnchor("#id") → "/#id"; anchorId()
 │   │   └── *.test.ts                    # colocated unit tests
 │   └── assets/
 │       ├── images/

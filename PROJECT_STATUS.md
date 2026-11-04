@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 06 — Foundation & Design System Implementation ✅ Complete (PR #5 merged)
-**Next phase:** Phase 07 — Core Portfolio Development ⏸️ Awaiting approval
+**Current phase:** Phase 07 — Core Portfolio Development 🔍 Implementation in review (PR on `phase/07-core-portfolio`)
+**Next phase:** Phase 08 — Projects & Content Showcase ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | None. Phase 07: investigation and proposal in progress; implementation awaits explicit owner approval. |
+| **Next approved action** | Owner reviews the Phase 07 PR. It is **not** merged without the owner's approval. Phase 08 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 07 proposal approval; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 07–12 not started |
+| **Pending work** | Phase 07 PR review; owner to confirm Formspree account access before Phase 09 (ADR 0006); non-blocking owner inputs Q8 and Q11; Phases 07–12 not started |
 
 ## Phase tracker
 
@@ -22,14 +22,47 @@
 | 04 | UI/UX Research & Design System | ✅ Complete | 2026-11-03 |
 | 05 | Technical Architecture | ✅ Complete | 2026-11-04 |
 | 06 | Foundation & Design System Implementation | ✅ Complete | 2026-11-04 |
-| 07 | Core Portfolio Development | ⏸️ Awaiting approval | — |
-| 08 | Projects & Content Showcase | ⏳ Not started | — |
+| 07 | Core Portfolio Development | 🔍 In review | — |
+| 08 | Projects & Content Showcase | ⏸️ Awaiting approval | — |
 | 09 | Contact & Interactive Features | ⏳ Not started | — |
 | 10 | Accessibility & Responsive Engineering | ⏳ Not started | — |
 | 11 | Performance, SEO & Quality Assurance | ⏳ Not started | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 07 summary
+
+**Delivered** (page order per D15 / DS-02; no separate Resume section):
+
+- **Site shell** (root layout, so the 404 page has it too):
+  - **header:** wordmark; inline nav ≥ 1280 px; Download CV ≥ 768 px; menu button < 1280 px; no theme toggle until Phase 09;
+  - **`MobileMenu` island:** focus moves in and is contained; page `inert`; scroll locked; Esc / Close restore focus; a chosen link focuses its section; 404 links go to `/#section`;
+  - **footer** with the build-time year;
+  - **no-JS fallback:** inline nav and CV link visible at every width.
+- **Sections:** Hero, 01 About, 02 Services, 03 Experience, 04 Skills, 05 Certifications, 06 Education. All content comes from `src/content` word for word; no personal information was rewritten.
+- **`HighlightsDisclosure` island:** all 17 highlights in the server render and without JS; after hydration the AltInvest role shows 4 plus "Show all 11 highlights".
+- **Owner decisions applied:**
+  - full navigation and hero links from the start, with the pending-targets test;
+  - text-labelled GitHub / LinkedIn / Email (no brand logos);
+  - approved order;
+  - approved UI copy (Portfolio, Role, Based in, Experience, Primary).
+- **Icons:** 7 Lucide icons copied verbatim from `lucide-static` 1.67.0; the Phase 06 icons were re-verified against it.
+- **Performance work:** the portrait is rendered with `getImageProps()` + `<img>` (no `next/image` client JS), and the menu's CV/social links are a server-rendered slot. Together they brought first-load JS from 145.1 back to 139.5 KB gzip (ADR 0010 addendum).
+
+**Validation (2026-11-04):**
+
+| Check | Result |
+|---|---|
+| Build | ✅ All 6 routes static (○) |
+| TypeScript, ESLint, Prettier | ✅ 0 errors |
+| Unit, component and content tests | ✅ 104 passed (19 files) |
+| E2E + axe (Chromium) | ✅ 43 passed. Coverage: section order; pending-targets-only internal links; header per breakpoint; desktop nav lands below the header; menu keyboard containment, inert, scroll lock, Esc/Close focus restore, link → section focus; 404 → home sections (desktop and menu); 17 highlights and the disclosure; CV accessible name and PDF response; no-JS nav, CV and highlights; no overflow at 320/375/768/1024/1280/1440; axe on home and 404 in both themes at 375/1280 and with the menu open |
+| First-load JS | ✅ 139.5 KB gzip (budget 150; ⚠ above the 120 KB target) |
+| `npm audit --audit-level=high` | ✅ 0 high or critical |
+| Visual review | ✅ Screenshots reviewed at 375 / 768 / 1280 / 1440 px, light and dark, menu open, 404 |
+
+**Pending internal targets (by design, owner decision):** `#projects` and `#testimonials` (Phase 08), `#contact` (Phase 09). The E2E test fails on any other missing target, and this list must be empty by the end of Phase 09.
 
 ## Phase 06 summary
 
@@ -218,6 +251,11 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Social image generated in Phase 11; Phase 06 emits the OG/Twitter text (`card: summary`) | Owner refinement 1 |
 | 2026-11-04 | Test worker limits: Vitest `maxWorkers: 2`, Playwright `workers: 1` | One worker per CPU exhausted memory on the development machine |
 | 2026-11-04 | First-load JS guarded by `npm run size` in CI (fails > 150 KB gzip) | NFR-PERF-05; `noModule` polyfill excluded (never loaded by supported browsers) |
+| 2026-11-04 | Phase 07: final nav and hero links from the start; missing targets allowed only for #projects, #testimonials (Phase 08) and #contact (Phase 09), enforced by E2E | Owner decision 1 (option A) with conditions |
+| 2026-11-04 | Social links are text links (GitHub, LinkedIn, Email) everywhere; no brand logos | Owner decision 2: no permissively licensed LinkedIn mark exists |
+| 2026-11-04 | Approved UI copy: Portfolio, Role, Based in, Experience, Primary; "Graduated {year}" taken from the resume wording | Owner decision 4 |
+| 2026-11-04 | Menu trigger and close are 44 px icon buttons named with the approved "Open menu" / "Close menu" copy (instead of "Menu" / "Close" pill text) | Avoids adding unapproved visible copy; spec updated, owner may revise |
+| 2026-11-04 | Server images via `getImageProps()` + `<img>` (ADR 0010 addendum) | About 6 KB less first-load JS than the `next/image` client component |
 | 2026-11-04 | `agentRules: false` in `next.config.ts`; the auto-generated `AGENTS.md` is not committed | Next.js 16 `next dev` writes AI-agent instructions into the repo root by default; not an approved deliverable (owner may reverse) |
 | 2026-11-04 | Test runner: Vitest (Jest-compatible API) | ADR 0007 |
 
@@ -240,7 +278,7 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R15 | Formspree account access unconfirmed (existing form `xleyzgzo`) | Medium | Owner confirms before Phase 09; fallback: new free form, config-only change | 09 |
 | R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
 | R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
-| R18 | First-load JS (136.9 KB gzip) is above the 120 KB target, though within the 150 KB budget; the framework runtime dominates, and every client island in Phases 07–09 adds to it | Medium | CI budget gate (`npm run size`); keep islands small; review in Phase 11 | 07–11 |
+| R18 | First-load JS (136.9 KB after Phase 06; **139.5 KB after Phase 07**) is above the 120 KB target, though within the 150 KB budget; the framework runtime dominates, and the Phase 08–09 islands (project gallery, contact form, theme toggle, active section, back-to-top, skills strip) add to it | Medium | CI budget gate (`npm run size`); server-rendered slots and `getImageProps()` patterns; keep islands small; review in Phase 11 | 08–11 |
 | R19 | 17 moderate `npm audit` advisories in the ESLint dev toolchain (none in runtime deps) | Low | Not shipped to users; CI fails only on high or critical; re-check when updating the lint stack | 06+ |
 | R20 | Local machine memory pressure caused a transient Turbopack build crash (`os error 1450`) and Vitest worker OOMs | Low | Worker limits set; retry succeeded; CI runners are unaffected | 06+ |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
@@ -265,3 +303,4 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 06: application foundation, design tokens, primitives, metadata, content layer, assets, temporary preview, tests and CI implemented on `phase/06-foundation`; documents reconciled; PR opened for review |
 | 2026-11-04 | First CI run failed at the type check: the git-ignored `next-env.d.ts` (image-import declarations) did not exist on a clean checkout. Fixed with `typecheck: next typegen && tsc --noEmit`; the full pipeline was re-run on a fresh clone and CI now passes |
 | 2026-11-04 | Phase 06 approved by owner; PR #5 merged into `main` (`agentRules: false` accepted with the merge); branch `phase/06-foundation` deleted |
+| 2026-11-04 | Phase 07: site shell (header, mobile menu, footer) and sections Hero → 06 Education implemented on `phase/07-core-portfolio`, one commit per section, each tested; specs and docs updated; PR opened for review |

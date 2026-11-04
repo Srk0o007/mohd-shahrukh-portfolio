@@ -54,13 +54,15 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 
 | Property | Spec |
 |---|---|
-| Structure | Wordmark (left) · inline nav (≥ 1280) · theme toggle · Download CV (primary, md) · Menu button (< 1280) |
+| Structure | Wordmark (left) · inline nav (≥ 1280) · Download CV (primary, md) · Menu button (< 1280). The theme toggle joins in **Phase 09**; no placeholder before then (owner condition B). |
 | Height | 72 px (≥ 768), 64 px (< 768); `--header-h` drives `scroll-padding-top` |
 | Surface | Solid `bg`, 1 px `rule` bottom border; sticky top, `z-header` |
-| Wordmark | `wordmark` token, "Mohd Shahrukh", links to `#top`; no underline |
+| Wordmark | `wordmark` token, "Mohd Shahrukh", links to `/#top`; no underline |
+| Link targets | Header, menu and footer links use `/#section`, so they also work from the 404 page (owner condition A) |
 | Spacing | Item gap 24 px (nav links 28 px); outer margins follow the grid |
-| Mobile (< 768) | Wordmark · theme toggle · Menu button. Download CV moves into the menu, so the header fits at 320 px. |
-| Tablet (768–1279) | Wordmark · theme toggle · Download CV · Menu button |
+| Mobile (< 768) | Wordmark · Menu button. Download CV moves into the menu, so the header fits at 320 px. |
+| Tablet (768–1279) | Wordmark · Download CV · Menu button |
+| No JavaScript | The inline nav (wrapped) and Download CV stay visible at every width; the menu button is hidden |
 
 ## 3. Nav link
 
@@ -75,12 +77,12 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 
 | Property | Spec |
 |---|---|
-| Trigger | "Menu" pill button (outline, md), `aria-expanded`, `aria-controls` |
-| Surface | Full viewport, `bg`, `z-menu`; header row stays (wordmark + "Close" pill) |
+| Trigger | 44 px outline circle with the Lucide `menu` icon; accessible name "Open menu" (approved UI copy, no new visible text); `aria-expanded`; `aria-controls` only while open (so it never points at a missing element) |
+| Surface | Full viewport, `bg`, `z-menu`; header row: wordmark + 44 px close button (Lucide `x`, accessible name "Close menu") |
 | Items | Numbered list, each 56 px min height: index in `label` `text-muted` + label in Fraunces 500 at 36 px (`h2` min); `rule` separators |
 | Order | 01 About … 07 Contact (nav order, D15). The menu's own 01–07 numbering may differ from section indices; screen readers announce only the labels (numbers `aria-hidden`). |
-| Footer of menu | Download CV (primary, lg, full width) · LinkedIn / GitHub / Email icon links (44 px) · theme toggle |
-| Behaviour | Focus moves to the first item; Tab is contained; Esc or Close closes it and returns focus to the toggle; page scroll locked; selecting a link closes it and scrolls |
+| Footer of menu | Download CV (primary, lg, full width) · **text links: GitHub, LinkedIn, Email** (owner decision, 2026-11-04). The theme toggle joins in Phase 09. |
+| Behaviour | Focus moves to the first item; Tab and Shift+Tab are contained; the rest of the page is `inert`; page scroll locked; Esc or Close closes it and returns focus to the toggle; selecting a link closes it and **moves focus to the target section**; on the 404 page links navigate to the home-page section |
 | Motion | Opacity fade (base); instant under reduced motion |
 
 ## 5. Theme toggle
@@ -141,7 +143,7 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 |---|---|
 | Layout | Section header (01) · summary (`lead`, max 62ch) in cols 4–10 · key facts below |
 | Key facts | `<dl>` row of 3: **Role**, **Based in**, **Experience** (values from `Profile.title`, `Profile.location`, `Profile.yearsOfExperience` + "Years"); `dt` in `label` `text-muted`, `dd` in `body` 500; separated by 1 px `rule` dividers; 3-up ≥ 768, stacked < 768 |
-| Links | GitHub and LinkedIn as secondary md buttons with icons |
+| Links | GitHub and LinkedIn as **text links** with the external-link arrow and "(opens in new tab)" announcement (owner decision, 2026-11-04) |
 
 ## 11. Service item
 
@@ -244,7 +246,7 @@ Glyphs are `aria-hidden`; the visible text carries the meaning. Height 24 px; pa
 | Layout | Cols 1–5 (≥ 1024); stacked above the form below that |
 | Heading | Index "09 — Contact" · "Let's get in touch" (`display-2`) · intro (`lead`) |
 | Details | `<dl>`: Based in · Phone (`tel:` link) · Email (`mailto:` link); `dt` `label` muted, `dd` `body` 500 |
-| Social | LinkedIn, GitHub and Email icon links: 44 px circles with a 1 px `border`, 20 px icons, accessible names per `SocialLink.label` |
+| Social | **Text links** GitHub, LinkedIn, Email (owner decision, 2026-11-04; no brand logos because no permissively licensed LinkedIn mark exists). External links announce "(opens in new tab)". |
 
 ## 21. Form field
 
@@ -272,7 +274,7 @@ Glyphs are `aria-hidden`; the visible text carries the meaning. Height 24 px; pa
 
 | Property | Spec |
 |---|---|
-| Layout | 1 px `rule` top; copyright (left) · "Designed by Mohd Shahrukh" (right) · social icon links (row); stacked < 768 |
+| Layout | 1 px `rule` top; copyright · "Designed by Mohd Shahrukh" · social **text links** (GitHub, LinkedIn, Email); stacked < 768 |
 | Type | `small`, `text-muted` |
 | Spacing | 48 px top padding, 40 px bottom |
 
