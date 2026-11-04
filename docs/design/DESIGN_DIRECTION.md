@@ -97,14 +97,14 @@ All three were mocked on a private design canvas owned by the site owner. Each h
 | DS-09 | Category distinction: **Enterprise product** = filled tag with ■ glyph; **Website** = outlined tag with □ glyph. Enterprise cards also show the D11 note. | Borrowed from B; NFR-A11Y-04 (not colour alone) |
 | DS-10 | The hire CTA is a full-bleed yellow band with ink text in **both** themes; no parallax | Brand moment; FR-CTA-01 |
 | DS-11 | Testimonials show 2-up, statically | FR-TST-01 |
-| DS-12 | **Skills strip adopted (FR-INT-06).** One strip after the hero; content = skills from the first three skill groups; slow, linear (one loop ≈ 60 s); visible pause/play button; the moving text is `aria-hidden` (it repeats the Skills section); static under reduced motion | Borrowed from B (optional) |
+| DS-12 | **Not built — owner decision 2026-11-04 (Phase 09): the design stays static.** Original decision: **Skills strip adopted (FR-INT-06).** One strip after the hero; content = skills from the first three skill groups; slow, linear (one loop ≈ 60 s); visible pause/play button; the moving text is `aria-hidden` (it repeats the Skills section); static under reduced motion | Borrowed from B (optional) |
 | DS-13 | **Collapsible highlights adopted (FR-RES-02):** the first 4 highlights are shown, then "Show all {n} highlights". Without JS, all are visible. | Scannability of 11 AltInvest bullets |
 | DS-14 | **Hover zoom adopted (FR-PRJ-07):** image scale 1.02 on hover and `:focus-visible` of linked cards only; none under reduced motion | Subtle hover (owner) |
 | DS-15 | **Character counter adopted (FR-CON-07):** a passive "0 / 5000" below the message field; not announced on each keystroke | Usability |
 | DS-16 | No scroll-entrance animations, parallax, page transitions, preloader or custom cursor | Owner: lightweight, purposeful motion; FR-INT-04 |
 | DS-17 | Flat elevation: 1 px rules instead of shadows; square image frames; pill-shaped controls | Editorial character; performance |
 | DS-18 | Portrait: right column (4:5) on desktop; beside the text on tablet; below the CTAs on mobile (max 360 px wide) | FR-HERO-02 |
-| DS-19 | Sticky header with solid background (no blur), 72 px desktop / 64 px mobile; `scroll-padding-top` = header + 16 px | FR-NAV-01/05 |
+| DS-19 | Sticky header with solid background (no blur), 72 px desktop / 64 px mobile; content `scroll-margin-top` = header + 16 px (Phase 09: replaces `scroll-padding-top`, which scrolled the page when header controls got focus) | FR-NAV-01/05 |
 | DS-20 | Technical hierarchy (from C): About shows a key-facts list built **only from existing schema fields** (Role, Based in, Experience); experience is a dated two-column row; skills are grouped lists; certifications and education are table-like rows | Owner borrowing; no new content |
 
 ## 6. Originality with respect to the reference

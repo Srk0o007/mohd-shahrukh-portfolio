@@ -54,15 +54,15 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 
 | Property | Spec |
 |---|---|
-| Structure | Wordmark (left) · inline nav (≥ 1280) · Download CV (primary, md) · Menu button (< 1280). The theme toggle joins in **Phase 09**; no placeholder before then (owner condition B). |
-| Height | 72 px (≥ 768), 64 px (< 768); `--header-h` drives `scroll-padding-top` |
+| Structure | Wordmark (left) · inline nav (≥ 1280) · theme toggle · Download CV (primary, md) · Menu button (< 1280). The theme toggle was added in Phase 09 (no placeholder before then, owner condition B). |
+| Height | 72 px (≥ 768), 64 px (< 768); `--header-h` drives the content `scroll-margin-top` (DS-19) |
 | Surface | Solid `bg`, 1 px `rule` bottom border; sticky top, `z-header` |
 | Wordmark | `wordmark` token, "Mohd Shahrukh", links to `/#top`; no underline |
 | Link targets | Header, menu and footer links use `/#section`, so they also work from the 404 page (owner condition A) |
-| Spacing | Item gap 24 px (nav links 28 px); outer margins follow the grid |
-| Mobile (< 768) | Wordmark · Menu button. Download CV moves into the menu, so the header fits at 320 px. |
-| Tablet (768–1279) | Wordmark · Download CV · Menu button |
-| No JavaScript | The inline nav (wrapped) and Download CV stay visible at every width; the menu button is hidden |
+| Spacing | Item gap 24 px from 768 px, 12 px below (so wordmark + two 44 px controls fit at 320 px); nav links 28 px; outer margins follow the grid |
+| Mobile (< 768) | Wordmark · theme toggle · Menu button. Download CV moves into the menu, so the header fits at 320 px. |
+| Tablet (768–1279) | Wordmark · theme toggle · Download CV · Menu button |
+| No JavaScript | The inline nav (wrapped) and Download CV stay visible at every width; the menu button and theme toggle are hidden |
 
 ## 3. Nav link
 
@@ -70,7 +70,7 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 |---|---|
 | Default | `ui` 500, `text`, no underline |
 | Hover | 1 px underline, offset 6 px |
-| Current (`aria-current="true"`) | 2 px underline, `text` |
+| Current (`aria-current="true"`) | 2 px underline, `text`. Set by the active-section observer on the section being read (reading line 40% down the viewport); in the menu only the label is underlined, not its number |
 | Focus | Universal ring |
 
 ## 4. Mobile menu overlay
@@ -81,7 +81,7 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 | Surface | Full viewport, `bg`, `z-menu`; header row: wordmark + 44 px close button (Lucide `x`, accessible name "Close menu") |
 | Items | Numbered list, each 56 px min height: index in `label` `text-muted` + label in Fraunces 500 at 36 px (`h2` min); `rule` separators |
 | Order | 01 About … 07 Contact (nav order, D15). The menu's own 01–07 numbering may differ from section indices; screen readers announce only the labels (numbers `aria-hidden`). |
-| Footer of menu | Download CV (primary, lg, full width) · **text links: GitHub, LinkedIn, Email** (owner decision, 2026-11-04). The theme toggle joins in Phase 09. |
+| Footer of menu | Download CV (primary, lg, full width) · **text links: GitHub, LinkedIn, Email** (owner decision, 2026-11-04) · theme toggle (right-aligned, Phase 09) |
 | Behaviour | Focus moves to the first item; Tab and Shift+Tab are contained; the rest of the page is `inert`; page scroll locked; Esc or Close closes it and returns focus to the toggle; selecting a link closes it and **moves focus to the target section**; on the 404 page links navigate to the home-page section |
 | Motion | Opacity fade (base); instant under reduced motion |
 
@@ -127,6 +127,8 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 | Motion | None |
 
 ## 9. Skills strip (DS-12)
+
+**Not built.** Owner decision, 2026-11-04 (Phase 09): the design stays static, with no extra motion or JavaScript. The specification below is kept for reference only.
 
 | Property | Spec |
 |---|---|

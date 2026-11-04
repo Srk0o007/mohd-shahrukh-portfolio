@@ -302,7 +302,7 @@ This is new text needed for functionality and accessibility. It contains **no pe
 | `sendError` | Sorry, your message couldn't be sent. Please try again or email khan.shahrukh156@gmail.com. |
 | `backToTop` | Back to top |
 | `highlightsMore` / `highlightsLess` | Show all {n} highlights / Show fewer highlights (only if FR-RES-02 is adopted) |
-| `marqueePause` / `marqueePlay` | Pause animation / Play animation (only if FR-INT-06 is adopted) |
+| `marqueePause` / `marqueePlay` | Pause animation / Play animation (only if FR-INT-06 is adopted; not adopted, owner decision 2026-11-04, so currently unused) |
 | `notFoundHeading` | Page not found |
 | `notFoundText` | The page you're looking for doesn't exist. |
 | `notFoundLink` | Back to home |
@@ -317,6 +317,7 @@ This is new text needed for functionality and accessibility. It contains **no pe
 | `primaryNavLabel` | Primary: accessible name of the primary navigation (Phase 07, owner-approved) |
 | `graduated` | Graduated {year}: wording from the 03 Nov 2026 resume ("Graduated 2019"), Phase 07 |
 | `tagEnterprise` / `tagWebsite` | Enterprise product / Website: project category tag (DS-09), from DATA_MODEL §4 `ProjectView.groupLabel`, Phase 08 |
+| `contactPhone` / `contactEmail` | Phone / Email: contact detail labels shown with `factLocation` "Based in" (Phase 09, owner-approved) |
 
 ## 14. `Image` type
 

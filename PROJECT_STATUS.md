@@ -1,16 +1,16 @@
 # Project Status
 
 **Last updated:** 2026-11-04
-**Current phase:** Phase 08 — Projects & Content Showcase 🔍 Implementation in review (PR on `phase/08-projects-showcase`)
-**Next phase:** Phase 09 — Contact & Interactive Features ⏸️ Awaiting approval
+**Current phase:** Phase 09 — Contact & Interactive Features 🔍 Implementation in review (PR on `phase/09-contact-interactions`)
+**Next phase:** Phase 10 — Accessibility & Responsive Engineering ⏸️ Awaiting approval
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Owner reviews the Phase 08 PR. It is **not** merged without the owner's approval. Phase 09 stays unstarted until explicitly approved. |
+| **Next approved action** | Owner reviews the Phase 09 PR. It is **not** merged without the owner's approval. Phase 10 stays unstarted until explicitly approved. |
 | **Blockers** | None |
-| **Pending work** | Phase 08 PR review. Formspree access ✅ confirmed by the owner (2026-11-04), so Phase 09 is unblocked. Q8 (extra project details) and Q11 (new project URLs) are deferred by the owner until the site is complete and deployed. First-load JS optimisation is scheduled for Phase 11 (owner, 2026-11-04). |
+| **Pending work** | Phase 09 PR review. **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
 
 ## Phase tracker
 
@@ -23,13 +23,59 @@
 | 05 | Technical Architecture | ✅ Complete | 2026-11-04 |
 | 06 | Foundation & Design System Implementation | ✅ Complete | 2026-11-04 |
 | 07 | Core Portfolio Development | ✅ Complete | 2026-11-04 |
-| 08 | Projects & Content Showcase | 🔍 In review | — |
-| 09 | Contact & Interactive Features | ⏸️ Awaiting approval | — |
-| 10 | Accessibility & Responsive Engineering | ⏳ Not started | — |
+| 08 | Projects & Content Showcase | ✅ Complete | 2026-11-04 |
+| 09 | Contact & Interactive Features | 🔍 In review | — |
+| 10 | Accessibility & Responsive Engineering | ⏸️ Awaiting approval | — |
 | 11 | Performance, SEO & Quality Assurance | ⏳ Not started | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 09 summary
+
+**Delivered:**
+
+- **09 Contact (FR-CON-01, FR-SOC-01):**
+  - "Let's get in touch" and the intro word for word;
+  - Based in / **Phone** (`tel:`) / Email (`mailto:`), with "Phone" and "Email" approved by the owner;
+  - GitHub, LinkedIn and Email text links;
+  - details in 5 columns and the form in 7 from 1024 px.
+- **Contact form (FR-CON-02–07, ADR 0006):**
+  - **Without JS:** a real `POST` to Formspree `xleyzgzo`, with native `required` checks.
+  - **With JS:** inline accessible errors (`aria-invalid`, `aria-describedby`, focus on the first invalid field, live after the first attempt), "Sending…" with `aria-disabled` and no double submits, and a passive "n / 5000" counter.
+  - **Success** is shown **only** when Formspree answers 2xx with `"ok": true`; the form then clears.
+  - **Any failure** (non-2xx, unexpected body, network error, 15 s timeout) shows `role="alert"` with the email link and keeps the input.
+  - **Honeypot:** `_gotcha` is always sent; Formspree drops filled submissions, so no success is ever faked.
+- **Theme switcher (FR-THM-01–04):**
+  - in the header at every width and in the mobile menu;
+  - moon / sun icon; the label "Switch to dark/light theme" is chosen by CSS, so it's correct before hydration;
+  - persists in `localStorage`; follows the system until the visitor chooses (including a change before hydration);
+  - works for the visit when storage is blocked; no flash; hidden without JS.
+- **Navigation:**
+  - **Current section (FR-NAV-04):** `aria-current` with a 2 px underline in the desktop nav and the menu.
+  - **Legacy anchors (FR-NAV-06):** `#home`, `#resume`, `#portfolio`, `#testimonial`.
+  - **Back to top (FR-INT-05):** appears after the hero; focus returns to the top.
+  - **Smooth scrolling:** native, instant under reduced motion.
+- **Bug fixed (since Phase 07):**
+  - **Symptom:** focusing any sticky-header control scrolled the page about 400 px toward the top. This hit Tab into the header nav, and focus returning to the menu button after Esc or Close.
+  - **Cause:** `scroll-padding-top` on `<html>`.
+  - **Fix:** replaced by `scroll-margin-top` on page content, which keeps WCAG 2.4.11 (focus not obscured).
+  - **Tests:** two regression tests.
+- **Not built (owner decision):** the skills strip (DS-12 / FR-INT-06, a "Could").
+- **Zero unresolved internal links:** the Phase 07 exception list is gone.
+
+**Validation (2026-11-04):**
+
+| Check | Result |
+|---|---|
+| Build | ✅ All 6 routes static (○) |
+| TypeScript, ESLint, Prettier | ✅ 0 errors |
+| Unit, component and content tests | ✅ 183 passed (28 files) |
+| E2E + axe (Chromium) | ✅ 81 passed (21 new). New coverage: theme persistence, no-flash, system follow, blocked storage, menu toggle, no-JS; current section (desktop and menu); legacy anchors; back to top; header-focus scroll regression; focus not obscured; form validation, success only after confirmation, 500 / 403 / network failures, axe with errors and alert in both themes; no-JS native validation and POST; zero unresolved links |
+| Formspree in tests | ✅ Every test intercepts `formspree.io`; no real submission was made |
+| First-load JS | ✅ 143.9 KB gzip (+3.7 KB; budget 150; ⚠ above the 120 KB target, optimisation in Phase 11) |
+| `npm audit --audit-level=high` | ✅ 0 high or critical |
+| Visual review | ✅ Screenshots: header at 320 / 375 / 800 / 1440 px, Contact at 375 / 1280 px, form errors / failure / success, menu with toggle and current section, both themes |
 
 ## Phase 08 summary
 
@@ -306,6 +352,9 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | "Existing Work CTA" = the hire band ("Interested in working with me?", Call Me! → phone, Hire Me! → Contact) | Owner |
 | 2026-11-04 | Project cards numbered 01–10 by content order (not renumbered when filtered); no invented descriptions; no link or note on the six unlinked projects; testimonials word for word | Owner |
 | 2026-11-04 | Hover zoom only on the linked card (link hover/focus); unlinked cards have no hover effect | A hover effect would suggest they are clickable (spec §17) |
+| 2026-11-04 | Phase 09: theme switcher included; skills strip (FR-INT-06, DS-12) excluded; "Phone" label approved; the real Formspree test is sent by the owner from the live site after deployment (option b) | Owner decisions 1–4 |
+| 2026-11-04 | Contact form success only after Formspree confirms (2xx + `"ok": true`); every failure keeps input and offers email; honeypot handled by Formspree, never a faked success | Owner requirement; ADR 0006 implementation notes |
+| 2026-11-04 | Focus-not-obscured offset moved from `scroll-padding-top` on `<html>` to `scroll-margin-top` on content | Sticky-header controls scrolled the page on focus (bug since Phase 07) |
 
 ## Risks & dependencies
 
@@ -321,12 +370,13 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | R10 | First-load JS budget (≤ 150 KB gzip) with the App Router | Medium | Server Components by default; client components only for interactive parts | 05–06 |
 | R11 | Contact form provider limits (rate limits, free tier) | Low | Provider chosen in Phase 05; failure state offers an email fallback | 05, 09 |
 | R12 | The asymmetric project grid can create awkward gaps with filtered subsets on tablet and desktop | Low | ✅ Layout by visible index; unpaired card spans 7; every filter state verified by unit tests, E2E geometry tests and screenshots in Phase 08 | 08 |
-| R13 | The skills strip adds motion and a control (WCAG 2.2.2) | Low | Pause control, static under reduced motion, `aria-hidden` duplicate; can be dropped without layout impact | 09 |
+| R13 | The skills strip adds motion and a control (WCAG 2.2.2) | — | ✅ Closed: not built (owner decision, 2026-11-04) | 09 |
 | R14 | TypeScript pinned below the latest major (7.x) | Low | ADR 0011; upgrade when typescript-eslint supports 7 | 06+ |
 | R15 | Formspree account access (existing form `xleyzgzo`) | Low | ✅ Owner confirmed access (2026-11-04); fallback remains a new free form, config-only change | 09 |
+| R21 | Formspree settings may block in-page submissions (reCAPTCHA was on by default for forms created before Feb 2020) or reject the domain | Medium | The site shows the error with the email fallback, never a false success; owner checklist (reCAPTCHA off, notification email, allowed domain); owner's real test after deployment | 09 → 12 |
 | R16 | `'unsafe-inline'` scripts weaken CSP against inline injection | Low | No user content rendered; two reviewed inline uses only; Phase 11 evaluates replacing it with CSP hash sources (ADR 0008 evaluation plan) | 11 |
 | R17 | Vercel plan limits, image-optimisation cost or acceptable-use terms may not fit | Medium | Verify against current terms in Phase 12; fallbacks: paid plan, pre-optimised images with `images.unoptimized`, or `output: 'export'` (ADR 0002, ADR 0010) | 12 |
-| R18 | First-load JS (136.9 KB after Phase 06; 139.5 KB after Phase 07; **140.2 KB after Phase 08**) is above the 120 KB target, though within the 150 KB budget; the framework runtime dominates, and the Phase 09 islands (contact form, theme toggle, active section, back-to-top, skills strip) add to it | Medium | CI budget gate (`npm run size`); server-rendered cards and slots (ADR 0013), `getImageProps()`; keep islands small; optimisation in Phase 11 (owner decision) | 09–11 |
+| R18 | First-load JS (136.9 KB after Phase 06; 139.5 after Phase 07; 140.2 after Phase 08; **143.9 KB after Phase 09**) is above the 120 KB target, though within the 150 KB budget (6.1 KB headroom); the framework runtime dominates | Medium | CI budget gate (`npm run size`); server-rendered cards and slots (ADR 0013), `getImageProps()`, CSS-driven toggle label; optimisation in Phase 11 (owner decision) | 11 |
 | R19 | 17 moderate `npm audit` advisories in the ESLint dev toolchain (none in runtime deps) | Low | Not shipped to users; CI fails only on high or critical; re-check when updating the lint stack | 06+ |
 | R20 | Local machine memory pressure caused a transient Turbopack build crash (`os error 1450`) and Vitest worker OOMs | Low | Worker limits set; retry succeeded; CI runners are unaffected | 06+ |
 | R8 | The reference site is built on a commercial template | Medium | Patterns only; no code, CSS or assets reused | 04–09 |
@@ -354,3 +404,5 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Phase 07: site shell (header, mobile menu, footer) and sections Hero → 06 Education implemented on `phase/07-core-portfolio`, one commit per section, each tested; specs and docs updated; PR opened for review |
 | 2026-11-04 | Phase 07 approved by owner; PR #6 merged into `main`; branch `phase/07-core-portfolio` deleted after verifying it was fully merged |
 | 2026-11-04 | Phase 08: 07 Projects (filter, asymmetric grid), hire band and 08 Testimonials implemented on `phase/08-projects-showcase`; ADR 0013; architecture, data model and content schema updated; PR opened for review |
+| 2026-11-04 | Phase 08 approved by owner; PR #7 merged into `main`; branch `phase/08-projects-showcase` deleted after verifying it was fully merged |
+| 2026-11-04 | Phase 09: theme switcher, current-section navigation, legacy anchors, back to top, 09 Contact and the Formspree form implemented on `phase/09-contact-interactions`; sticky-header focus-scroll bug fixed; docs updated; PR opened for review |

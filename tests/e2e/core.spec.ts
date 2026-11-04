@@ -6,14 +6,11 @@ import { expect, test, type Page } from '@playwright/test'
 const CV_NAME = 'Download CV (PDF, 72 KB)'
 const CV_PATH = '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf'
 
-/**
- * Internal link targets that are allowed to be missing until their phase builds them
- * (owner decision 2026-11-04). Remove each entry when its section ships; by the end of
- * Phase 09 this list must be empty and the test must report zero unresolved links.
+/*
+ * Phase 07 allowed #projects, #testimonials (Phase 08) and #contact (Phase 09) to be missing
+ * until their sections shipped (owner decision 2026-11-04). With Contact built in Phase 09 the
+ * exception list is gone: every internal link must resolve.
  */
-const PENDING_TARGETS: Record<string, string> = {
-  contact: 'Phase 09',
-}
 
 const primaryNav = (page: Page) => page.getByRole('navigation', { name: 'Primary' })
 const menuButton = (page: Page) => page.getByRole('button', { name: 'Open menu' })
@@ -35,20 +32,23 @@ test('sections render in the approved order with no separate Resume section', as
     'projects',
     'hire-heading',
     'testimonials',
+    'contact',
   ])
   await expect(page.getByRole('heading', { level: 2, name: /resume/i })).toHaveCount(0)
 })
 
-test('internal links resolve, except the approved pending targets', async ({ page }) => {
+test('every internal link resolves: zero unresolved targets (owner condition, Phase 07–09)', async ({
+  page,
+}) => {
   await page.goto('/')
-  const targets = await page
+  const unresolved = await page
     .locator('a[href^="#"], a[href^="/#"]')
     .evaluateAll((links) =>
       [...new Set(links.map((a) => (a.getAttribute('href') ?? '').split('#')[1] ?? ''))].filter(
         (id) => id && !document.getElementById(id),
       ),
     )
-  expect(targets.sort()).toEqual(Object.keys(PENDING_TARGETS).sort())
+  expect(unresolved).toEqual([])
 })
 
 test.describe('header layout per breakpoint (COMPONENT_VISUAL_SPEC §2)', () => {
@@ -65,7 +65,8 @@ test.describe('header layout per breakpoint (COMPONENT_VISUAL_SPEC §2)', () => 
       await expect(primaryNav(page)).toBeVisible({ visible: c.nav })
       await expect(header.getByRole('link', { name: CV_NAME })).toBeVisible({ visible: c.cv })
       await expect(menuButton(page)).toBeVisible({ visible: c.menu })
-      await expect(header.getByRole('button', { name: /theme/i })).toHaveCount(0)
+      // Phase 09: the theme toggle is in the header at every width.
+      await expect(header.getByRole('button', { name: /theme/i })).toBeVisible()
     })
   }
 })

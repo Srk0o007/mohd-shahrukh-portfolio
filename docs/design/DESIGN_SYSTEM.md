@@ -116,7 +116,7 @@ Projects are placed by **visible index** `i` (after filtering), so filtering nev
 | Mobile menu open/close | Opacity 0 → 1 · base | Instant |
 | Back-to-top appear | Opacity · fast | Instant |
 | Smooth anchor scrolling | `scroll-behavior: smooth` | `auto` |
-| Skills strip | Linear translate, one loop ≈ 60 s; pausable | **Static** (no movement) |
+| Skills strip | Not built (owner decision, 2026-11-04). Original spec: linear translate, one loop ≈ 60 s; pausable | — |
 
 Nothing else animates: no entrance or scroll reveals, parallax, page transitions, preloader, cursor effects or theme cross-fade.
 
@@ -126,7 +126,7 @@ Nothing else animates: no entrance or scroll reveals, parallax, page transitions
 |---|---|
 | Focus indicator | `outline: 2px solid var(--color-focus); outline-offset: 3px`, on `:focus-visible` only; never removed |
 | Focus on the yellow band | `--color-focus` is set to ink in both themes |
-| Not obscured | `scroll-padding-top: calc(var(--header-h) + 16px)` (WCAG 2.4.11) |
+| Not obscured | `scroll-margin-top: calc(var(--header-h) + 16px)` on `main` and `footer` content (WCAG 2.4.11). Not `scroll-padding-top` on `<html>`: that also applied to sticky-header controls, so focusing them scrolled the page (fixed in Phase 09) |
 | Hover | Never the only way to reveal information (NFR-RSP-04) |
 | Pressed / current | `aria-pressed` for filter chips; `aria-current="true"` for the active nav item (2 px underline) |
 | Disabled | Used only for "Sending…": the label changes and `aria-disabled="true"` is set; colours stay at full strength, so contrast is unchanged (no opacity fades) |

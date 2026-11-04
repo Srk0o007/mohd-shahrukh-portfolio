@@ -95,14 +95,13 @@ There are no other pages, no dynamic segments, no route handlers, no Server Acti
 |---|---|---|
 | `app/layout.tsx`, `app/page.tsx`, all section shells, cards, lists, footer | Server | Pure rendering of content |
 | `ThemeScript` (inline `<script>`) | Server-rendered inline script | Must run before paint, so it can't be a React effect |
-| `ThemeToggle` | **Client** | Click handler, `localStorage`, `matchMedia` listener |
+| `ThemeToggle` | **Client** | Click handler, `localStorage`, `matchMedia` listener (label and icon chosen by CSS) |
 | `MobileMenu` | **Client** | Open state, focus containment, Esc key, scroll lock |
 | `ActiveSectionObserver` (+ legacy-anchor mapping) | **Client** | IntersectionObserver → `aria-current` on nav links |
-| `ProjectGallery` (filter + grid) | **Client** | Filter state; per-visible-index layout classes; live status |
-| `ProjectCard` | Shared (no hooks) | Rendered by the client gallery; can also render on the server |
+| `ProjectGallery` (filter) | **Client** | Filter state on `data-filter`; live status (ADR 0013) |
+| `ProjectCard` | Server | Rendered with classes for every filter state (ADR 0013) |
 | `HighlightsDisclosure` | **Client** | `aria-expanded` toggle; collapses only after hydration |
-| `SkillsStripControl` | **Client** | Pause/play state; IntersectionObserver start |
-| `ContactForm` | **Client** | Validation, async submit, status |
+| `ContactForm` | **Client** | Validation, async submit (`lib/submit-contact.ts`), status |
 | `BackToTop` | **Client** | Visibility via IntersectionObserver |
 
 **Progressive enhancement:**
@@ -123,10 +122,11 @@ There are no other pages, no dynamic segments, no route handlers, no Server Acti
     SkipLink
     SiteHeader ─ Wordmark · Nav (server) · ThemeToggle* · CV link · MobileMenu*
     <main id="main">                                         ← app/page.tsx
-      Hero · SkillsStrip(*) · About · Services · Experience(*) · Skills
+      Hero · About · Services · Experience(*) · Skills
       Certifications · Education · Projects(*) · HireCta · Testimonials · Contact(*)
     </main>
-    SiteFooter · BackToTop* · ActiveSectionObserver*
+    BackToTop* · ActiveSectionObserver*                      ← home page only
+    SiteFooter
 ```
 
 `*` marks a client island; `(*)` marks a server section containing a client island. The header and footer live in the root layout, so `not-found.tsx` inherits them (FR-ERR-01).

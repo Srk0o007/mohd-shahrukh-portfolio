@@ -28,13 +28,12 @@ RootLayout [S]                                   app/layout.tsx
 ├── SiteHeader [S]
 │   ├── Wordmark (TextLink to #top)
 │   ├── PrimaryNav [S] {items: NavItem[]}                 (visible ≥1280, and when no JS)
-│   ├── ThemeToggle [C] {labels}
+│   ├── ThemeToggle [C] {labels}                          (every width; also in the menu)
 │   ├── ButtonLink "Download CV" {cv: CvDocument}
-│   └── MobileMenu [C] {items, cv, social, labels}        (<1280, JS only)
+│   └── MobileMenu [C] {items, footer (server slot), labels}  (<1280, JS only)
 ├── children → HomePage [S]                       app/page.tsx
 │   ├── Hero [S] {profile, cv}
-│   ├── SkillsStrip [S] {skills: string[]}
-│   │   └── SkillsStripControl [C] {labels}
+│   ├── (SkillsStrip — not built: owner decision 2026-11-04, Phase 09)
 │   ├── About [S] {profile, social}
 │   ├── Services [S] {services}
 │   ├── Experience [S] {experience}
@@ -51,25 +50,26 @@ RootLayout [S]                                   app/layout.tsx
 │   ├── HireCta [S] {cta}
 │   ├── Testimonials [S] {testimonials}
 │   ├── Contact [S] {contact, social}
-│   │   └── ContactForm [C] {endpoint, fields, copy}
-│   └── PersonJsonLd [S] {profile, social}
-├── SiteFooter [S] {footer, social}
-├── BackToTop [C] {label}
-└── ActiveSectionObserver [C] {sectionIds}               (renders nothing)
+│   │   └── ContactForm [C] {endpoint, copy}
+│   │       ├── FormField ×3, honeypot
+│   │       └── FormStatus (role="status" / role="alert")
+│   └── PersonJsonLd [S] {profile, social}              (Phase 11)
+├── BackToTop [C] {label}                                (home page)
+├── ActiveSectionObserver [C] {navIds}                   (home page; renders nothing)
+└── SiteFooter [S] {footer, social}
 ```
 
 ## 3. Client islands: contracts
 
 | Island | Props (serialisable) | State | Behaviour and accessibility | Requirements |
 |---|---|---|---|---|
-| **ThemeToggle** | `labels: {toDark, toLight}` | `theme: 'light'\|'dark'` (initialised from `document.documentElement.dataset.theme`) | Toggles `data-theme` and `color-scheme`; persists to `localStorage['theme']` (try/catch); while no stored choice, listens to `matchMedia('(prefers-color-scheme: dark)')` changes; `aria-label` describes the action | FR-THM-01–04 |
-| **MobileMenu** | `items`, `cv`, `social`, `labels` | `open: boolean` | Button with `aria-expanded`/`aria-controls`; on open: focus the first link, contain Tab, `inert` on `<main>`/footer, lock scroll; Esc/Close → close and return focus; selecting a link → close and let the anchor scroll | FR-NAV-02 |
-| **ActiveSectionObserver** | `sectionIds: string[]` | none (DOM only) | One IntersectionObserver; sets `aria-current="true"` on the matching nav link (desktop and menu); maps legacy hashes (`#home → #top`, `#resume → #experience`, `#portfolio → #projects`, `#testimonial → #testimonials`) on load and `hashchange` | FR-NAV-04, FR-NAV-06 |
+| **ThemeToggle** | `labels: {toDark, toLight}` | None in React. A module-level per-visit choice covers blocked storage. | Toggles `data-theme` and `color-scheme`; persists to `localStorage['theme']` (try/catch). The icon **and** the accessible name ("Switch to dark/light theme") are chosen by CSS from `data-theme` (`dark:` variants on `sr-only` spans), so they are right before hydration with no server/client mismatch. While no choice exists it follows `matchMedia('(prefers-color-scheme: dark)')`, re-syncing on mount to catch a change between paint and hydration. `js-only`. | FR-THM-01–04 |
+| **MobileMenu** | `items`, `footer` (server-rendered CV, social links, theme toggle), `labels` | `open`, `currentId` | Button with `aria-expanded`/`aria-controls`; on open: focus the first link, contain Tab, `inert` on everything else, lock scroll, mark the current section (`<html data-section>`); Esc/Close → close and return focus; selecting a link → close, scroll to and focus the section (`goToSection`) | FR-NAV-02, FR-NAV-04 |
+| **ActiveSectionObserver** | `navIds: string[]` | none (DOM only) | IntersectionObserver on a reading line 40% down the viewport (plus the footer for the page end) → `currentSectionId()`; sets `aria-current="true"` on matching nav links and `<html data-section>` for the menu; sections without a nav item clear it; maps legacy hashes (`#home → #top`, `#resume → #experience`, `#portfolio → #projects`, `#testimonial → #testimonials`) on load and `hashchange` | FR-NAV-04, FR-NAV-06 |
 | **ProjectGallery** | `filters: FilterOption[]` (value, label, pre-formatted status), `children` (server-rendered `<li>` cards) | `filter: 'all'\|ProjectGroup` | Writes `data-filter` on `<ul class="group/gallery">`; cards carry precomputed classes for every state (`layoutsByFilter` → `cardLayoutClasses`), so CSS shows and lays them out. Filter buttons with `aria-pressed`, focus stays on the button; `aria-live="polite"` status "Showing n of total projects". Chips are server-rendered in a `js-only` wrapper (no layout shift; hidden without JS). Amended by [ADR 0013](adr/0013-server-rendered-project-filter.md). | FR-PRJ-01–07, DS-07 |
 | **HighlightsDisclosure** | `total`, `visible` (default 4), `labels`, `children` (server-rendered `<li>`s) | `expanded` | Before hydration all items are shown; after mount, collapses to `visible` and renders a button with `aria-expanded` and `aria-controls`; keeps focus on the button | FR-RES-02, DS-13 |
-| **SkillsStripControl** | `labels: {pause, play}` | `paused` | Toggles `data-paused` on the strip; IntersectionObserver starts motion only when ≥ 50% visible; not rendered under reduced motion (CSS hides it) | FR-INT-03/06, DS-12 |
-| **ContactForm** | `endpoint`, `copy: ContactFormCopy`, `limits` | `status: 'idle'\|'sending'\|'success'\|'error'`, `errors: FieldErrors`, `submitted: boolean` | See §5 | FR-CON-02–07 |
-| **BackToTop** | `label` | `visible` | IntersectionObserver on `#top`; renders `<a href="#top">`; respects reduced motion via CSS | FR-INT-05 |
+| **ContactForm** | `endpoint`, `copy: ContactFormCopy` (strings only; too-long messages pre-formatted per field) | `values`, `errors`, `attempted`, `status: 'idle'\|'sending'\|'success'\|'error'` | See §5 | FR-CON-02–07 |
+| **BackToTop** | `label` | `visible` | IntersectionObserver on `#top`; `<a href="#top">`, `invisible` while hidden (not focusable); click → `goToSection('top')` (scroll, focus, hash); instant under reduced motion | FR-INT-05 |
 
 **Hydration safety:** islands never read `window` or `localStorage` during render. They read in effects, or from attributes set by the pre-paint script. `<html>` carries `suppressHydrationWarning` because the script adds attributes before hydration.
 
@@ -96,15 +96,18 @@ type Status = 'idle' | 'sending' | 'success' | 'error'
 
 onSubmit(e):
   e.preventDefault()
-  if honeypot filled → set success (silently drop)        // FR-CON-05
-  const result = validateContact(formValues)              // lib, pure
-  if (!result.ok) → setErrors, setSubmitted(true), focus first invalid; return
+  if status === 'sending' → return                        // no double submit
+  const result = validateContact(values)                  // lib/validate-contact.ts, pure
+  if (!result.ok) → setErrors, setAttempted(true), focus first invalid; return
   setStatus('sending')
-  try:
-    res = await fetch(endpoint, { method:'POST', headers:{Accept:'application/json'}, body:new FormData(form) })
-    res.ok ? (setStatus('success'), form.reset()) : setStatus('error')
-  catch: setStatus('error')
+  outcome = await submitContact(endpoint, new FormData(form))   // lib/submit-contact.ts
+  // 'success' only for HTTP 2xx + JSON {"ok": true}; non-2xx, other bodies, network
+  // errors and a 15 s timeout are all 'error' (ADR 0006 implementation notes)
+  outcome === 'success' ? (clear values, setStatus('success')) : setStatus('error')  // input kept
 ```
+
+- **Honeypot:** `_gotcha` is always sent and Formspree discards filled submissions. The page never shows a success that did not happen (owner requirement); the Phase 05 sketch that faked success client-side was dropped.
+- **No-JS:** `action`/`method="POST"` with native `required`; `noValidate` is applied only after hydration.
 
 - **Field components:** `FormField` renders the label with the "(required)" suffix, the input, the error text (`id` linked with `aria-describedby`) and `aria-invalid`.
 - **Validation trigger:** on submit. After the first submit attempt, also on blur and change (FR-CON-03).
@@ -146,7 +149,7 @@ Image fit (`cover` vs `contain`) comes from the image's intrinsic ratio (DS-08),
 | `h2` per section, `aria-labelledby` | `Section` + `SectionHeader` |
 | Skip link → `#main` | `SkipLink` + `<main id="main" tabIndex={-1}>` |
 | Focus visible everywhere | Global CSS (`:focus-visible`) |
-| Focus not obscured | `scroll-padding-top` in `globals.css` |
+| Focus not obscured | `scroll-margin-top` on `main`/`footer` content in `globals.css` (not `scroll-padding` on `<html>`, which made focusing sticky-header controls scroll the page) |
 | Reduced motion | Global CSS plus the islands that animate (strip, menu) |
 | Live regions | `ProjectGallery` status, `FormStatus` |
 | New-tab links | `ExternalLink` only |

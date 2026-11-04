@@ -38,7 +38,7 @@ Details: [docs/ROADMAP.md](docs/ROADMAP.md). Process and conventions: [docs/ENGI
 
 ## Getting started
 
-> **Status:** Phase 08. The home page has the site header, mobile menu and footer, plus Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band and Testimonials. Contact arrives in Phase 09.
+> **Status:** Phase 09. The home page is complete: site header with theme switcher, mobile menu, Hero, About, Services, Experience, Skills, Certifications, Education, Projects (with filter), the hire band, Testimonials and Contact (Formspree form), plus current-section highlighting, legacy-anchor redirects and back-to-top. Accessibility hardening, performance/SEO and deployment follow in Phases 10–12.
 
 ### Prerequisites
 
