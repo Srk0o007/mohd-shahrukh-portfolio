@@ -245,6 +245,11 @@ html[data-js] .no-js-only {
   display: none !important;
 }
 
+/* Collapsed disclosure items: hidden from the first paint when JS will run (no shift later). */
+html[data-js] .js-collapsed {
+  display: none;
+}
+
 /* Without JS, keep navigation and the CV link visible at every width (FR-NAV-02 fallback). */
 html:not([data-js]) .nojs-flex {
   display: flex !important;

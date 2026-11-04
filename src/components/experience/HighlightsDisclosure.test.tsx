@@ -8,11 +8,15 @@ const eleven = Array.from({ length: 11 }, (_, i) => `Highlight ${i + 1}`)
 const labels = { more: 'Show all 11 highlights', less: 'Show fewer highlights' }
 
 describe('HighlightsDisclosure (FR-RES-02, DS-13)', () => {
-  it('server render / no JavaScript: all highlights visible and no button', () => {
+  it('server render: every highlight is in the HTML; extras collapse via CSS only when JS runs', () => {
     const html = renderToString(<HighlightsDisclosure highlights={eleven} labels={labels} />)
     for (const text of eleven) expect(html).toContain(text)
+    // No `hidden` attribute: without JS (no html[data-js]) all items stay visible.
     expect(html).not.toContain('hidden=""')
-    expect(html).not.toContain('<button')
+    // Items 5–11 carry the pre-paint collapse class (Phase 11: no shift on hydration).
+    expect(html.match(/class="js-collapsed"/g)).toHaveLength(7)
+    // The button is server-rendered but js-only, so it reserves its space from the first paint.
+    expect(html).toMatch(/<button[^>]*class="js-only/)
   })
 
   it('after hydration: shows the first four and an accessible disclosure button', () => {

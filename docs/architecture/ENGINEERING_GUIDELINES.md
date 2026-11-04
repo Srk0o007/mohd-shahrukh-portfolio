@@ -31,7 +31,7 @@ These guidelines apply to all code from Phase 06 onward. They complement [ENGINE
 | `test` | `vitest run` |
 | `test:watch` | `vitest` |
 | `test:e2e` | `playwright test` (run `npm run build` first; it starts `next start`) |
-| `size` | `node scripts/check-bundle-size.mjs`: first-load JS budget for `/` (fails > 150 KB gzip, warns > 120 KB) |
+| `size` | `node scripts/check-bundle-size.mjs`: first-load JS budget for `/` (fails > 150 KB gzip; warns when project code exceeds 15 KB above the 136.9 KB framework baseline — Phase 11) |
 | `check` | `npm run format:check && npm run lint && npm run typecheck && npm test` |
 
 **Worker limits:** Vitest runs with `maxWorkers: 2` and Playwright with `workers: 1`. One worker per CPU exhausted memory on the development machine (Phase 06), and the suites are small enough that this costs little time.
