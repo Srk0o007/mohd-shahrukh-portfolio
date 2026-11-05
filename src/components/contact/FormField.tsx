@@ -22,9 +22,10 @@ export interface FormFieldProps {
 }
 
 const control =
-  'w-full rounded-sm border border-border bg-surface px-4 text-body text-text ' +
-  'focus:border-text focus:shadow-[inset_0_0_0_1px_var(--color-text)] ' +
-  'aria-invalid:border-error aria-invalid:shadow-[inset_0_0_0_1px_var(--color-error)]'
+  'w-full rounded-md border border-field bg-[rgb(0_0_0/0.55)] px-4 font-sans text-body text-heading ' +
+  'transition-[border-color,box-shadow] duration-400 ease-soft ' +
+  'focus:border-accent focus:shadow-[0_0_0_3px_rgb(0_194_255/0.2)] ' +
+  'aria-invalid:border-error aria-invalid:shadow-[0_0_0_1px_var(--color-error)]'
 
 /**
  * Labelled field (COMPONENT_VISUAL_SPEC §21, FR-CON-02/03): visible label with "(required)",
@@ -61,15 +62,15 @@ export function FormField({
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-ui font-medium">
-        {label} <span className="font-normal text-text-muted">{requiredLabel}</span>
+      <label htmlFor={id} className="text-ui font-bold text-heading">
+        {label} <span className="font-normal text-sub">{requiredLabel}</span>
       </label>
       {multiline ? (
         <textarea
           {...shared}
           ref={inputRef}
           rows={6}
-          className={cn(control, 'min-h-40 resize-y py-3')}
+          className={cn(control, 'min-h-37.5 resize-y py-3.5')}
         />
       ) : (
         <input

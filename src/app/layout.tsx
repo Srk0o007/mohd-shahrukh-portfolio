@@ -1,29 +1,25 @@
 import type { Metadata, Viewport } from 'next'
-import { Fraunces, Inter } from 'next/font/google'
+import { Andika } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { ParticleWaveLayer } from '@/components/layout/ParticleWaveLayer'
+import { JsFlagScript } from '@/components/layout/JsFlagScript'
+import { MotionLayer } from '@/components/layout/MotionLayer'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SkipLink } from '@/components/layout/SkipLink'
-import { ThemeScript } from '@/components/layout/ThemeScript'
 import { siteConfig } from '@/config/site'
 import { profile, siteMeta, uiCopy } from '@/content'
 import './globals.css'
 
 /*
- * Fonts (TYPOGRAPHY §2, ARCHITECTURE §10): next/font/google fetches the files at build time and
- * serves them from this origin — the browser never requests Google Fonts. Two variable files.
+ * Font (TYPOGRAPHY.md, ADR 0014): Andika 400/700. next/font/google fetches the files at build
+ * time and serves them from this origin — the browser never requests Google Fonts.
  */
-const fraunces = Fraunces({
+const andika = Andika({
   subsets: ['latin'],
-  axes: ['opsz'],
+  weight: ['400', '700'],
   display: 'swap',
-  variable: '--font-fraunces',
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-andika',
 })
 
 /*
@@ -51,28 +47,30 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f5f2ea' },
-    { media: '(prefers-color-scheme: dark)', color: '#121211' },
-  ],
-  colorScheme: 'light dark',
+  // Dark only (ADR 0014): the page colour behind the content column.
+  themeColor: '#10100d',
+  colorScheme: 'dark',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html
-      lang={siteMeta.locale}
-      className={`${fraunces.variable} ${inter.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang={siteMeta.locale} className={andika.variable} suppressHydrationWarning>
       <head>
-        <ThemeScript />
+        <JsFlagScript />
       </head>
       <body>
+        <ParticleWaveLayer />
+        <MotionLayer />
         <SkipLink label={uiCopy.skipLink} />
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        {/*
+          Content column (1240 px): solid black from 1024 px so the wave shows only in the side
+          areas; translucent below so it still reads faintly on phones and tablets.
+        */}
+        <div className="relative mx-auto min-h-screen max-w-310 bg-frame/72 lg:border-x lg:border-[rgb(255_255_255/0.05)] lg:bg-frame lg:shadow-[0_0_120px_rgb(0_0_0/0.6)]">
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </div>
       </body>
     </html>
   )

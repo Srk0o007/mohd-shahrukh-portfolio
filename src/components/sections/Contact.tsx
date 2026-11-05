@@ -1,67 +1,63 @@
 import { ContactForm } from '@/components/contact/ContactForm'
 import { SocialLinks } from '@/components/layout/SocialLinks'
 import { Section } from '@/components/ui/Section'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { textLinkClasses } from '@/components/ui/TextLink'
 import { siteConfig } from '@/config/site'
 import { contactDetails, formatCopy, getSectionHeading, socialLinks, uiCopy } from '@/content'
 import { CONTACT_LIMITS } from '@/lib/validate-contact'
 
 /**
- * 09 — Contact (FR-CON-01–07, FR-SOC-01, COMPONENT_VISUAL_SPEC §20–22). Details in columns
- * 1–5 and the form in 6–12 from 1024 px; stacked below. Copy is word for word from content.
+ * 09 — Contact (FR-CON-01–07, FR-SOC-01, COMPONENT_VISUAL_SPEC §20–22, Phase 11.5): the header,
+ * intro and details (each with a cyan left border) on the left; the form in a card on the right.
+ * Stacked below 960 px. Copy is word for word from content; the Formspree logic is unchanged.
  */
 export function Contact() {
   const heading = getSectionHeading('contact')
   const headingId = `${heading.id}-heading`
+  const term = 'text-xs font-bold tracking-[0.16em] text-accent uppercase'
+  const link = `${textLinkClasses} inline-flex min-h-8 items-center [overflow-wrap:anywhere]`
 
   return (
     <Section id={heading.id} labelledBy={headingId}>
-      <div className="grid gap-16 lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8">
-        <div className="lg:col-span-5">
-          <p className="text-label font-medium text-text-muted uppercase tabular-nums">
-            {heading.index} — {heading.eyebrow}
-          </p>
-          <h2 id={headingId} className="mt-4 font-display text-display-2 font-medium">
-            {heading.heading}
-          </h2>
-          <p className="mt-6 max-w-[48ch] text-lead">{contactDetails.intro}</p>
-          <dl className="mt-10 flex flex-col gap-5">
-            <div>
-              <dt className="text-label font-medium text-text-muted uppercase">
-                {uiCopy.factLocation}
-              </dt>
-              <dd className="mt-1 font-medium">{contactDetails.location}</dd>
+      <div className="grid grid-cols-1 items-start gap-14 mid:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div>
+          <SectionHeader
+            index={heading.index}
+            eyebrow={heading.eyebrow}
+            heading={heading.heading}
+            headingId={headingId}
+            intro={<p>{contactDetails.intro}</p>}
+            className="mb-11"
+          />
+          <dl data-reveal="" className="mt-2 grid gap-5.5">
+            <div className="border-l-2 border-accent pl-4">
+              <dt className={term}>{uiCopy.factLocation}</dt>
+              <dd className="mt-0.5 font-bold text-heading">{contactDetails.location}</dd>
             </div>
-            <div>
-              <dt className="text-label font-medium text-text-muted uppercase">
-                {uiCopy.contactPhone}
-              </dt>
-              <dd className="mt-1 font-medium">
-                <a
-                  href={contactDetails.phone.tel}
-                  className="inline-flex min-h-11 items-center underline decoration-1 underline-offset-4 hover:decoration-2"
-                >
+            <div className="border-l-2 border-accent pl-4">
+              <dt className={term}>{uiCopy.contactPhone}</dt>
+              <dd className="mt-0.5">
+                <a href={contactDetails.phone.tel} className={link}>
                   {contactDetails.phone.display}
                 </a>
               </dd>
             </div>
-            <div>
-              <dt className="text-label font-medium text-text-muted uppercase">
-                {uiCopy.contactEmail}
-              </dt>
-              <dd className="mt-1 font-medium">
-                <a
-                  href={`mailto:${contactDetails.email}`}
-                  className="inline-flex min-h-11 items-center break-all underline decoration-1 underline-offset-4 hover:decoration-2"
-                >
+            <div className="border-l-2 border-accent pl-4">
+              <dt className={term}>{uiCopy.contactEmail}</dt>
+              <dd className="mt-0.5">
+                <a href={`mailto:${contactDetails.email}`} className={link}>
                   {contactDetails.email}
                 </a>
               </dd>
             </div>
           </dl>
-          <SocialLinks links={socialLinks} newTabLabel={uiCopy.newTab} className="mt-8" />
+          <div data-reveal="">
+            <SocialLinks links={socialLinks} newTabLabel={uiCopy.newTab} className="mt-6.5" />
+          </div>
         </div>
 
-        <div className="lg:col-span-7">
+        <div>
           <ContactForm
             endpoint={siteConfig.formEndpoint}
             copy={{

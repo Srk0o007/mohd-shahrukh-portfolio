@@ -36,7 +36,7 @@ export function BackToTop({ label }: BackToTopProps) {
       aria-label={label}
       onClick={onClick}
       className={cn(
-        'js-only fixed right-4 bottom-4 z-30 inline-flex size-12 items-center justify-center rounded-pill border border-border bg-surface text-text transition-[opacity,visibility,background-color] duration-150 ease-standard hover:bg-surface-2 md:right-6 md:bottom-6',
+        'glass js-only fixed right-[max(18px,env(safe-area-inset-right,0px))] bottom-[calc(18px+env(safe-area-inset-bottom,0px))] z-30 inline-flex size-12.5 items-center justify-center rounded-full border-rim text-accent transition-[opacity,visibility,border-color] duration-250 hover:border-accent',
         visible ? 'visible opacity-100' : 'invisible opacity-0',
       )}
     >

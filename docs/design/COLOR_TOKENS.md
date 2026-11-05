@@ -9,6 +9,8 @@ All ratios are WCAG 2.x contrast ratios computed from sRGB relative luminance. E
 
 ---
 
+> **Phase 11.5 update (2026-11-05):** the site is dark only ([ADR 0014](../architecture/adr/0014-dark-only-theme-and-andika.md)). The current tokens are `bg #10100d`, `frame #000`, `card #050505`, `heading #fff`, `soft #e4e4e4`, `sub #969696`, `faint #808080`, `accent #00c2ff` / `#0077ff` / `#7fe3ff`, `on-accent #00131c`, `field #5c5c5c`, `error #ff8a75` and `success #7bcf96`, plus lines at 8 % / 16 % white. Contrast is in ACCESSIBILITY_REPORT §4. The light and dark sets below are historical.
+
 ## 1. Rules
 
 1. **Text** must be ≥ 4.5:1 on its background. Large text (≥ 24 px, or ≥ 18.66 px bold) must be ≥ 3:1. This design uses ≥ 4.5:1 for all text.

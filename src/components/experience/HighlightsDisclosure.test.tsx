@@ -14,7 +14,7 @@ describe('HighlightsDisclosure (FR-RES-02, DS-13)', () => {
     // No `hidden` attribute: without JS (no html[data-js]) all items stay visible.
     expect(html).not.toContain('hidden=""')
     // Items 5–11 carry the pre-paint collapse class (Phase 11: no shift on hydration).
-    expect(html.match(/class="js-collapsed"/g)).toHaveLength(7)
+    expect(html.match(/\bjs-collapsed\b/g)).toHaveLength(7)
     // The button is server-rendered but js-only, so it reserves its space from the first paint.
     expect(html).toMatch(/<button[^>]*class="js-only/)
   })

@@ -8,6 +8,12 @@ Related: [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md) · [COMPONENT_ARCHITECTURE.m
 
 ---
 
+> **Phase 11.5 update (2026-11-05):** dark only, with no theme toggle ([ADR 0014](adr/0014-dark-only-theme-and-andika.md)). Andika via `next/font`. Lazy islands load after idle:
+> - `ParticleWaveLayer` ([ADR 0015](adr/0015-particle-wave-background.md));
+> - `MotionLayer` ([ADR 0016](adr/0016-motion-system-and-testimonial-carousel.md)).
+>
+> New first-load islands are `SkillTabs` and `TestimonialSlider`. First-load JS is 147.2 KB gzip (cap 150).
+
 ## 1. Context
 
 - **The product:** a single-page personal portfolio plus a 404 page.

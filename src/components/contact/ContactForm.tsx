@@ -128,11 +128,14 @@ export function ContactForm({ endpoint, copy }: ContactFormProps) {
       noValidate={hydrated}
       onSubmit={onSubmit}
       aria-labelledby={headingId}
+      data-reveal=""
+      // Phase 11.5: the form sits in a card (COMPONENT_VISUAL_SPEC §21).
+      className="card card-hover rounded-panel p-[clamp(24px,4vw,40px)]"
     >
-      <h3 id={headingId} className="font-display text-h3 font-medium">
+      <h3 id={headingId} className="text-form">
         {copy.heading}
       </h3>
-      <div className="mt-8 flex flex-col gap-6">
+      <div className="mt-5 flex flex-col gap-5">
         <FormField
           id={`${id}-name`}
           name="name"
@@ -178,7 +181,7 @@ export function ContactForm({ endpoint, copy }: ContactFormProps) {
           onBlur={(event) => revalidate('message', event.target.value)}
         >
           {/* DS-15: passive counter; read with the field, not live-announced (FR-CON-07). */}
-          <p id={counterId} className="text-right text-small text-text-muted tabular-nums">
+          <p id={counterId} className="text-right text-small tabular-nums">
             {values.message.length} / {CONTACT_LIMITS.message}
           </p>
         </FormField>
@@ -190,7 +193,7 @@ export function ContactForm({ endpoint, copy }: ContactFormProps) {
       <button
         type="submit"
         aria-disabled={sending || undefined}
-        className={buttonClasses('primary', 'lg', 'mt-8')}
+        className={buttonClasses('primary', 'lg', 'mt-5 w-full')}
       >
         {sending ? copy.sending : copy.submit}
         {sending ? null : <ArrowRightIcon size={20} />}

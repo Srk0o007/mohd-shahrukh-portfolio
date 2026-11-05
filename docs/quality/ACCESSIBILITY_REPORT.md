@@ -104,7 +104,35 @@ The audit found **no open WCAG 2.2 AA failures**.
 - **Reduced motion (FR-INT-02, NFR-A11Y-08):** smooth scrolling and the hover zoom are disabled, and transitions are instant (tested).
 - **Forced colours (NFR-BRW-04, Should):** controls keep visible outlines and the pressed chip stays distinct (A11Y-01).
 
-## 4. Colour contrast (both themes)
+## 4. Colour contrast
+
+### Phase 11.5: dark only (current)
+
+| Text / UI | Background | Ratio | Minimum | Result |
+|---|---|---|---|---|
+| heading `#ffffff` | frame `#000000` | 21.00:1 | 4.5:1 | ✅ |
+| soft `#e4e4e4` | card `#050505` | 16.03:1 | 4.5:1 | ✅ |
+| sub `#969696` | frame `#000000` | 7.10:1 | 4.5:1 | ✅ |
+| sub `#969696` | card `#050505` | 6.89:1 | 4.5:1 | ✅ |
+| accent `#00c2ff` | frame `#000000` | 10.16:1 | 4.5:1 | ✅ |
+| accent `#00c2ff` | card `#050505` | 9.86:1 | 4.5:1 | ✅ |
+| accent-3 `#7fe3ff` | card `#050505` | 13.91:1 | 4.5:1 | ✅ |
+| on-accent `#00131c` | accent `#00c2ff` | 9.15:1 | 4.5:1 | ✅ |
+| on-accent `#00131c` | accent-2 `#0077ff` | 4.58:1 | 4.5:1 | ✅ |
+| error `#ff8a75` | frame `#000000` | 9.14:1 | 4.5:1 | ✅ |
+| success `#7bcf96` | frame `#000000` | 11.21:1 | 4.5:1 | ✅ |
+| faint `#808080` (meta, code comments, tab ordinals) | frame `#000000` | 5.32:1 | 4.5:1 | ✅ |
+| faint `#808080` | card `#050505` | 5.16:1 | 4.5:1 | ✅ |
+| field border `#5c5c5c` | frame `#000000` | 3.14:1 | 3:1 | ✅ |
+| sub `#969696` | bg `#10100d` | 6.44:1 | 4.5:1 | ✅ |
+
+All pass. **Adjusted from the prototype to pass AA:**
+- the `faint` text token is `#808080`, not `#6b6b6b` / `#5a5a5a`;
+- form fields keep the 2 px focus outline (the prototype removes it).
+
+The outlined skills **ticker** (`#474747` stroke, 2.3:1) is `aria-hidden` and repeats the skills list, so it is pure decoration (1.4.3 exception). It is hidden under reduced motion, which is the mode the axe matrix runs in (ADR 0016).
+
+### Phase 10: light and dark (historical)
 
 Calculated from the tokens in `src/app/globals.css` (WCAG relative luminance).
 
@@ -148,7 +176,7 @@ Calculated from the tokens in `src/app/globals.css` (WCAG relative luminance).
 
 ## 6. Open items and limitations
 
-None of these is a known AA failure.
+None of these is a known AA failure, except OI-9 (owner-accepted, Phase 11.5).
 
 | ID | Item | Status / owner | Plan |
 |---|---|---|---|
@@ -160,6 +188,7 @@ None of these is a known AA failure.
 | OI-6 | Experience highlights collapse after hydration; a visitor already scrolled below them sees content shift | Phase 11 (layout stability) | Not an AA failure; measure with CLS in Phase 11. |
 | OI-7 | The browser UI colour (`theme-color`) follows the system preference, not the manual theme choice | Cosmetic | Optional, Phase 11. |
 | OI-8 | One test timed out once in a full local run (memory-constrained machine); it passed on every re-run | Monitored | CI retries once. |
+| OI-9 | **WCAG 2.2.2 Pause, Stop, Hide:** the particle wave, ticker, portrait morph and orbits move for more than 5 s with no pause control | **Known gap, accepted by the owner (2026-11-05)** | Shipped exactly as frozen. Everything stops under `prefers-reduced-motion`; the slider pauses on hover and focus. [ADR 0016](../architecture/adr/0016-motion-system-and-testimonial-carousel.md) |
 
 ## 7. Screen-reader smoke test (owner checklist)
 

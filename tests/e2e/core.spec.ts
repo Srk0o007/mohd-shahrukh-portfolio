@@ -52,10 +52,13 @@ test('every internal link resolves: zero unresolved targets (owner condition, Ph
 })
 
 test.describe('header layout per breakpoint (COMPONENT_VISUAL_SPEC §2)', () => {
+  // Phase 11.5: the CV pill stays in the header at every width (icon only under 560 px) and the
+  // inline nav replaces the menu from 1080 px.
   const cases = [
-    { width: 375, nav: false, cv: false, menu: true },
-    { width: 800, nav: false, cv: true, menu: true },
-    { width: 1440, nav: true, cv: true, menu: false },
+    { width: 375, nav: false, menu: true, cvLabel: false },
+    { width: 800, nav: false, menu: true, cvLabel: true },
+    { width: 1024, nav: false, menu: true, cvLabel: true },
+    { width: 1440, nav: true, menu: false, cvLabel: true },
   ]
   for (const c of cases) {
     test(`${c.width}px`, async ({ page }) => {
@@ -63,10 +66,15 @@ test.describe('header layout per breakpoint (COMPONENT_VISUAL_SPEC §2)', () => 
       await page.goto('/')
       const header = page.locator('header')
       await expect(primaryNav(page)).toBeVisible({ visible: c.nav })
-      await expect(header.getByRole('link', { name: CV_NAME })).toBeVisible({ visible: c.cv })
+      const cvLink = header.getByRole('link', { name: CV_NAME })
+      await expect(cvLink).toBeVisible()
+      // The accessible name stays complete; under 560 px the visible label is visually hidden.
+      const labelWidth = await cvLink.evaluate(
+        (a) => a.querySelector('.btn-label')?.getBoundingClientRect().width ?? 0,
+      )
+      expect(labelWidth > 1).toBe(c.cvLabel)
       await expect(menuButton(page)).toBeVisible({ visible: c.menu })
-      // Phase 09: the theme toggle is in the header at every width.
-      await expect(header.getByRole('button', { name: /theme/i })).toBeVisible()
+      await expect(header.getByRole('button', { name: /theme/i })).toHaveCount(0)
     })
   }
 })
@@ -111,8 +119,11 @@ test.describe('mobile menu (FR-NAV-02)', () => {
 
   test('makes the page inert and locks scrolling while open', async ({ page }) => {
     await menuButton(page).click()
-    await expect(page.locator('main')).toHaveAttribute('inert', '')
-    await expect(page.locator('footer')).toHaveAttribute('inert', '')
+    // Main and footer sit inside the content column, which is the element made inert.
+    const isInert = (selector: string) =>
+      page.locator(selector).evaluate((el) => el.closest('[inert]') !== null)
+    await expect.poll(() => isInert('main')).toBe(true)
+    expect(await isInert('footer')).toBe(true)
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden')
     const before = await page.evaluate(() => window.scrollY)
     await page.mouse.wheel(0, 800)
@@ -127,7 +138,7 @@ test.describe('mobile menu (FR-NAV-02)', () => {
     await page.keyboard.press('Escape')
     await expect(primaryNav(page)).toBeHidden()
     await expect(menuButton(page)).toBeFocused()
-    await expect(page.locator('main')).not.toHaveAttribute('inert', '')
+    expect(await page.locator('main').evaluate((el) => el.closest('[inert]') === null)).toBe(true)
 
     await menuButton(page).click()
     await page.getByRole('button', { name: 'Close menu' }).click()
@@ -147,27 +158,35 @@ test.describe('mobile menu (FR-NAV-02)', () => {
     await expect(page.getByRole('heading', { level: 2, name: 'My Skills' })).toBeInViewport()
   })
 
-  test('contains the CV download and text-labelled social links', async ({ page }) => {
+  test('lists only the section links; the CV pill stays in the header (Phase 11.5)', async ({
+    page,
+  }) => {
     await menuButton(page).click()
-    // Scope to the overlay: the page behind it (now inert) has its own CV link.
-    const panel = primaryNav(page).locator('xpath=ancestor::div[contains(@class, "fixed")]')
-    await expect(panel.getByRole('link', { name: CV_NAME })).toBeVisible()
-    for (const name of ['GitHub (opens in new tab)', 'LinkedIn (opens in new tab)', 'Email']) {
-      await expect(panel.getByRole('link', { name, exact: true })).toBeVisible()
-    }
+    const panel = page.getByRole('dialog')
+    const names = (links: ReturnType<Page['locator']>) =>
+      links.evaluateAll((els) =>
+        // The menu's "01"–"07" ordinals are aria-hidden: compare the visible labels only.
+        els.map((a) => a.querySelector('span:not([aria-hidden])')?.textContent ?? a.textContent),
+      )
+    const menuLinks = await names(panel.getByRole('navigation', { name: 'Primary' }).locator('a'))
+    const desktopLinks = await names(page.locator('header nav[aria-label="Primary"] a'))
+    expect(menuLinks).toEqual(desktopLinks)
+    expect(menuLinks.length).toBeGreaterThan(5)
+    await expect(panel.getByRole('link', { name: CV_NAME })).toHaveCount(0)
+    await page.keyboard.press('Escape')
+    await expect(page.locator('header').getByRole('link', { name: CV_NAME })).toBeVisible()
   })
 
-  for (const scheme of ['light', 'dark'] as const) {
-    test(`axe: open menu has no violations (${scheme})`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme })
-      await page.goto('/')
-      await menuButton(page).click()
-      const results = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .analyze()
-      expect(results.violations.map((v) => v.id)).toEqual([])
-    })
-  }
+  test('axe: open menu has no violations', async ({ page }) => {
+    // Reduced motion: final reveal states, so axe never measures content mid-fade (ADR 0016).
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/')
+    await menuButton(page).click()
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze()
+    expect(results.violations.map((v) => v.id)).toEqual([])
+  })
 })
 
 test.describe('navigation from the 404 page goes to home-page sections', () => {

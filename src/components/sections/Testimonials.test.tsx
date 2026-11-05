@@ -18,7 +18,7 @@ describe('Hire CTA band (FR-CTA-01, DS-10)', () => {
   })
 })
 
-describe('08 — Testimonials (FR-TST-01)', () => {
+describe('08 — Testimonials (FR-TST-01, ADR 0016)', () => {
   it('is a labelled region with the numbered eyebrow', () => {
     render(<Testimonials />)
     expect(screen.getByRole('region', { name: 'What My Colleagues Say' })).toHaveAttribute(
@@ -29,8 +29,9 @@ describe('08 — Testimonials (FR-TST-01)', () => {
   })
 
   it('shows both endorsements as figures with verbatim quotes, names, roles and photos', () => {
-    const { container } = render(<Testimonials />)
-    const figures = screen.getAllByRole('figure')
+    render(<Testimonials />)
+    // The inactive slide is aria-hidden, so query hidden content too.
+    const figures = screen.getAllByRole('figure', { hidden: true })
     expect(figures).toHaveLength(2)
     testimonials.forEach((t, i) => {
       const figure = figures[i] as HTMLElement
@@ -38,12 +39,25 @@ describe('08 — Testimonials (FR-TST-01)', () => {
       const caption = figure.querySelector('figcaption') as HTMLElement
       expect(within(caption).getByText(t.name)).toBeInTheDocument()
       expect(within(caption).getByText(t.role)).toBeInTheDocument()
-      expect(within(caption).getByRole('img')).toHaveAttribute('alt', `Photo of ${t.name}`)
+      expect(within(caption).getByRole('img', { hidden: true })).toHaveAttribute(
+        'alt',
+        `Photo of ${t.name}`,
+      )
     })
-    // Decorative quote marks are hidden; no carousel controls (A2).
-    for (const mark of container.querySelectorAll('[aria-hidden="true"]')) {
-      expect(mark.textContent).toBe('“')
-    }
-    expect(screen.queryByRole('button')).toBeNull()
+  })
+
+  it('is an ARIA carousel of labelled slides with previous, next and dot controls', () => {
+    render(<Testimonials />)
+    const carousel = screen.getByRole('region', { name: 'Testimonials' })
+    expect(carousel).toHaveAttribute('aria-roledescription', 'carousel')
+    const slides = within(carousel).getAllByRole('group', { hidden: true })
+    expect(slides.map((s) => s.getAttribute('aria-label'))).toEqual(['1 of 2', '2 of 2'])
+    for (const slide of slides) expect(slide).toHaveAttribute('aria-roledescription', 'slide')
+    expect(screen.getByRole('button', { name: 'Previous testimonial' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next testimonial' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Show testimonial 1' })).toHaveAttribute(
+      'aria-current',
+      'true',
+    )
   })
 })

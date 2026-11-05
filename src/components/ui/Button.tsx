@@ -23,7 +23,7 @@ export function Button({
   return (
     <button type={type} className={buttonClasses(variant, size, className)} {...rest}>
       {iconPosition === 'start' && icon}
-      {children}
+      <span className="btn-label">{children}</span>
       {iconPosition === 'end' && icon}
     </button>
   )

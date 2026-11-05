@@ -114,7 +114,10 @@ export interface Certification {
 export interface Education {
   degree: string
   institution: string
-  graduated: number
+  /** Start year (Phase 11.5, owner decision 2026-11-05). */
+  from: number
+  /** End year. */
+  to: number
 }
 
 export type ProjectGroup = 'enterprise' | 'website'
@@ -184,8 +187,6 @@ export interface UiCopy {
   skipLink: string
   menuOpen: string
   menuClose: string
-  themeToDark: string
-  themeToLight: string
   cvAccessibleSuffix: string
   newTab: string
   filterAll: string
@@ -219,9 +220,18 @@ export interface UiCopy {
   factLocation: string
   factExperience: string
   primaryNavLabel: string
-  graduated: string
   tagEnterprise: string
   tagWebsite: string
   contactPhone: string
   contactEmail: string
+  filterGroupLabel: string
+  heroStackTitle: string
+  heroStackLine: string
+  skillsTabsLabel: string
+  skillsMeta: string
+  carouselLabel: string
+  slideLabel: string
+  slidePrevious: string
+  slideNext: string
+  slideShow: string
 }

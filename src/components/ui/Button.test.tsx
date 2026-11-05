@@ -24,15 +24,22 @@ describe('Button', () => {
     expect(onClick).toHaveBeenCalledOnce()
   })
 
-  it('applies the token-based variant classes', () => {
+  it('applies the variant classes (Phase 11.5: cyan primary, gradient-rim ghost)', () => {
     render(
       <>
         <Button>Primary</Button>
-        <Button variant="secondary">Secondary</Button>
+        <Button variant="ghost">Ghost</Button>
       </>,
     )
-    expect(screen.getByRole('button', { name: 'Primary' }).className).toContain('bg-primary')
-    expect(screen.getByRole('button', { name: 'Secondary' }).className).toContain('border-border')
+    expect(screen.getByRole('button', { name: 'Primary' }).className).toContain('btn-primary')
+    expect(screen.getByRole('button', { name: 'Ghost' }).className).toContain('btn-ghost')
+  })
+
+  it('keeps a transparent border for forced-colours mode (NFR-BRW-04)', () => {
+    render(<Button>Primary</Button>)
+    expect(screen.getByRole('button', { name: 'Primary' }).className).toContain(
+      'border-transparent',
+    )
   })
 
   it('meets the 44 px minimum target size class (md) and 52 px (lg)', () => {

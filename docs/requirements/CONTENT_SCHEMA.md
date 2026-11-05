@@ -155,11 +155,17 @@ Source: `[R]`, D5. There is **no** proficiency or percentage field.
 
 | Field | Type | Req. | Value |
 |---|---|---|---|
-| `degree` | string | ✓ | B.Tech, Electronics & Communication Engineering |
-| `institution` | string | ✓ | Bipin Tripathi Kumaon Institute of Technology, Dwarahat |
-| `graduated` | number (year) | ✓ | 2019 |
+| `degree` | string | ✓ | e.g. Bachelor in Electronics & Communication Engineering |
+| `institution` | string | ✓ | e.g. Bipin Tripathi Kumaon Institute Of Technology |
+| `from` | number (year) | ✓ | e.g. 2016 |
+| `to` | number (year) | ✓ | e.g. 2019 |
 
-Source: `[R]`, D2. One entry only.
+Source: `[S]`, the live site's "My Education", word for word. **Three entries** (owner decision 2026-11-05; supersedes D2's single B.Tech entry):
+- Bachelor in Electronics & Communication Engineering, Bipin Tripathi Kumaon Institute Of Technology, 2016–2019;
+- Diploma in Electronics Engineering, Government Polytechnic Nainital, 2012–2015;
+- Intermediate, Mahatma Gandhi Inter College, 2010–2012.
+
+`uiCopy.graduated` was removed.
 
 ## 10. `Project[]`
 

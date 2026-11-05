@@ -14,8 +14,6 @@ Icon paths in this folder are copied (not installed as a dependency) per [ADR 00
 | `ChevronDownIcon` (chevron-down) | [Lucide](https://lucide.dev) | ISC |
 | `MenuIcon` (menu) | [Lucide](https://lucide.dev) | ISC |
 | `CloseIcon` (x) | [Lucide](https://lucide.dev) | ISC |
-| `SunIcon` (sun) | [Lucide](https://lucide.dev) | ISC |
-| `MoonIcon` (moon) | [Lucide](https://lucide.dev) | ISC |
 | `ArrowUpIcon` (arrow-up) | [Lucide](https://lucide.dev) | ISC |
 | `CircleCheckIcon` (circle-check) | [Lucide](https://lucide.dev) | ISC |
 | `CircleAlertIcon` (circle-alert) | [Lucide](https://lucide.dev) | ISC |

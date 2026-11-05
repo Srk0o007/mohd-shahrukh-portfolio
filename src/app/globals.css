@@ -1,85 +1,31 @@
 @import 'tailwindcss';
 
 /*
- * Design tokens — docs/design/COLOR_TOKENS.md, TYPOGRAPHY.md, DESIGN_SYSTEM.md (ADR 0004).
- * The application theme is set on <html data-theme> by the pre-paint script (ADR 0005).
- * Attribute selectors (not only :root) allow scoped panels in the temporary Phase 06 preview.
+ * Design tokens: Phase 11.5 dark redesign (ADR 0014; frozen prototype 2026-11-05).
+ * Dark only: one palette, no theme switching. Values come from the prototype's style.css.
+ * Utilities cover layout and type; the component classes in @layer components hold what
+ * utilities cannot express cleanly (masked borders, multi-layer backgrounds, keyframes).
  */
 
-@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
-
-/* ---------- Theme values (semantic tokens) ---------- */
-
-:root,
-[data-theme='light'] {
-  color-scheme: light;
-  --c-bg: #f5f2ea;
-  --c-surface: #ffffff;
-  --c-surface-2: #ece7db;
-  --c-text: #161513;
-  --c-text-muted: #5c584f;
-  --c-rule: #d9d3c4;
-  --c-border: #807a6e;
-  --c-accent: #f5df4e;
-  --c-on-accent: #161513;
-  --c-primary: #161513;
-  --c-primary-hover: #34312b;
-  --c-on-primary: #f5f2ea;
-  --c-tag-enterprise-bg: #161513;
-  --c-tag-enterprise-fg: #f5f2ea;
-  --c-focus: #161513;
-  --c-error: #a1281a;
-  --c-success: #1e6b3a;
-  --c-selection-bg: #f5df4e;
-  --c-selection-fg: #161513;
-}
-
-[data-theme='dark'] {
+:root {
   color-scheme: dark;
-  --c-bg: #121211;
-  --c-surface: #1c1b19;
-  --c-surface-2: #24231f;
-  --c-text: #edeae2;
-  --c-text-muted: #a8a398;
-  --c-rule: #2e2c28;
-  --c-border: #7a766d;
-  --c-accent: #f5df4e;
-  --c-on-accent: #121211;
-  --c-primary: #f5df4e;
-  --c-primary-hover: #f7e77e;
-  --c-on-primary: #121211;
-  --c-tag-enterprise-bg: #edeae2;
-  --c-tag-enterprise-fg: #121211;
-  --c-focus: #f5df4e;
-  --c-error: #ff8a75;
-  --c-success: #7bcf96;
-  --c-selection-bg: #f5df4e;
-  --c-selection-fg: #121211;
+  /* Read by the particle-wave engine (ADR 0015). */
+  --particle-rgb: 0 194 255;
+  --particle-alpha: 0.85;
+  /* Text set directly on the wave gets a halo in the colour behind it (see .on-wave). */
+  --halo: #000;
+  /* Section vertical padding: 64 → 120 px. */
+  --space-section: clamp(4rem, 9vw, 7.5rem);
+  /* Sticky glass header: 12 px offset + 68 px bar; anchors and focus clear it. */
+  --header-h: 80px;
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(20px, env(safe-area-inset-right, 0px));
 }
 
-/* No-JS fallback: follow the system preference when the pre-paint script did not run. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-    --c-bg: #121211;
-    --c-surface: #1c1b19;
-    --c-surface-2: #24231f;
-    --c-text: #edeae2;
-    --c-text-muted: #a8a398;
-    --c-rule: #2e2c28;
-    --c-border: #7a766d;
-    --c-accent: #f5df4e;
-    --c-on-accent: #121211;
-    --c-primary: #f5df4e;
-    --c-primary-hover: #f7e77e;
-    --c-on-primary: #121211;
-    --c-tag-enterprise-bg: #edeae2;
-    --c-tag-enterprise-fg: #121211;
-    --c-focus: #f5df4e;
-    --c-error: #ff8a75;
-    --c-success: #7bcf96;
-    --c-selection-bg: #f5df4e;
-    --c-selection-fg: #121211;
+@media (width < 64rem) {
+  :root {
+    /* Below 1024 px the content column is translucent; the halo matches the card colour. */
+    --halo: #050505;
   }
 }
 
@@ -92,98 +38,100 @@
   --font-*: initial;
   --radius-*: initial;
   --breakpoint-*: initial;
+  --ease-*: initial;
 
-  /* Breakpoints (DESIGN_SYSTEM §2) */
-  --breakpoint-sm: 30rem; /* 480 */
-  --breakpoint-md: 48rem; /* 768 */
-  --breakpoint-lg: 64rem; /* 1024 */
-  --breakpoint-xl: 80rem; /* 1280 */
-  --breakpoint-2xl: 96rem; /* 1536 */
+  /* Colour (COLOR_TOKENS.md, Phase 11.5) */
+  --color-bg: #10100d;
+  --color-frame: #000000;
+  --color-card: #050505;
+  --color-fill: #0c0c0a;
+  --color-heading: #ffffff;
+  --color-sub: #969696;
+  --color-soft: #e4e4e4;
+  --color-faint: #808080;
+  --color-accent: #00c2ff;
+  --color-accent-2: #0077ff;
+  --color-accent-3: #7fe3ff;
+  --color-on-accent: #00131c;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-rim: rgb(0 194 255 / 0.35);
+  --color-field: #5c5c5c;
+  --color-error: #ff8a75;
+  --color-success: #7bcf96;
 
-  /* Type scale (TYPOGRAPHY §3): fluid 360 → 1440 px */
-  --text-display: clamp(3.5rem, 1.542rem + 8.704vw, 9.375rem);
-  --text-display--line-height: 0.92;
-  --text-display--letter-spacing: -0.025em;
-  --text-display-2: clamp(2.75rem, 1.333rem + 6.296vw, 7rem);
-  --text-display-2--line-height: 0.95;
-  --text-display-2--letter-spacing: -0.025em;
-  --text-h2: clamp(2.25rem, 1.667rem + 2.593vw, 4rem);
-  --text-h2--line-height: 1.05;
+  /* Breakpoints: the prototype's 560 / 640 / 768 / 960 / 1024 / 1080 px. */
+  --breakpoint-xs: 35rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-mid: 60rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-nav: 67.5rem;
+
+  /* Type scale (TYPOGRAPHY.md, Phase 11.5) */
+  --text-hero: clamp(3.5rem, 9.4vw, 8.25rem);
+  --text-hero--line-height: 0.95;
+  --text-hero--letter-spacing: -0.035em;
+  --text-h2: clamp(2.25rem, 4.8vw, 3.75rem);
+  --text-h2--line-height: 1.08;
   --text-h2--letter-spacing: -0.02em;
-  --text-h3-lg: clamp(1.5rem, 1.375rem + 0.556vw, 1.875rem);
-  --text-h3-lg--line-height: 1.15;
-  --text-h3-lg--letter-spacing: -0.01em;
-  --text-h3: clamp(1.5rem, 1.333rem + 0.741vw, 2rem);
-  --text-h3--line-height: 1.12;
-  --text-h3--letter-spacing: -0.01em;
-  --text-quote: clamp(1.25rem, 1.167rem + 0.37vw, 1.5rem);
-  --text-quote--line-height: 1.45;
-  --text-lead: clamp(1.125rem, 1.083rem + 0.185vw, 1.25rem);
-  --text-lead--line-height: 1.65;
-  --text-title-line: clamp(1.125rem, 0.958rem + 0.741vw, 1.625rem);
-  --text-title-line--line-height: 1.5;
-  --text-body: clamp(1rem, 0.979rem + 0.093vw, 1.0625rem);
-  --text-body--line-height: 1.6;
-  --text-ui: 0.9375rem;
-  --text-ui--line-height: 1.2;
-  --text-small: 0.875rem;
-  --text-small--line-height: 1.5;
-  --text-label: 0.8125rem;
-  --text-label--line-height: 1.3;
-  --text-label--letter-spacing: 0.12em;
-  --text-wordmark: clamp(1.25rem, 1.208rem + 0.185vw, 1.375rem);
-  --text-wordmark--line-height: 1;
+  --text-hire: clamp(1.875rem, 4vw, 3rem);
+  --text-hire--line-height: 1.1;
+  --text-form: 1.875rem;
+  --text-form--line-height: 1.2;
+  --text-stat: 1.875rem;
+  --text-stat--line-height: 1.1;
+  --text-menu: 1.875rem;
+  --text-menu--line-height: 1.3;
+  --text-h3-lg: 1.5rem;
+  --text-h3-lg--line-height: 1.3;
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.3;
+  --text-h3-sm: 1.25rem;
+  --text-h3-sm--line-height: 1.35;
+  --text-quote: clamp(1.125rem, 2vw, 1.375rem);
+  --text-quote--line-height: 1.7;
+  --text-role: clamp(1.125rem, 2vw, 1.375rem);
+  --text-role--line-height: 1.5;
+  --text-wordmark: 1.3125rem;
+  --text-wordmark--line-height: 1.2;
   --text-wordmark--letter-spacing: -0.01em;
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.75;
+  --text-body: 1rem;
+  --text-body--line-height: 1.75;
+  --text-ui: 0.9375rem;
+  --text-ui--line-height: 1.4;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.6;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.4;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.4;
 
-  /* Shape (DESIGN_SYSTEM §6) */
-  --radius-sm: 2px;
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-card: 18px;
+  --radius-bar: 20px;
+  --radius-panel: 24px;
   --radius-pill: 9999px;
 
-  /* Motion (DESIGN_SYSTEM §7) */
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  /* Motion: every hover and reveal uses this soft ease-out. */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
-  --color-bg: var(--c-bg);
-  --color-surface: var(--c-surface);
-  --color-surface-2: var(--c-surface-2);
-  --color-text: var(--c-text);
-  --color-text-muted: var(--c-text-muted);
-  --color-rule: var(--c-rule);
-  --color-border: var(--c-border);
-  --color-accent: var(--c-accent);
-  --color-on-accent: var(--c-on-accent);
-  --color-primary: var(--c-primary);
-  --color-primary-hover: var(--c-primary-hover);
-  --color-on-primary: var(--c-on-primary);
-  --color-tag-enterprise-bg: var(--c-tag-enterprise-bg);
-  --color-tag-enterprise-fg: var(--c-tag-enterprise-fg);
-  --color-focus: var(--c-focus);
-  --color-error: var(--c-error);
-  --color-success: var(--c-success);
-
-  /* Fonts (TYPOGRAPHY §1): variables provided by next/font on <html> */
-  --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
-  --font-sans: var(--font-inter), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Font variable provided by next/font on <html> (TYPOGRAPHY.md). */
+  --font-sans: var(--font-andika), 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 }
 
 /* ---------- Base ---------- */
 
 @layer base {
-  :root {
-    /* Section vertical padding: 64 → 128 px (DESIGN_SYSTEM §5) */
-    --space-section: clamp(4rem, 2.667rem + 5.926vw, 8rem);
-    /* Sticky header height (COMPONENT_VISUAL_SPEC §2) */
-    --header-h: 64px;
-  }
-
-  @media (width >= 48rem) {
-    :root {
-      --header-h: 72px;
-    }
-  }
-
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
@@ -192,29 +140,45 @@
   /*
    * Focus and anchor targets are not obscured by the sticky header (WCAG 2.4.11, FR-NAV-05).
    * A scroll margin on page content, not `scroll-padding` on <html>: scroll-padding also applies
-   * to the header's own controls, which always sit inside that padded band, so focusing them
-   * (Tab, or focus returning to the menu button) scrolled the page toward the top.
+   * to the header's own controls, which always sit inside that padded band.
    */
   :where(main, footer),
   :where(main, footer) * {
     scroll-margin-top: calc(var(--header-h) + 16px);
-    /* Clear of the fixed back-to-top button (48 px + 24 px inset) when focus scrolls down. */
+    /* Clear of the fixed back-to-top button (50 px + 18 px inset) when focus scrolls down. */
     scroll-margin-bottom: 88px;
   }
 
+  /*
+   * The page colour lives on <body> only: on <html> it would paint over the fixed `-z-10`
+   * particle canvas (ADR 0015).
+   */
   body {
     background-color: var(--color-bg);
-    color: var(--color-text);
+    color: var(--color-sub);
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  /* The iOS notch area above the sticky header keeps the page colour. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 10;
+    height: env(safe-area-inset-top, 0px);
+    background: var(--color-bg);
   }
 
   h1,
   h2,
   h3 {
+    color: var(--color-heading);
+    font-weight: 700;
     text-wrap: balance;
     /* Break a word only if it cannot fit at all (320 px with text-spacing overrides, 1.4.12). */
     overflow-wrap: break-word;
@@ -225,13 +189,490 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
   }
 
   ::selection {
-    background-color: var(--c-selection-bg);
-    color: var(--c-selection-fg);
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+}
+
+/* ---------- Components ---------- */
+
+@layer components {
+  /* Text set directly on the wave: a halo in the column colour hides the dots behind glyphs. */
+  .on-wave {
+    text-shadow:
+      0 0 3px var(--halo),
+      0 0 10px var(--halo),
+      0 0 20px var(--halo);
+  }
+
+  .grad-text {
+    background: linear-gradient(
+      110deg,
+      var(--color-accent) 0%,
+      var(--color-accent-2) 55%,
+      var(--color-accent-3) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Frosted glass: header, menu, stat chips, back-to-top. */
+  .glass {
+    background: rgb(10 10 9 / 0.55);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid var(--color-line);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 14px 34px rgb(0 0 0 / 0.3);
+    transform: translateZ(0);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass {
+      background: rgb(16 16 13 / 0.92);
+    }
+  }
+
+  /* Header bar: denser glass with a cyan rim once the page has scrolled (motion module). */
+  .nav-bar {
+    transition:
+      background-color 0.3s,
+      border-color 0.3s,
+      box-shadow 0.3s;
+  }
+
+  [data-scrolled] .nav-bar {
+    background: rgb(8 8 7 / 0.72);
+    border-color: rgb(0 194 255 / 0.22);
+  }
+
+  /* Primary nav link: grey → white, with a 2 px gradient underline growing from the left. */
+  .nav-link {
+    position: relative;
+    transition: color 0.4s var(--ease-soft);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      110deg,
+      var(--color-accent),
+      var(--color-accent-2) 55%,
+      var(--color-accent-3)
+    );
+    transition: right 0.5s var(--ease-soft);
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current] {
+    color: var(--color-heading);
+  }
+
+  .nav-link:hover::after,
+  .nav-link[aria-current]::after {
+    right: 0;
+  }
+
+  /*
+   * Buttons. Hover uses `transform` and the reveal uses `translate`, so the two never fight
+   * (the easing bug the owner saw in an early prototype).
+   */
+  .btn {
+    transition:
+      transform 0.5s var(--ease-soft),
+      box-shadow 0.5s var(--ease-soft),
+      background-position 0.7s var(--ease-soft),
+      color 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  /* Primary: solid cyan; hover slides a cyan → blue gradient in and lifts with a glow. */
+  .btn-primary {
+    color: var(--color-on-accent);
+    background-image: linear-gradient(
+      110deg,
+      var(--color-accent) 0%,
+      var(--color-accent) 45%,
+      var(--color-accent-2) 75%,
+      var(--color-accent-3) 100%
+    );
+    background-size: 220% 100%;
+    background-position: 0% 0;
+  }
+
+  .btn-primary:hover {
+    background-position: 100% 0;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 34px rgb(0 194 255 / 0.35);
+  }
+
+  /* Ghost: dark fill with a cyan rim; hover turns the rim and the label into the gradient. */
+  .btn-ghost {
+    color: var(--color-heading);
+    background:
+      linear-gradient(var(--color-fill), var(--color-fill)) padding-box,
+      linear-gradient(var(--color-rim), var(--color-rim)) border-box;
+  }
+
+  .btn-ghost svg {
+    color: var(--color-accent);
+  }
+
+  .btn-ghost:hover {
+    background:
+      linear-gradient(#000, #000) padding-box,
+      linear-gradient(110deg, var(--color-accent), var(--color-accent-2) 55%, var(--color-accent-3))
+        border-box;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 34px rgb(0 119 255 / 0.22);
+  }
+
+  .btn-ghost:hover .btn-label {
+    background: linear-gradient(
+      110deg,
+      var(--color-accent),
+      var(--color-accent-2) 55%,
+      var(--color-accent-3)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Pressed filter chip: gradient border on black. */
+  .chip-pressed {
+    border-color: transparent;
+    background:
+      linear-gradient(#000, #000) padding-box,
+      linear-gradient(110deg, var(--color-accent), var(--color-accent-2) 55%, var(--color-accent-3))
+        border-box;
+  }
+
+  /*
+   * Card: flat near-black with a glass sheen on the border only (cyan at the top-left corner,
+   * soft white at the bottom-right, transparent along the middle of each edge).
+   */
+  .card {
+    position: relative;
+    background-color: var(--color-card);
+    border: 1px solid rgb(255 255 255 / 0.07);
+    border-radius: var(--radius-card);
+    transition:
+      transform 0.7s var(--ease-soft),
+      border-color 0.6s var(--ease-soft),
+      background-color 0.6s var(--ease-soft),
+      box-shadow 0.6s var(--ease-soft);
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgb(0 194 255 / 0.5),
+      rgb(0 194 255 / 0) 24%,
+      rgb(255 255 255 / 0) 76%,
+      rgb(255 255 255 / 0.2)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+    opacity: 0.65;
+    transition: opacity 0.7s var(--ease-soft);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    border-color: rgb(255 255 255 / 0.12);
+    background-color: #080808;
+    box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
+  }
+
+  .card-hover:hover::after {
+    opacity: 1;
+  }
+
+  /* Big outlined section number behind each heading. */
+  .sec-num {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(0 194 255 / 0.22);
+  }
+
+  /* Hero portrait: a slowly morphing organic shape with a spinning cyan gradient rim. */
+  .blob {
+    border-radius: 40% 60% 66% 34% / 42% 48% 52% 58%;
+    background: conic-gradient(
+      from var(--spin),
+      var(--color-accent),
+      var(--color-accent-2) 22%,
+      rgb(0 194 255 / 0) 40%,
+      rgb(0 194 255 / 0) 62%,
+      var(--color-accent-3) 82%,
+      var(--color-accent)
+    );
+    animation:
+      blob-morph 16s ease-in-out infinite,
+      blob-spin 9s linear infinite;
+    box-shadow: 0 0 70px rgb(0 194 255 / 0.16);
+  }
+
+  .blob::before {
+    content: '';
+    position: absolute;
+    inset: 10%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(0 194 255 / 0.35), transparent 70%);
+    filter: blur(40px);
+  }
+
+  .orbit-spin {
+    animation: orbit 18s linear infinite;
+  }
+
+  .orbit-spin-slow {
+    animation: orbit 26s linear infinite reverse;
+  }
+
+  .glow-dot {
+    box-shadow:
+      0 0 0 4px rgb(0 194 255 / 0.18),
+      0 0 14px var(--color-accent);
+  }
+
+  .orbit-dot {
+    box-shadow:
+      0 0 0 4px rgb(0 194 255 / 0.15),
+      0 0 18px var(--color-accent);
+  }
+
+  /* Experience timeline line and nodes. */
+  .timeline-line {
+    background: linear-gradient(var(--color-accent), rgb(0 194 255 / 0.05));
+  }
+
+  .timeline-node {
+    box-shadow: 0 0 12px var(--color-accent);
+  }
+
+  /* Skills editor: lines slide in one by one; restarted on every tab change. */
+  .code-line {
+    animation: line-in 0.6s var(--ease-soft) both;
+    animation-delay: calc(var(--i, 0) * 45ms);
+  }
+
+  /* Skills ticker: two rows of outlined words scrolling in opposite directions. */
+  .ticker {
+    mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .ticker-track {
+    animation: ticker 60s linear infinite;
+  }
+
+  .ticker-track-reverse {
+    animation: ticker 70s linear infinite reverse;
+  }
+
+  .ticker:hover .ticker-track,
+  .ticker:hover .ticker-track-reverse {
+    animation-play-state: paused;
+  }
+
+  .ticker-word {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(255 255 255 / 0.28);
+    transition:
+      color 0.5s var(--ease-soft),
+      -webkit-text-stroke-color 0.5s var(--ease-soft);
+  }
+
+  .ticker-word:hover {
+    color: var(--color-heading);
+    -webkit-text-stroke-color: transparent;
+  }
+
+  /* Education journey: the fill follows --progress (set by the motion module; 1 without JS). */
+  .journey {
+    --progress: 1;
+  }
+
+  html[data-js] .journey {
+    --progress: 0;
+  }
+
+  .journey-fill {
+    height: calc(var(--progress) * 100%);
+    background: linear-gradient(var(--color-accent-3), var(--color-accent), var(--color-accent-2));
+    box-shadow: 0 0 14px var(--color-accent);
+  }
+
+  .journey-node {
+    transition:
+      border-color 0.6s var(--ease-soft),
+      box-shadow 0.6s var(--ease-soft),
+      background-color 0.6s var(--ease-soft);
+  }
+
+  html:not([data-js]) .journey-node,
+  [data-lit] > .journey-node {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    box-shadow:
+      0 0 0 6px rgb(0 194 255 / 0.15),
+      0 0 22px var(--color-accent);
+  }
+
+  .ghost-year {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(0 194 255 / 0.14);
+    transition:
+      -webkit-text-stroke-color 0.7s var(--ease-soft),
+      translate 0.7s var(--ease-soft);
+  }
+
+  .ed-card:hover .ghost-year {
+    -webkit-text-stroke-color: rgb(0 194 255 / 0.35);
+    translate: -6px -4px;
+  }
+
+  /* Testimonial slider: inactive slides dim and soften; the active dot fills over 7 s. */
+  .slide-card {
+    transition:
+      opacity 0.9s var(--ease-soft),
+      filter 0.9s var(--ease-soft),
+      border-color 0.6s var(--ease-soft);
+  }
+
+  [data-inactive] .slide-card {
+    opacity: 0.35;
+    filter: blur(2px);
+  }
+
+  .dot-progress::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent);
+    transform-origin: left;
+    animation: dot-progress var(--autoplay, 7s) linear forwards;
+  }
+
+  /* Hire band glow. */
+  .hire-glow {
+    background: radial-gradient(circle, rgb(0 194 255 / 0.12), transparent 65%);
+  }
+
+  /*
+   * Scroll reveal (motion module): content fades from soft focus to clear on entry and
+   * replays when re-entered from below. Only when the module has set `data-reveal-on`, and
+   * never under reduced motion. Uses `translate` (hover uses `transform`), and keeps its own
+   * transition list so the stagger delay applies to the reveal properties only.
+   */
+  [data-reveal-on] [data-reveal] {
+    opacity: 0;
+    translate: 0 32px;
+    filter: blur(8px);
+    transition:
+      opacity 0.9s var(--ease-soft) var(--delay, 0ms),
+      translate 1s var(--ease-soft) var(--delay, 0ms),
+      filter 0.9s var(--ease-soft) var(--delay, 0ms),
+      transform 0.7s var(--ease-soft),
+      border-color 0.6s var(--ease-soft),
+      background-color 0.6s var(--ease-soft),
+      box-shadow 0.6s var(--ease-soft);
+  }
+
+  [data-reveal-on] [data-reveal][data-in] {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
+
+  /* Parallax targets move only via transform (motion module). */
+  [data-speed] {
+    will-change: transform;
+  }
+}
+
+@property --spin {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes blob-morph {
+  0%,
+  100% {
+    border-radius: 40% 60% 66% 34% / 42% 48% 52% 58%;
+  }
+  33% {
+    border-radius: 68% 32% 48% 52% / 34% 36% 64% 66%;
+  }
+  66% {
+    border-radius: 32% 68% 36% 64% / 58% 42% 58% 42%;
+  }
+}
+
+@keyframes blob-spin {
+  to {
+    --spin: 360deg;
+  }
+}
+
+@keyframes orbit {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    translate: -10px 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
+}
+
+@keyframes ticker {
+  to {
+    translate: -50% 0;
+  }
+}
+
+@keyframes dot-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 
@@ -255,7 +696,7 @@ html:not([data-js]) .nojs-flex {
   display: flex !important;
 }
 
-/* ---------- Reduced motion (DESIGN_SYSTEM §7) ---------- */
+/* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -269,6 +710,42 @@ html:not([data-js]) .nojs-flex {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  [data-speed] {
+    transform: none !important;
+  }
+
+  /* FR-PRJ-07 / FR-INT-02: no hover lift on cards (the image zoom is motion-safe only). */
+  .card-hover:hover {
+    transform: none;
+  }
+
+  .blob,
+  .orbit-spin,
+  .orbit-spin-slow,
+  .code-line,
+  .dot-progress::after {
+    animation: none !important;
+  }
+
+  .ticker {
+    display: none;
+  }
+
+  [data-reveal-on] [data-reveal] {
+    opacity: 1 !important;
+    translate: none !important;
+    filter: none !important;
+  }
+
+  .journey {
+    --progress: 1 !important;
+  }
+
+  .journey-node {
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-accent) !important;
+  }
 }
 
 /* ---------- Forced colors (NFR-BRW-04) ---------- */
@@ -276,5 +753,17 @@ html:not([data-js]) .nojs-flex {
 @media (forced-colors: active) {
   :focus-visible {
     outline-color: Highlight;
+  }
+
+  .grad-text,
+  .btn-ghost:hover .btn-label {
+    background: none;
+    color: CanvasText;
+  }
+
+  .sec-num,
+  .ghost-year,
+  .ticker {
+    display: none;
   }
 }

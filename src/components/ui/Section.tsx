@@ -11,7 +11,7 @@ export interface SectionProps {
   children: ReactNode
 }
 
-/** A page section: hairline rule on top, fluid vertical padding, standard container. */
+/** A page section: fluid vertical padding (64 → 120 px) and the standard container. */
 export function Section({ id, labelledBy, className, children }: SectionProps) {
   return (
     <section
@@ -19,7 +19,7 @@ export function Section({ id, labelledBy, className, children }: SectionProps) {
       aria-labelledby={labelledBy}
       // Programmatic focus target for in-page navigation (FR-NAV-02); not in the tab order.
       tabIndex={-1}
-      className={cn('border-t border-rule py-(--space-section) focus:outline-none', className)}
+      className={cn('py-(--space-section) focus:outline-none', className)}
     >
       <Container>{children}</Container>
     </section>

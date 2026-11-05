@@ -164,8 +164,13 @@ describe('I-9 owner decisions are respected', () => {
     expect(all).not.toContain('9458156004')
   })
 
-  it('has B.Tech only (D2), three approved certifications (D3), grouped skills (D5)', () => {
-    expect(education).toHaveLength(1)
+  it('has three education entries (owner decision 2026-11-05), three certifications (D3), grouped skills (D5)', () => {
+    expect(education.map((e) => [e.degree, e.from, e.to])).toEqual([
+      ['Bachelor in Electronics & Communication Engineering', 2016, 2019],
+      ['Diploma in Electronics Engineering', 2012, 2015],
+      ['Intermediate', 2010, 2012],
+    ])
+    for (const entry of education) expect(entry.from).toBeLessThan(entry.to)
     expect(certifications.map((c) => c.name)).toEqual([
       'IBM Full Stack Software Developer',
       'JavaScript: The Complete Guide',

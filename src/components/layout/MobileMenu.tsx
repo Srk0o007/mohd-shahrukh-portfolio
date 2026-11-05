@@ -17,8 +17,8 @@ import { goToSection } from '@/lib/section-nav'
 export interface MobileMenuProps {
   name: string
   items: readonly { label: string; href: string }[]
-  /** Server-rendered CV link + social links (keeps them out of the client bundle). */
-  footer: ReactNode
+  /** Optional server-rendered content below the links (kept out of the client bundle). */
+  footer?: ReactNode
   labels: { open: string; close: string; nav: string }
 }
 
@@ -27,7 +27,7 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 type AfterClose = { kind: 'restore' } | { kind: 'section'; id: string } | null
 
 /**
- * Overlay navigation below 1280 px (FR-NAV-02, COMPONENT_ARCHITECTURE §3):
+ * Glass overlay navigation below 1080 px (FR-NAV-02, COMPONENT_ARCHITECTURE §3):
  * focus moves into the menu and stays contained; everything else is `inert`; page scroll is
  * locked; Esc / Close return focus to the menu button; choosing a link closes the menu and
  * moves focus to the target section. On pages without the target (e.g. the 404) links fall
@@ -65,7 +65,9 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
 
     panel?.querySelector<HTMLElement>('nav a')?.focus()
 
-    // Esc closes; Tab / Shift+Tab wrap within the menu (focus containment).
+    // Esc closes; Tab / Shift+Tab move through the menu's controls and wrap (focus
+    // containment). Every Tab is handled here, not only at the ends: Safari skips links on Tab
+    // by default, so native Tab from a link would leave the dialog (Phase 11.5 regression).
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
@@ -74,17 +76,17 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
       }
       if (event.key !== 'Tab' || !panel) return
       const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE))
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (!first || !last) return
-      const active = document.activeElement
-      if (event.shiftKey && (active === first || !panel.contains(active))) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && (active === last || !panel.contains(active))) {
-        event.preventDefault()
-        first.focus()
-      }
+      if (focusable.length === 0) return
+      event.preventDefault()
+      const current = focusable.indexOf(document.activeElement as HTMLElement)
+      const step = event.shiftKey ? -1 : 1
+      const next =
+        current === -1
+          ? event.shiftKey
+            ? focusable.length - 1
+            : 0
+          : (current + step + focusable.length) % focusable.length
+      focusable[next]?.focus()
     }
     document.addEventListener('keydown', onKeyDown)
 
@@ -133,7 +135,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
         aria-expanded={open}
         {...(open ? { 'aria-controls': panelId } : {})}
         onClick={openMenu}
-        className="js-only inline-flex size-11 items-center justify-center rounded-pill border border-border text-text transition-colors duration-150 ease-standard hover:bg-surface-2 xl:hidden"
+        className="js-only inline-flex size-11 cursor-pointer items-center justify-center rounded-pill border border-line-strong bg-[rgb(255_255_255/0.04)] text-heading transition-colors duration-300 ease-soft hover:border-accent nav:hidden"
       >
         <MenuIcon size={20} />
       </button>
@@ -148,46 +150,46 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
               role="dialog"
               aria-modal="true"
               aria-labelledby={`${panelId}-title`}
-              className="fixed inset-0 z-50 overflow-y-auto bg-bg text-text"
+              className="glass fixed inset-0 z-70 overflow-y-auto bg-[rgb(16_16_13/0.88)] text-heading"
             >
-              <div className="mx-auto flex min-h-full w-full max-w-360 flex-col px-5 pb-10 md:px-8 lg:px-10">
-                <div className="flex h-16 items-center justify-between border-b border-rule md:h-18">
-                  <span
-                    id={`${panelId}-title`}
-                    className="font-display text-wordmark font-semibold"
-                  >
+              <div className="mx-auto flex min-h-full w-full max-w-305 flex-col pt-[calc(20px+env(safe-area-inset-top,0px))] pr-(--gutter-r) pb-10 pl-(--gutter)">
+                <div className="flex min-h-11 items-center justify-between">
+                  <span id={`${panelId}-title`} className="text-wordmark font-bold">
                     {name}
+                    <span aria-hidden="true" className="text-accent">
+                      .
+                    </span>
                   </span>
                   <button
                     type="button"
                     aria-label={labels.close}
                     onClick={() => close({ kind: 'restore' })}
-                    className="inline-flex size-11 items-center justify-center rounded-pill border border-border transition-colors duration-150 ease-standard hover:bg-surface-2"
+                    className="inline-flex size-11 cursor-pointer items-center justify-center rounded-pill border border-line-strong bg-[rgb(255_255_255/0.04)] text-heading transition-colors duration-300 ease-soft hover:border-accent"
                   >
                     <CloseIcon size={20} />
                   </button>
                 </div>
 
-                <nav aria-label={labels.nav} className="mt-6">
+                <nav aria-label={labels.nav} className="mt-4">
                   <ul>
                     {items.map((item, index) => (
-                      <li key={item.href} className="border-b border-rule">
+                      <li key={item.href} className="border-b border-line">
                         <a
                           href={item.href}
                           onClick={(event) => onLinkClick(event, item.href)}
                           {...(currentId !== '' && anchorId(item.href) === currentId
                             ? { 'aria-current': 'true' as const }
                             : {})}
-                          className="group/item flex min-h-14 items-baseline gap-4 py-3"
+                          className="group/item flex min-h-14 items-baseline gap-4 py-3.5 text-heading no-underline transition-colors duration-400 ease-soft hover:text-accent"
                         >
                           <span
                             aria-hidden="true"
-                            className="text-label font-medium text-text-muted tabular-nums"
+                            className="text-label font-bold text-accent tabular-nums"
                           >
                             {String(index + 1).padStart(2, '0')}
                           </span>
-                          {/* Current section (FR-NAV-04): 2 px underline on the label only. */}
-                          <span className="font-display text-h2 font-medium decoration-2 underline-offset-8 group-aria-current/item:underline">
+                          {/* Current section (FR-NAV-04): 2 px cyan underline on the label only. */}
+                          <span className="text-menu font-bold decoration-accent decoration-2 underline-offset-8 group-aria-current/item:underline">
                             {item.label}
                           </span>
                         </a>
@@ -196,7 +198,7 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
                   </ul>
                 </nav>
 
-                <div className="mt-10">{footer}</div>
+                {footer ? <div className="mt-10">{footer}</div> : null}
               </div>
             </div>,
             document.body,

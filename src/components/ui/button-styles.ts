@@ -1,34 +1,37 @@
 import { cn } from '@/lib/cn'
 
-/** `ink` / `ink-outline` are only for the accent band (COMPONENT_VISUAL_SPEC §18). */
-export type ButtonVariant = 'primary' | 'secondary' | 'ink' | 'ink-outline'
+/**
+ * Phase 11.5 buttons (COMPONENT_VISUAL_SPEC §6, frozen prototype):
+ * - `primary`: cyan pill; on hover a cyan → blue gradient slides in, it lifts 2 px and glows.
+ * - `ghost`: dark fill with a cyan rim; on hover the rim and the label turn into the gradient.
+ * The hover styles live in globals.css (`.btn`, `.btn-primary`, `.btn-ghost`); the label is
+ * wrapped in `.btn-label` by <Button>, <ButtonLink> and <CvLink> so the ghost label can take
+ * the gradient.
+ */
+export type ButtonVariant = 'primary' | 'ghost'
 export type ButtonSize = 'md' | 'lg'
 
-const base =
-  'inline-flex items-center justify-center gap-2 rounded-pill font-sans text-ui font-semibold ' +
-  'transition-colors duration-150 ease-standard motion-reduce:transition-none ' +
-  'aria-disabled:cursor-progress'
-
 /*
- * Filled variants carry a transparent border: invisible normally, but forced-colours mode
- * (Windows High Contrast) paints borders in the system text colour while removing fills,
- * so the button outline stays visible (NFR-BRW-04, Phase 10). Same box size as outlined.
+ * Both variants carry a transparent border: invisible normally, but forced-colours mode
+ * (Windows High Contrast) paints borders in the system text colour while removing fills, so
+ * the button outline stays visible (NFR-BRW-04, Phase 10).
  */
+const base =
+  'btn relative inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-pill ' +
+  'border border-transparent font-sans font-bold no-underline aria-disabled:cursor-progress'
+
 const variants: Record<ButtonVariant, string> = {
-  primary: 'border border-transparent bg-primary text-on-primary hover:bg-primary-hover',
-  secondary: 'border border-border text-text hover:bg-surface-2',
-  // Ink on the yellow accent in both themes; contrast is the on-accent pair (COLOR_TOKENS).
-  ink: 'border border-transparent bg-on-accent text-accent hover:bg-on-accent/85',
-  'ink-outline': 'border border-on-accent text-on-accent hover:bg-on-accent/10',
+  primary: 'btn-primary',
+  ghost: 'btn-ghost',
 }
 
-/** md = 44 px, lg = 52 px tall (COMPONENT_VISUAL_SPEC §6; targets ≥ 44 px). */
+/** md = 44 px, lg = 52 px tall (targets ≥ 44 px, WCAG 2.5.8). */
 const sizes: Record<ButtonSize, string> = {
-  md: 'min-h-11 px-5',
-  lg: 'min-h-13 px-7',
+  md: 'min-h-11 px-4.5 text-small',
+  lg: 'min-h-13 px-6.5 text-body',
 }
 
-/** Shared by <Button> and <ButtonLink> so both render identically. */
+/** Shared by <Button>, <ButtonLink> and <CvLink> so all render identically. */
 export function buttonClasses(
   variant: ButtonVariant = 'primary',
   size: ButtonSize = 'md',

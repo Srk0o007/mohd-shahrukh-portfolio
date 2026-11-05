@@ -6,6 +6,7 @@ import { SiteHeader } from './SiteHeader'
 describe('SiteHeader (FR-NAV-01, D15)', () => {
   it('links the wordmark to the top of the home page', () => {
     render(<SiteHeader />)
+    // The cyan "." after the name is decorative (aria-hidden), so the name stays exact.
     expect(screen.getByRole('link', { name: 'Mohd Shahrukh' })).toHaveAttribute('href', '/#top')
   })
 
@@ -32,12 +33,10 @@ describe('SiteHeader (FR-NAV-01, D15)', () => {
     expect(cv).toHaveAttribute('download')
   })
 
-  it('has the mobile menu toggle and the theme toggle (Phase 09)', () => {
+  it('has the mobile menu toggle and no theme toggle (dark only, ADR 0014)', () => {
     render(<SiteHeader />)
     expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument()
-    // jsdom applies no CSS, so both CSS-selected labels are present here; E2E checks each theme.
-    const toggle = screen.getByRole('button', { name: /Switch to dark theme/ })
-    expect(toggle).toHaveClass('js-only')
+    expect(screen.queryByRole('button', { name: /theme/i })).not.toBeInTheDocument()
   })
 })
 
@@ -51,21 +50,9 @@ describe('SiteFooter (FR-FTR-01, FR-SOC-01)', () => {
     expect(screen.getByText('Designed by Mohd Shahrukh')).toBeInTheDocument()
   })
 
-  it('uses text-labelled social links in the approved order', () => {
-    render(<SiteFooter />)
-    const links = screen.getAllByRole('link')
-    expect(links.map((l) => l.textContent?.replace(' (opens in new tab)', '').trim())).toEqual([
-      'GitHub',
-      'LinkedIn',
-      'Email',
-    ])
-    expect(screen.getByRole('link', { name: 'GitHub (opens in new tab)' })).toHaveAttribute(
-      'rel',
-      'noopener noreferrer',
-    )
-    expect(screen.getByRole('link', { name: 'Email' })).toHaveAttribute(
-      'href',
-      'mailto:khan.shahrukh156@gmail.com',
-    )
+  it('has only the copyright and the credit: no wordmark, no social links (2026-11-05)', () => {
+    const { container } = render(<SiteFooter />)
+    expect(screen.queryAllByRole('link')).toHaveLength(0)
+    expect(container.querySelectorAll('p')).toHaveLength(2)
   })
 })

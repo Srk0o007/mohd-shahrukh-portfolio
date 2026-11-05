@@ -63,43 +63,21 @@ test.describe('project filter (FR-PRJ-02, AC-PRJ-2)', () => {
   }
 })
 
-test.describe('asymmetric grid (DS-07) uses the visible index in every filter state', () => {
-  test('≥ 1024: 7 + 5 / 5 + 7 pairs with offsets; frames 16:10 and 4:3', async ({ page }) => {
+test.describe('uniform grid (Phase 11.5) in every filter state', () => {
+  test('≥ 640: two equal columns of 16:10 frames, rows aligned', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/')
-    const all = await boxes(page)
-    const [wide, narrow] = [all[0], all[1]]
-    if (!wide || !narrow) throw new Error('missing cards')
-    expect(wide.width).toBeGreaterThan(narrow.width)
-    expect(narrow.y - wide.y).toBe(96) // even pair: narrow card offset +96
-    expect(all[2]?.width).toBe(narrow.width) // odd pair starts narrow
-    expect((all[2]?.y ?? 0) - (all[3]?.y ?? 0)).toBe(64) // … offset +64
-    expect(wide.ratio).toBe(1.6)
-    expect(narrow.ratio).toBe(1.33)
-
-    // Enterprise (3): pair + an unpaired wide card that starts a new row at column 1.
-    await chip(page, 'Enterprise products').click()
-    const enterprise = await boxes(page)
-    expect(enterprise.map((b) => b.width)).toEqual([wide.width, narrow.width, wide.width])
-    expect(enterprise[2]?.x).toBe(enterprise[0]?.x)
-
-    // Websites (7): restarts the rhythm from the first visible card.
-    await chip(page, 'Websites').click()
-    const websites = await boxes(page)
-    expect(websites.slice(0, 6).map((b) => b.width)).toEqual(all.slice(0, 6).map((b) => b.width))
-    expect(websites[6]?.width).toBe(wide.width)
+    for (const name of ['All', 'Enterprise products', 'Websites']) {
+      await chip(page, name).click()
+      const all = await boxes(page)
+      expect(new Set(all.map((b) => b.width)).size).toBe(1)
+      expect(new Set(all.map((b) => b.x)).size).toBe(2)
+      for (let i = 0; i + 1 < all.length; i += 2) expect(all[i + 1]?.y).toBe(all[i]?.y)
+      for (const b of all) expect(b.ratio).toBe(1.6)
+    }
   })
 
-  test('768–1023: 2-up, every second card offset +48 px, 4:3 frames', async ({ page }) => {
-    await page.setViewportSize({ width: 800, height: 900 })
-    await page.goto('/')
-    const all = await boxes(page)
-    expect(new Set(all.map((b) => b.width)).size).toBe(1)
-    expect((all[1]?.y ?? 0) - (all[0]?.y ?? 0)).toBe(48)
-    for (const b of all) expect(b.ratio).toBe(1.33)
-  })
-
-  test('< 768: one column, no offsets, 16:10 frames', async ({ page }) => {
+  test('< 640: one column of 16:10 frames', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 900 })
     await page.goto('/')
     const all = await boxes(page)
@@ -128,28 +106,26 @@ test.describe('project cards (FR-PRJ-03–07)', () => {
     }
   })
 
-  test('the linked card zooms its image on link hover; unlinked cards do not', async ({ page }) => {
+  test('hovering a card slowly zooms its image (Phase 11.5)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/')
-    const card = section(page).getByRole('article', { name: 'SOSUDATECH Pvt. Ltd.' })
-    const scaleOf = (name: string) =>
-      section(page)
-        .getByRole('article', { name })
-        .locator('img')
-        .evaluate((img) => getComputedStyle(img).scale)
-    await card.getByRole('link').hover()
-    await expect.poll(() => scaleOf('SOSUDATECH Pvt. Ltd.')).toMatch(/^1\.02( 1\.02)?$/)
-    await section(page).getByRole('article', { name: 'Virtual University' }).hover()
-    expect(await scaleOf('Virtual University')).toBe('none')
+    const card = section(page).getByRole('article', { name: 'Virtual University' })
+    await card.hover()
+    await expect
+      .poll(() => card.locator('img').evaluate((img) => getComputedStyle(img).scale))
+      .toMatch(/^1\.04( 1\.04)?$/)
   })
 
-  test('no zoom when reduced motion is preferred (FR-INT-02)', async ({ page }) => {
+  test('no zoom and no lift when reduced motion is preferred (FR-INT-02, FR-PRJ-07)', async ({
+    page,
+  }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/')
     const card = section(page).getByRole('article', { name: 'SOSUDATECH Pvt. Ltd.' })
-    await card.getByRole('link').hover()
+    await card.hover()
     expect(await card.locator('img').evaluate((img) => getComputedStyle(img).scale)).toBe('none')
+    expect(await card.evaluate((el) => getComputedStyle(el).transform)).toBe('none')
   })
 })
 
@@ -182,18 +158,62 @@ test('hire band: phone link and Contact link (FR-CTA-01)', async ({ page }) => {
   await expect(band.getByRole('link', { name: 'Hire Me!' })).toHaveAttribute('href', '#contact')
 })
 
-test('testimonials: two static figures, no carousel (FR-TST-01)', async ({ page }) => {
-  await page.goto('/')
-  const testimonials = page.locator('section#testimonials')
-  await expect(testimonials.locator('figure')).toHaveCount(2)
-  await expect(testimonials.locator('figure:visible')).toHaveCount(2)
-  await expect(testimonials.getByRole('button')).toHaveCount(0)
-  await expect(testimonials.getByRole('img', { name: 'Photo of Sowmit Nag' })).toBeVisible()
-  await expect(testimonials.getByRole('img', { name: 'Photo of Divesh Kumar' })).toBeVisible()
+test.describe('testimonials slider (FR-TST-01, ADR 0016)', () => {
+  const slider = (page: Page) =>
+    page.locator('section#testimonials [aria-roledescription="carousel"]')
+  // By attribute: inactive slides are aria-hidden, so role queries cannot see them.
+  const slide = (page: Page, n: number) =>
+    slider(page).locator(`[aria-roledescription="slide"][aria-label="${n} of 2"]`)
+
+  test('one quote at a time; arrows and dots move between them', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' }) // no autoplay while we assert
+    await page.goto('/')
+    await expect(slider(page)).toHaveAttribute('aria-label', 'Testimonials')
+    await expect(slide(page, 1)).not.toHaveAttribute('aria-hidden')
+    await expect(slide(page, 2)).toHaveAttribute('aria-hidden', 'true')
+    await expect(slider(page).getByRole('img', { name: 'Photo of Sowmit Nag' })).toBeVisible()
+
+    await slider(page).getByRole('button', { name: 'Next testimonial' }).click()
+    await expect(slide(page, 2)).not.toHaveAttribute('aria-hidden')
+    await expect(slide(page, 1)).toHaveAttribute('aria-hidden', 'true')
+    await expect(slider(page).getByRole('button', { name: 'Show testimonial 2' })).toHaveAttribute(
+      'aria-current',
+      'true',
+    )
+
+    await slider(page).getByRole('button', { name: 'Show testimonial 1' }).click()
+    await expect(slide(page, 1)).not.toHaveAttribute('aria-hidden')
+    await slider(page).getByRole('button', { name: 'Previous testimonial' }).click()
+    await expect(slide(page, 2)).not.toHaveAttribute('aria-hidden') // wraps around
+  })
+
+  test('autoplay never runs under reduced motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.clock.install()
+    await page.goto('/')
+    await page.clock.runFor(15_000)
+    await expect(slide(page, 1)).not.toHaveAttribute('aria-hidden')
+  })
+
+  test('autoplay advances after 7 s', async ({ page }) => {
+    await page.clock.install()
+    await page.goto('/')
+    await expect(slide(page, 2)).toHaveAttribute('aria-hidden', 'true') // hydrated: timer set
+    await page.mouse.move(0, 0) // keep the pointer off the slider (hover pauses it)
+    await page.clock.runFor(7_500)
+    await expect(slide(page, 2)).not.toHaveAttribute('aria-hidden')
+  })
 })
 
 test.describe('without JavaScript (NFR-BRW-03)', () => {
   test.use({ javaScriptEnabled: false })
+
+  test('both testimonials stack and the slider controls are hidden', async ({ page }) => {
+    await page.goto('/')
+    const testimonials = page.locator('section#testimonials')
+    await expect(testimonials.locator('figure:visible')).toHaveCount(2)
+    await expect(testimonials.getByRole('button')).toHaveCount(0)
+  })
 
   test('all ten projects are visible and the filter is hidden', async ({ page }) => {
     await page.goto('/')
@@ -203,19 +223,18 @@ test.describe('without JavaScript (NFR-BRW-03)', () => {
 })
 
 test.describe('axe with a filter applied', () => {
-  for (const scheme of ['light', 'dark'] as const) {
-    for (const width of [375, 1280]) {
-      test(`${scheme} · ${width}px · Websites`, async ({ page }) => {
-        await page.setViewportSize({ width, height: 900 })
-        await page.emulateMedia({ colorScheme: scheme })
-        await page.goto('/')
-        await chip(page, 'Websites').click()
-        const results = await new AxeBuilder({ page })
-          .include('section#projects')
-          .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-          .analyze()
-        expect(results.violations.map((v) => v.id)).toEqual([])
-      })
-    }
+  for (const width of [375, 1280]) {
+    test(`${width}px · Websites`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      // Reduced motion: final reveal states, so axe never measures content mid-fade (ADR 0016).
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+      await page.goto('/')
+      await chip(page, 'Websites').click()
+      const results = await new AxeBuilder({ page })
+        .include('section#projects')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze()
+      expect(results.violations.map((v) => v.id)).toEqual([])
+    })
   }
 })

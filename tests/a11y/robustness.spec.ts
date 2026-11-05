@@ -58,24 +58,38 @@ test.describe('text spacing, zoom and reflow (WCAG 1.4.4, 1.4.10, 1.4.12)', () =
   test('text-spacing overrides cause no overflow or clipping at 320px', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 })
     await page.goto('/')
+    // Wait for the testimonial slider to hydrate: before that its off-screen slide is not yet
+    // aria-hidden (WebKit hydrates later than the other engines).
+    await expect(page.locator('[aria-roledescription="slide"][aria-hidden="true"]')).toHaveCount(1)
     await page.addStyleTag({
       content:
         '* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }',
     })
     expect(await overflowX(page)).toBeLessThanOrEqual(0)
-    const clipped = await page.evaluate(() =>
-      Array.from(document.querySelectorAll<HTMLElement>('body *'))
-        .filter((el) => {
-          const cs = getComputedStyle(el)
-          return (
-            (cs.overflowX === 'hidden' || cs.overflow === 'hidden') &&
-            el.scrollWidth > el.clientWidth + 1 &&
-            (el.textContent ?? '').trim() !== '' &&
-            !el.matches('.sr-only')
+    // Phase 11.5: some containers clip on purpose (the aria-hidden ticker, the slider's
+    // off-screen slide, decorative numerals, the visually hidden CV label). What must never
+    // happen is readable text extending past the box that clips it.
+    const clipped = await page.evaluate(() => {
+      const found: string[] = []
+      const hidden = (el: Element) => el.closest('[aria-hidden="true"]') !== null
+      for (const box of Array.from(document.querySelectorAll<HTMLElement>('body *'))) {
+        const cs = getComputedStyle(box)
+        if (![cs.overflowX, cs.overflow].some((v) => v === 'hidden' || v === 'clip')) continue
+        const b = box.getBoundingClientRect()
+        if (hidden(box) || b.width <= 1) continue
+        for (const el of Array.from(box.querySelectorAll<HTMLElement>('*'))) {
+          if (hidden(el)) continue
+          const text = Array.from(el.childNodes).some(
+            (n) => n.nodeType === Node.TEXT_NODE && (n.textContent ?? '').trim() !== '',
           )
-        })
-        .map((el) => el.tagName),
-    )
+          const r = el.getBoundingClientRect()
+          if (!text || r.width <= 1 || r.height <= 1) continue
+          if (r.right > b.right + 1 || r.left < b.left - 1)
+            found.push(`${el.tagName}: ${(el.textContent ?? '').trim().slice(0, 40)}`)
+        }
+      }
+      return found
+    })
     expect(clipped).toEqual([])
   })
 

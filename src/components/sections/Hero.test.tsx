@@ -23,9 +23,23 @@ describe('Hero (FR-HERO-01/02, D12, D14)', () => {
   })
 
   it('shows the portrait with descriptive alt text and the experience caption', () => {
-    render(<Hero />)
+    const { container } = render(<Hero />)
     expect(screen.getByRole('img', { name: 'Portrait of Mohd Shahrukh' })).toBeInTheDocument()
-    expect(screen.getByText('6+ Years of Experience')).toBeInTheDocument()
+    expect(container.querySelector('figcaption')?.textContent).toBe('6+ Years of Experience')
+  })
+
+  it('keeps the decorative stack chip and the orbits away from assistive technology', () => {
+    const { container } = render(<Hero />)
+    const chip = screen.getByText('React · Next.js · TypeScript')
+    expect(chip.closest('[aria-hidden="true"]')).not.toBeNull()
+    expect(
+      container.querySelectorAll('figure > [aria-hidden="true"]').length,
+    ).toBeGreaterThanOrEqual(3)
+  })
+
+  it('marks the parallax layers with data-speed (motion module)', () => {
+    const { container } = render(<Hero />)
+    expect(container.querySelectorAll('[data-speed]').length).toBeGreaterThanOrEqual(8)
   })
 
   it('is the #top target and is labelled by the h1', () => {

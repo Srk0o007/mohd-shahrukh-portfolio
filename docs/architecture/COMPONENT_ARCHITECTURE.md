@@ -7,6 +7,11 @@ Visual specifications live in [COMPONENT_VISUAL_SPEC.md](../design/COMPONENT_VIS
 
 ---
 
+> **Phase 11.5 update (2026-11-05):** `ThemeToggle` and `CredentialRow` were removed.
+> - **Added:** `ui/Card`, `skills/SkillTabs` (client, ARIA tabs), `testimonials/TestimonialSlider` (client, carousel), `layout/ParticleWaveLayer` and `layout/MotionLayer` (client, lazy, render no UI of their own).
+> - **Simplified:** the project layout (§7) is a uniform grid; `lib/project-layout.ts` only counts projects per filter, and `layout-classes.ts` hides cards per `data-filter`.
+> - **Mobile menu:** it handles every Tab itself (Safari skips links).
+
 ## 1. Layers
 
 | Layer | Folder | Knows about content? | May use hooks? | Examples |
