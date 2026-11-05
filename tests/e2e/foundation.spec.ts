@@ -2,7 +2,7 @@ import { expect, test, WEBKIT_TAB_SKIPS_LINKS, type ConsoleMessage } from '../fi
 
 /** Phase 06 foundation checks: rendering, dark-only theme, fonts, metadata, headers, no-JS. */
 
-const CV_PATH = '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf'
+const CV_PATH = '/Mohd_Shahrukh_Resume_05_Nov_2026.pdf'
 
 test.describe('home page', () => {
   test('renders statically with the pre-paint flags and no console errors', async ({ page }) => {
@@ -72,11 +72,11 @@ test('fonts are served only from this origin, never Google (NFR-PERF-07)', async
   }
 })
 
-test('CV is served as the 03 Nov 2026 PDF (FR-RES-06, D7)', async ({ request }) => {
+test('CV is served as the 05 Nov 2026 PDF (FR-RES-06, D7)', async ({ request }) => {
   const response = await request.get(CV_PATH)
   expect(response.status()).toBe(200)
   expect(response.headers()['content-type']).toContain('application/pdf')
-  expect((await response.body()).byteLength).toBe(72379)
+  expect((await response.body()).byteLength).toBe(64319)
 })
 
 test('unknown URLs return a branded, noindex 404 (FR-ERR-01, NFR-SEO-09)', async ({ page }) => {

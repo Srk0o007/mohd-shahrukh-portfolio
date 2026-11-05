@@ -221,10 +221,10 @@ The old dead URLs are kept in [CONTENT_INVENTORY §12](../audit/CONTENT_INVENTOR
 
 | Field | Type | Req. | Value |
 |---|---|---|---|
-| `path` | Path | ✓ | e.g. `/Mohd_Shahrukh_Resume_03_Nov_2026.pdf` (final path set in Phase 05/06) |
+| `path` | Path | ✓ | `/Mohd_Shahrukh_Resume_05_Nov_2026.pdf` (05 Nov 2026 resume, from 2026-11-05) |
 | `label` | string | ✓ | "Download CV" |
 | `format` | string | ✓ | "PDF" |
-| `sizeLabel` | string | ✓ | "72 KB" (the actual file size, recalculated whenever the file changes) |
+| `sizeLabel` | string | ✓ | "64 KB" (the actual file size, recalculated whenever the file changes) |
 | `updated` | YearMonth | ✓ | 2026-11 |
 
 Source: D7 (`C:\Users\saurabh bhatt\Downloads\Mohd_Shahrukh_Resume_03_nov_2026.pdf`).

@@ -4,6 +4,8 @@
 **Date:** 2026-11-04
 **Verdict: ready for Phase 12 (deployment).** No code or content blockers remain. Three owner actions must be done before or at launch (§9).
 
+**Phase 12 update (2026-11-05): live at https://mohdshahrukh.in.** §8 and §9 below are updated.
+
 **Status key:**
 - ✅ done and verified;
 - ⏳ done in Phase 12 or by the owner;
@@ -37,7 +39,7 @@
 | CLS 0, including the hydration shift fix | ✅ | PERFORMANCE_REPORT §4 |
 | First-load JS ≤ 150 KB; project code ≤ 15 KB above the framework | ✅ 144.8 KB / about 7.9 KB | `npm run size` (CI) |
 | Page weight ≤ 1.5 MB after a full scroll | ✅ about 0.5 MB transferred | PERFORMANCE_REPORT §6 |
-| Real-world measurement | ⏳ Phase 12: PageSpeed Insights on the live URL; field Core Web Vitals after launch | |
+| Real-world measurement | ⚠️ Live mobile Lighthouse 75, accepted by the owner (2026-11-05). Field Core Web Vitals after launch. | PROJECT_STATUS Phase 12 |
 
 ## 4. SEO
 
@@ -84,24 +86,24 @@
 
 | Item | Status |
 |---|---|
-| Hosting: Vercel (ADR 0002). Plan terms and image-optimisation limits to confirm. | ⏳ Phase 12 (R17) |
-| Domain `mohdshahrukh.in`: DNS at Hostinger; apex and `www` → Vercel; one canonical host | ⏳ Phase 12: **needs your Hostinger access** (R3) |
-| HTTPS certificate | ⏳ Issued automatically by Vercel once DNS points to it |
-| Rollback | ⏳ Vercel keeps every deployment; rollback is instant. The old Hostinger site stays untouched until DNS switches. |
-| Preview deployments for PRs | ⏳ Set up with the Vercel Git integration |
+| Hosting: Vercel (ADR 0002). Plan terms and image-optimisation limits to confirm. | ✅ Deployed on Vercel Hobby. ⏳ Plan terms check by the owner (R17) |
+| Domain `mohdshahrukh.in`: DNS at Hostinger; apex and `www` → Vercel; one canonical host | ✅ Cut over 2026-11-05; `www` → 308 → apex (DNS_CONFIGURATION.md) |
+| HTTPS certificate | ✅ Let's Encrypt, apex and `www`, auto-renewed by Vercel |
+| Rollback | ✅ Vercel keeps every deployment; rollback is instant. DNS rollback in DNS_CONFIGURATION §5 (old Hostinger site untouched). |
+| Preview deployments for PRs | ✅ Vercel Git integration builds every PR |
 
 ## 9. Owner actions
 
 **Before or at launch:**
-1. **Formspree** (form `xleyzgzo`):
+1. ✅ **Formspree** (form `xleyzgzo`), confirmed working on the live site:
    - reCAPTCHA **off** (Spam protection);
    - notification email `khan.shahrukh156@gmail.com`;
    - allowed domain `mohdshahrukh.in` if domain restriction is on.
-2. **Vercel account:** sign in with GitHub (Hobby plan, ADR 0002) so the repository can be imported in Phase 12.
-3. **Hostinger access:** for the DNS change from the old host to Vercel.
+2. ✅ **Vercel account:** sign in with GitHub (Hobby plan, ADR 0002) so the repository can be imported in Phase 12.
+3. ✅ **Hostinger access:** for the DNS change from the old host to Vercel.
 
 **After launch:**
-4. Send one real test message from the live site (decision 4b).
-5. Screen-reader smoke test (ACCESSIBILITY_REPORT §7).
+4. ✅ Send one real test message from the live site (decision 4b). Received 2026-11-05.
+5. ⏸️ Screen-reader smoke test (ACCESSIBILITY_REPORT §7). Deferred by the owner, not required for launch.
 6. Google Search Console: verify and submit the sitemap; check social previews (SEO_CHECKLIST §8).
 7. Add project URLs and details when ready (Q8, Q11): content-only edits in `src/content/projects.ts` and the matching link-status test.

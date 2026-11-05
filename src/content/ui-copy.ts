@@ -8,7 +8,7 @@ export const uiCopy = {
   skipLink: 'Skip to main content',
   menuOpen: 'Open menu',
   menuClose: 'Close menu',
-  cvAccessibleSuffix: '(PDF, {size})',
+  cvAccessibleSuffix: '(PDF, {size}, opens in new tab)',
   newTab: '(opens in new tab)',
   filterAll: 'All',
   filterEnterprise: 'Enterprise products',
