@@ -105,7 +105,7 @@ export function TestimonialSlider({
       className="mx-auto max-w-215"
     >
       <div className="overflow-hidden rounded-card">
-        <ul
+        <div
           aria-live={autoplay ? 'off' : 'polite'}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
@@ -115,7 +115,7 @@ export function TestimonialSlider({
           {slides.map((slide, i) => {
             const inactive = hydrated && i !== index
             return (
-              <li
+              <div
                 key={slideLabels[i] ?? i}
                 role="group"
                 aria-roledescription="slide"
@@ -125,10 +125,10 @@ export function TestimonialSlider({
                 className="flex-[0_0_100%] p-1"
               >
                 {slide}
-              </li>
+              </div>
             )
           })}
-        </ul>
+        </div>
       </div>
 
       <div className="js-only mt-6.5 flex items-center justify-center gap-4.5">

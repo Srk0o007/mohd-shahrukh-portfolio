@@ -16,8 +16,10 @@ import {
  *   parent's distance from the viewport centre (35 % below 768 px, off under reduced motion);
  * - the education journey: `--progress` on `[data-journey]` and `data-lit` on each milestone.
  *
- * Scroll reveal uses an IntersectionObserver: `[data-reveal]` elements fade in on entry and
- * replay when re-entered from below. Elements already on screen when the module starts are
+ * Scroll reveal uses two IntersectionObservers: `[data-reveal]` elements fade in once 8 % of
+ * them is inside the viewport (minus an 8 % bottom margin), and are reset only when they have
+ * left the viewport *entirely* below, so they replay when re-entered from below. Resetting on
+ * the first observer alone would hide elements peeking into the bottom margin at load. Elements already on screen when the module starts are
  * marked `data-in` *before* `data-reveal-on` goes on `<html>`, so nothing visible is ever
  * hidden. Children of `[data-stagger]` get a 90 ms `--delay` per step (max 5). The reveal is
  * off under reduced motion; the CSS also forces every final state there.
@@ -69,6 +71,7 @@ export function createMotion(): { destroy: () => void } {
   }
 
   let revealer: IntersectionObserver | undefined
+  let resetter: IntersectionObserver | undefined
   const revealed = () => Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
 
   const startReveal = () => {
@@ -85,17 +88,28 @@ export function createMotion(): { destroy: () => void } {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) entry.target.setAttribute('data-in', '')
-          else if (entry.boundingClientRect.top > 0) entry.target.removeAttribute('data-in')
         }
       },
       { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
     )
-    for (const element of elements) revealer.observe(element)
+    resetter = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting && entry.boundingClientRect.top > 0) {
+          entry.target.removeAttribute('data-in')
+        }
+      }
+    })
+    for (const element of elements) {
+      revealer.observe(element)
+      resetter.observe(element)
+    }
   }
 
   const stopReveal = () => {
     revealer?.disconnect()
+    resetter?.disconnect()
     revealer = undefined
+    resetter = undefined
     root.removeAttribute('data-reveal-on')
     for (const element of revealed()) {
       element.removeAttribute('data-in')

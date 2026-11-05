@@ -65,7 +65,9 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
 
     panel?.querySelector<HTMLElement>('nav a')?.focus()
 
-    // Esc closes; Tab / Shift+Tab wrap within the menu (focus containment).
+    // Esc closes; Tab / Shift+Tab move through the menu's controls and wrap (focus
+    // containment). Every Tab is handled here, not only at the ends: Safari skips links on Tab
+    // by default, so native Tab from a link would leave the dialog (Phase 11.5 regression).
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
@@ -74,17 +76,17 @@ export function MobileMenu({ name, items, footer, labels }: MobileMenuProps) {
       }
       if (event.key !== 'Tab' || !panel) return
       const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE))
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      if (!first || !last) return
-      const active = document.activeElement
-      if (event.shiftKey && (active === first || !panel.contains(active))) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && (active === last || !panel.contains(active))) {
-        event.preventDefault()
-        first.focus()
-      }
+      if (focusable.length === 0) return
+      event.preventDefault()
+      const current = focusable.indexOf(document.activeElement as HTMLElement)
+      const step = event.shiftKey ? -1 : 1
+      const next =
+        current === -1
+          ? event.shiftKey
+            ? focusable.length - 1
+            : 0
+          : (current + step + focusable.length) % focusable.length
+      focusable[next]?.focus()
     }
     document.addEventListener('keydown', onKeyDown)
 

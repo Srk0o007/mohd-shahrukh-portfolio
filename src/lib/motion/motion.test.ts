@@ -58,7 +58,7 @@ describe('createMotion (ADR 0016)', () => {
     expect(document.documentElement).toHaveAttribute('data-reveal-on')
     expect(document.getElementById('above')).toHaveAttribute('data-in')
     expect(document.getElementById('below')).not.toHaveAttribute('data-in')
-    expect(observed).toHaveLength(4)
+    expect(observed).toHaveLength(8) // four elements, entry and reset observers
     motion.destroy()
   })
 

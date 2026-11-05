@@ -24,7 +24,7 @@ export interface FormFieldProps {
 const control =
   'w-full rounded-md border border-field bg-[rgb(0_0_0/0.55)] px-4 font-sans text-body text-heading ' +
   'transition-[border-color,box-shadow] duration-400 ease-soft ' +
-  'focus:border-accent focus:shadow-[0_0_0_3px_rgb(0_194_255/0.2)] focus:outline-none ' +
+  'focus:border-accent focus:shadow-[0_0_0_3px_rgb(0_194_255/0.2)] ' +
   'aria-invalid:border-error aria-invalid:shadow-[0_0_0_1px_var(--color-error)]'
 
 /**

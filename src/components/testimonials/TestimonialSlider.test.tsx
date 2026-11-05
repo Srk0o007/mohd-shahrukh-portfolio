@@ -70,7 +70,7 @@ describe('TestimonialSlider (ADR 0016)', () => {
   it('moves on a horizontal swipe of more than 50 px', () => {
     mockReducedMotion(true)
     const { container } = renderSlider()
-    const track = container.querySelector('ul') as HTMLElement
+    const track = container.querySelector('[aria-live]') as HTMLElement
     fireEvent.pointerDown(track, { clientX: 300 })
     fireEvent.pointerUp(track, { clientX: 200 })
     expect(slide('2 of 3')).not.toHaveAttribute('aria-hidden')
@@ -83,7 +83,7 @@ describe('TestimonialSlider (ADR 0016)', () => {
     vi.useFakeTimers()
     mockReducedMotion(false)
     const { container } = renderSlider()
-    expect(container.querySelector('ul')).toHaveAttribute('aria-live', 'off')
+    expect(container.querySelector('[aria-live]')).toHaveAttribute('aria-live', 'off')
     act(() => vi.advanceTimersByTime(AUTOPLAY_MS))
     expect(slide('2 of 3')).not.toHaveAttribute('aria-hidden')
   })
@@ -94,7 +94,7 @@ describe('TestimonialSlider (ADR 0016)', () => {
     const { container } = renderSlider()
     const carousel = screen.getByRole('region', { name: 'Testimonials' })
     fireEvent.mouseEnter(carousel)
-    expect(container.querySelector('ul')).toHaveAttribute('aria-live', 'polite')
+    expect(container.querySelector('[aria-live]')).toHaveAttribute('aria-live', 'polite')
     act(() => vi.advanceTimersByTime(AUTOPLAY_MS * 2))
     expect(slide('1 of 3')).not.toHaveAttribute('aria-hidden')
   })

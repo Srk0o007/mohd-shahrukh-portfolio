@@ -24,7 +24,7 @@ export function ProjectCard({ project, sizes, newTabLabel }: ProjectCardProps) {
           src={project.image.src}
           alt={project.image.alt}
           sizes={sizes}
-          className="size-full object-cover object-top transition-transform duration-1100 ease-soft group-hover/card:scale-104"
+          className="size-full object-cover object-top transition-transform duration-1100 ease-soft motion-safe:group-hover/card:scale-104"
         />
       </div>
       <div className="grid gap-1.5 px-5.5 pt-5.5 pb-6.5 sm:px-6.5">

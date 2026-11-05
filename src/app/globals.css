@@ -715,6 +715,11 @@ html:not([data-js]) .nojs-flex {
     transform: none !important;
   }
 
+  /* FR-PRJ-07 / FR-INT-02: no hover lift on cards (the image zoom is motion-safe only). */
+  .card-hover:hover {
+    transform: none;
+  }
+
   .blob,
   .orbit-spin,
   .orbit-spin-slow,
