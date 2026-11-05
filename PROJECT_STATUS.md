@@ -1,14 +1,14 @@
 # Project Status
 
 **Last updated:** 2026-11-05
-**Current phase:** Phase 11.5 — Dark Redesign & Particle Wave 🚧 In progress (branch `phase/11.5-dark-redesign`)
+**Current phase:** Phase 11.5 — Dark Redesign & Particle Wave 🔍 In review: implemented, awaiting owner approval (branch `phase/11.5-dark-redesign`, not pushed)
 **Next phase:** Phase 12 — Deployment & Domain Configuration ⏳ Not started
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | Implement Phase 11.5 per the approved plan (owner approved 2026-11-05). Nothing is pushed and no PR is opened until the owner says so. Phase 12 stays unstarted until explicitly approved. |
+| **Next approved action** | None. Phase 11.5 is implemented and validated locally and waits for the owner's review. Open decision: the mobile Lighthouse score (88 vs 91, see the Phase 11.5 summary). No push or PR until the owner says so. Phase 12 stays unstarted until explicitly approved. |
 | **Blockers** | None |
 | **Pending work** | Phase 11.5 implementation. Before launch (PRODUCTION_READINESS §9): Vercel account and Hostinger DNS access for Phase 12. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
 
@@ -27,10 +27,45 @@
 | 09 | Contact & Interactive Features | ✅ Complete | 2026-11-04 |
 | 10 | Accessibility & Responsive Engineering | ✅ Complete | 2026-11-04 |
 | 11 | Performance, SEO & Quality Assurance | ✅ Complete (PR #10 merged) | 2026-11-04 |
-| 11.5 | Dark Redesign & Particle Wave (inserted 2026-11-05) | 🚧 In progress | — |
+| 11.5 | Dark Redesign & Particle Wave (inserted 2026-11-05) | 🔍 In review | — |
 | 12 | Deployment & Domain Configuration | ⏳ Not started | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
+
+## Phase 11.5 summary
+
+**Delivered** (7 commits on `phase/11.5-dark-redesign`):
+- the particle wave (ADR 0015);
+- dark-only tokens and Andika (ADR 0014);
+- a restyle of every section to the frozen prototype;
+- scroll motion: header, parallax, reveal and the education journey (ADR 0016);
+- the SkillTabs and TestimonialSlider islands;
+- three education entries.
+
+**Fixed during validation:**
+- **Reveal:** content in the bottom margin was hidden at load. The prototype has the same bug.
+- **Mobile menu:** Tab escaped the menu in Safari.
+- **Slider:** its list semantics broke axe's `list` rule.
+- **Contrast:** the `faint` token is now `#808080` (was 3.0–3.9:1).
+- **Form fields:** they keep the 2 px focus outline.
+- **Reduced motion:** no hover zoom or lift (FR-INT-02).
+
+**Deviations from the prototype**, all for accessibility: the `faint` colour, the field focus outline, and no hover motion under reduced motion.
+
+**Known gap:** WCAG 2.2.2, because the infinite motion has no pause control. The owner accepted it (ACCESSIBILITY_REPORT OI-9).
+
+**Validation (2026-11-05):**
+
+| Check | Result |
+|---|---|
+| Build | ✅ |
+| Prettier, ESLint, TypeScript | ✅ 0 errors |
+| Unit, component and content tests | ✅ 222 passed (35 files) |
+| E2E + a11y (Chromium, Firefox, WebKit) | ✅ 332 passed, 7 skipped (WebKit link-Tab), 0 failed; axe 0 violations |
+| First-load JS | ✅ 147.2 KB gzip (cap 150) |
+| Lighthouse desktop | ✅ 100 / 100 / 100 / 100 |
+| Lighthouse mobile | ⚠️ 88 / 100 / 100 / 100 vs 91 in Phase 11. LCP is better (2.9 s); TBT is 248 ms because of the wave engine's setup. **Owner decision needed.** |
+| Prototype match | ✅ 1440 and 390 px screenshots checked against the prototype |
 
 ## Phase 11 summary
 

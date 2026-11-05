@@ -10,6 +10,18 @@ Tokens refer to [COLOR_TOKENS.md](COLOR_TOKENS.md) (colours), [TYPOGRAPHY.md](TY
 - **Hover** never carries information.
 - **Reduced motion** removes every transition listed in [DESIGN_SYSTEM.md §7](DESIGN_SYSTEM.md#7-motion-ds-12-ds-14-ds-16).
 
+> **Phase 11.5 update (2026-11-05):** the visual source of truth is now the frozen prototype (`.handoff/`, git-ignored).
+> - **Header:** a glass header.
+> - **Hero:** a morphing portrait with orbits.
+> - **Section headers:** an eyebrow and an outlined number.
+> - **Skills:** editor tabs, a code view and a ticker.
+> - **Education:** a journey timeline with 3 entries.
+> - **Projects:** a uniform 2-column grid.
+> - **Testimonials:** a slider.
+> - **Footer:** copyright and credit only.
+>
+> Section numbers below still map to the components; their measurements are historical where they differ from the prototype.
+
 ## Index
 
 | # | Component | Requirements |

@@ -8,6 +8,13 @@ This document defines the foundations. Colour is in [COLOR_TOKENS.md](COLOR_TOKE
 
 ---
 
+> **Phase 11.5 update (2026-11-05):** the frozen dark design replaces several sections below.
+> - **Layout:** a 1240 px black content column; content max 1180 px with 20 px gutters; navigation breakpoint 1080 px (`nav`).
+> - **Cards:** `#050505` with a masked border sheen and an 18 px radius.
+> - **Projects:** a uniform 2-column project grid replaces the DS-07 asymmetric rhythm (§4).
+> - **Motion:** see [ADR 0016](../architecture/adr/0016-motion-system-and-testimonial-carousel.md); every hover and reveal uses `cubic-bezier(.22,1,.36,1)`.
+> - **Theming (§11):** dark only, see [ADR 0014](../architecture/adr/0014-dark-only-theme-and-andika.md).
+
 ## 1. Principles
 
 1. **Editorial hierarchy.** Scale, whitespace and alignment carry meaning; ornament does not.

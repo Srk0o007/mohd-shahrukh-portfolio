@@ -7,6 +7,8 @@
 
 ---
 
+> **Phase 11.5 update (2026-11-05):** Andika 400/700 (`next/font/google`, self-hosted at build time) replaces Fraunces and Inter for every role ([ADR 0014](../architecture/adr/0014-dark-only-theme-and-andika.md)). The scale tokens are in `globals.css` (`--text-hero` clamp(3.5rem, 9.4vw, 8.25rem), `--text-h2` clamp(2.25rem, 4.8vw, 3.75rem), and so on). The families and specimens below are historical.
+
 ## 1. Families
 
 | Role | Family | Licence | Axes used | Weights used | Fallback stack |

@@ -92,7 +92,7 @@ export function SkillTabs({ label, tabs, meta, panels }: SkillTabsProps) {
                 aria-hidden="true"
                 className={cn(
                   'text-xs tabular-nums transition-colors duration-450 ease-soft',
-                  active ? 'text-accent' : 'text-[#808080]',
+                  active ? 'text-accent' : 'text-faint',
                 )}
               >
                 {String(index + 1).padStart(2, '0')}

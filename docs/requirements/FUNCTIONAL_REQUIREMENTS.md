@@ -129,6 +129,8 @@
 | FR-THM-03 | Both themes meet contrast requirements. | Must | • All text and UI meets NFR-A11Y-04 in both themes<br>• Brand yellow `#f5df4e` is never used as text on light backgrounds (1.35:1) | NFR-A11Y-04, Phase 04 | Audit §5 contrast table |
 | FR-THM-04 | The theme follows live system changes until the user chooses one explicitly. | Should | • Changing the OS theme updates the site immediately while no stored choice exists | FR-THM-01 | D8 |
 
+> **Superseded (2026-11-05):** FR-THM-01–04 are withdrawn. The site is dark only ([ADR 0014](../architecture/adr/0014-dark-only-theme-and-andika.md)), and AC-Q contrast is checked against the single dark palette.
+
 ## 12. Accessible interactions (INT)
 
 | ID | Description | Priority | Acceptance criteria | Dependencies | Source |

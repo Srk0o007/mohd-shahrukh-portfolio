@@ -43,6 +43,8 @@
 | Final build, slowed host | Phase 11 + SEO | Desktop | 5 | **100** | 100 | 100 | 100 | 296 | 766 | 43 | 0 | 329 KB | 954 |
 | **A/B, interleaved** | `main` | Mobile | 5 | 80 | — | — | — | 1,128 | 3,437 | 436 | 0 | — | 946 |
 | **A/B, interleaved** | Phase 11 | Mobile | 5 | 81 | — | — | — | 1,156 | 3,427 | 417 | 0 | — | 950 |
+| Phase 11.5 (dark redesign) | Phase 11.5 | Mobile | 3 | **88** | 100 | 100 | 100 | 986 | 2,933 | 248 | 0 | 270 KB | 2,599 |
+| Phase 11.5 (dark redesign) | Phase 11.5 | Desktop | 3 | **100** | 100 | 100 | 100 | 274 | 640 | 0 | 0 | 265 KB | 2,483 |
 
 "Final build" adds SEO assets on top of the image-preload build: JSON-LD (about 0.6 KB of HTML) and metadata tags. **The interleaved A/B rows** alternate `main` and Phase 11 runs on the same host minutes apart. They show **no regression**: 81 vs 80, and LCP and TBT equal within noise.
 
@@ -51,6 +53,15 @@
 - **Measured without throttling:** the observed LCP was **0.4 s**.
 - **Where the 3.2 s comes from:** Lighthouse's simulation charges everything that loads before LCP to the throttled network and CPU, mainly the 145 KB of framework JavaScript and two fonts (115 KB).
 - **Lighthouse's rating:** "needs improvement" against the 2.5 s "good" threshold. The overall mobile score of 90–91 is in the "good" band.
+
+**Phase 11.5 (2026-11-05):**
+- **Mobile score:** 88 (vs 91).
+- **LCP:** better, 2.9 s (vs 3.2 s).
+- **TBT:** 248 ms (vs 153 ms). The long tasks are React hydration (also present before) and the particle-wave engine's first setup, a 115 ms task at about 3.0 s.
+- **Why the setup counts:** `ParticleWaveLayer` forces boot within 1.5 s of idle (ADR 0015), so the task falls inside Lighthouse's TBT window.
+- **Desktop:** 100 / 100 / 100 / 100.
+- **First-load JS:** 147.2 KB gzip (cap 150 KB). Project code is about 10.3 KB above the framework baseline (allowance 15 KB).
+- **Lazy chunks:** the wave (3.8 KB) and motion (1.3 KB) are not counted in first-load JS.
 
 ## 4. Changes made, and experiments that were rejected
 

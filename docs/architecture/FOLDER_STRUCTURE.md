@@ -132,6 +132,20 @@ mohd-shahrukh-portfolio/
 ├── README.md  PROJECT_STATUS.md
 ```
 
+> **Phase 11.5 update (2026-11-05):** new folders:
+> - `src/components/skills/`
+> - `src/components/testimonials/`
+> - `src/lib/particle-wave/` (engine, [ADR 0015](adr/0015-particle-wave-background.md))
+> - `src/lib/motion/` (scroll motion, [ADR 0016](adr/0016-motion-system-and-testimonial-carousel.md))
+>
+> New files:
+> - `src/lib/skills-code.ts`
+> - `src/lib/js-flag.ts`
+> - `tests/e2e/motion.spec.ts`
+> - `tests/e2e/particle-wave.spec.ts`
+>
+> Removed: `ThemeToggle`, `lib/theme.ts`, `CredentialRow`.
+
 ## Rules
 
 | Rule | Detail |
