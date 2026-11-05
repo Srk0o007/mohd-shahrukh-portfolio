@@ -1,44 +1,45 @@
 import type { SkillGroup } from './types'
 
-/** CONTENT_SCHEMA §7 — [R] verbatim; no proficiency values (D5). */
+/** CONTENT_SCHEMA §7 — [R] verbatim (05 Nov 2026 resume); no proficiency values (D5). */
 export const skillGroups = [
   {
-    label: 'Frontend',
-    skills: [
-      'React.js',
-      'Next.js',
-      'JavaScript (ES6+)',
-      'TypeScript',
-      'HTML5',
-      'CSS3',
-      'SCSS/SASS',
-      'Tailwind CSS',
-      'Bootstrap 5',
-      'responsive UI',
-    ],
+    label: 'Languages',
+    skills: ['JavaScript (ES6+)', 'TypeScript', 'HTML5', 'CSS3'],
   },
   {
-    label: 'State & APIs',
-    skills: [
-      'Redux Toolkit',
-      'React Query (TanStack Query)',
-      'REST APIs',
-      'async request handling',
-    ],
+    label: 'Frameworks & Libraries',
+    skills: ['React.js', 'Next.js'],
+  },
+  {
+    label: 'Styling & UI',
+    skills: ['SCSS/SASS', 'Tailwind CSS', 'Bootstrap 5', 'shadcn/ui', 'Material UI'],
+  },
+  {
+    label: 'State Management',
+    skills: ['Redux Toolkit', 'React Query (TanStack Query)'],
+    context: 'Redux Toolkit for client state; React Query for server state, caching and mutations',
+  },
+  {
+    label: 'API Integration',
+    skills: ['REST APIs', 'async request handling', 'request deduplication', 'parallel API calls'],
   },
   {
     label: 'Testing',
     skills: ['Jest', 'React Testing Library', 'Playwright'],
-    context: 'unit, component, UI/API integration and end-to-end testing',
+    context: 'unit, component, UI/API integration and end-to-end tests',
   },
   {
-    label: 'Architecture',
+    label: 'Architecture & Security',
     skills: [
       'Reusable React components',
       'component libraries',
       'design systems',
-      'frontend architecture',
+      'modular architecture',
       'code reviews',
+      'SSO',
+      'token lifecycle',
+      'session management',
+      'secure redirects',
     ],
   },
   {
@@ -46,8 +47,8 @@ export const skillGroups = [
     skills: [
       'Lighthouse',
       'Core Web Vitals',
-      'API request optimization',
-      'image optimization',
+      'API request optimisation',
+      'image optimisation',
       'WCAG 2.1 AA',
       'ARIA',
       'keyboard navigation',
@@ -55,11 +56,12 @@ export const skillGroups = [
     ],
   },
   {
-    label: 'Frontend Security',
-    skills: ['SSO', 'token lifecycle handling', 'session management', 'secure redirects'],
+    label: 'AI-Assisted Development',
+    skills: ['Claude Code', 'Codex'],
+    context: 'feature development, test writing, PR and code reviews',
   },
   {
-    label: 'Cloud & Delivery',
+    label: 'Tools',
     skills: [
       'AWS S3',
       'CloudFront',
@@ -67,18 +69,9 @@ export const skillGroups = [
       'Vite',
       'Git',
       'GitHub/GitLab/Bitbucket',
-      'CI/CD collaboration',
-      'frontend release coordination',
-      'Agile/Scrum',
+      'CI/CD pipelines',
+      'Figma',
+      'Balsamiq',
     ],
-  },
-  {
-    label: 'AI-Assisted Development',
-    skills: ['Claude Code', 'Codex'],
-    context: 'feature development, test-case writing, PR and code reviews',
-  },
-  {
-    label: 'Design',
-    skills: ['Figma', 'Balsamiq', 'wireframing', 'prototyping', 'usability feedback'],
   },
 ] as const satisfies readonly SkillGroup[]

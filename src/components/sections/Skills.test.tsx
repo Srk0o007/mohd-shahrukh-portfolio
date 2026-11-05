@@ -18,7 +18,7 @@ describe('04 — Skills (FR-RES-03, D5, Phase 11.5)', () => {
     expect(tabs.map((tab) => tab.textContent)).toEqual(
       skillGroups.map((g, i) => `${String(i + 1).padStart(2, '0')}${g.label}${g.skills.length}`),
     )
-    expect(screen.getByText('50 skills · 9 groups')).toBeInTheDocument()
+    expect(screen.getByText('48 skills · 10 groups')).toBeInTheDocument()
   })
 
   it('lists every skill in a plain list per group for assistive technology', () => {
@@ -37,15 +37,15 @@ describe('04 — Skills (FR-RES-03, D5, Phase 11.5)', () => {
   it('hides the decorative code view and the ticker from assistive technology', () => {
     const { container } = render(<Skills />)
     const pres = container.querySelectorAll('pre')
-    expect(pres).toHaveLength(9)
+    expect(pres).toHaveLength(10)
     for (const pre of pres) expect(pre).toHaveAttribute('aria-hidden', 'true')
     expect(container.querySelector('.ticker')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('renders each group as a TypeScript constant with the context as a comment', () => {
     const { container } = render(<Skills />)
-    const testing = container.querySelectorAll('pre')[2]?.textContent ?? ''
-    expect(testing).toContain('// unit, component, UI/API integration and end-to-end testing')
+    const testing = container.querySelectorAll('pre')[5]?.textContent ?? ''
+    expect(testing).toContain('// unit, component, UI/API integration and end-to-end tests')
     expect(testing).toContain('export const testing = [')
     expect(testing).toContain("'React Testing Library',")
     expect(testing).toContain('] as const')
@@ -54,10 +54,10 @@ describe('04 — Skills (FR-RES-03, D5, Phase 11.5)', () => {
   it('shows the verified context lines and no percentages', () => {
     const { container } = render(<Skills />)
     expect(
-      screen.getByText('unit, component, UI/API integration and end-to-end testing'),
+      screen.getByText('unit, component, UI/API integration and end-to-end tests'),
     ).toBeInTheDocument()
     expect(
-      screen.getByText('feature development, test-case writing, PR and code reviews'),
+      screen.getByText('feature development, test writing, PR and code reviews'),
     ).toBeInTheDocument()
     expect(container.textContent).not.toMatch(/\d+%/)
   })
