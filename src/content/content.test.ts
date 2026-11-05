@@ -177,7 +177,7 @@ describe('I-9 owner decisions are respected', () => {
       'JavaScript: The Complete Guide',
       'React — The Complete Guide (incl. Next.js, Redux)',
     ])
-    expect(skillGroups).toHaveLength(9)
+    expect(skillGroups).toHaveLength(10)
     expect(all).not.toMatch(/\d+%/)
   })
 

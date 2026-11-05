@@ -123,17 +123,18 @@ Source: `[R]`, D1. Display format: `MMM YYYY – MMM YYYY` (e.g. "May 2024 – O
 
 | # | label | skills | context |
 |---|---|---|---|
-| 1 | Frontend | React.js, Next.js, JavaScript (ES6+), TypeScript, HTML5, CSS3, SCSS/SASS, Tailwind CSS, Bootstrap 5, responsive UI | — |
-| 2 | State & APIs | Redux Toolkit, React Query (TanStack Query), REST APIs, async request handling | — |
-| 3 | Testing | Jest, React Testing Library, Playwright | unit, component, UI/API integration and end-to-end testing |
-| 4 | Architecture | Reusable React components, component libraries, design systems, frontend architecture, code reviews | — |
-| 5 | Performance & Accessibility | Lighthouse, Core Web Vitals, API request optimization, image optimization, WCAG 2.1 AA, ARIA, keyboard navigation, screen-reader support | — |
-| 6 | Frontend Security | SSO, token lifecycle handling, session management, secure redirects | — |
-| 7 | Cloud & Delivery | AWS S3, CloudFront, Docker, Vite, Git, GitHub/GitLab/Bitbucket, CI/CD collaboration, frontend release coordination, Agile/Scrum | — |
-| 8 | AI-Assisted Development | Claude Code, Codex | feature development, test-case writing, PR and code reviews |
-| 9 | Design | Figma, Balsamiq, wireframing, prototyping, usability feedback | — |
+| 1 | Languages | JavaScript (ES6+), TypeScript, HTML5, CSS3 | — |
+| 2 | Frameworks & Libraries | React.js, Next.js | — |
+| 3 | Styling & UI | SCSS/SASS, Tailwind CSS, Bootstrap 5, shadcn/ui, Material UI | — |
+| 4 | State Management | Redux Toolkit, React Query (TanStack Query) | Redux Toolkit for client state; React Query for server state, caching and mutations |
+| 5 | API Integration | REST APIs, async request handling, request deduplication, parallel API calls | — |
+| 6 | Testing | Jest, React Testing Library, Playwright | unit, component, UI/API integration and end-to-end tests |
+| 7 | Architecture & Security | Reusable React components, component libraries, design systems, modular architecture, code reviews, SSO, token lifecycle, session management, secure redirects | — |
+| 8 | Performance & Accessibility | Lighthouse, Core Web Vitals, API request optimisation, image optimisation, WCAG 2.1 AA, ARIA, keyboard navigation, screen-reader support | — |
+| 9 | AI-Assisted Development | Claude Code, Codex | feature development, test writing, PR and code reviews |
+| 10 | Tools | AWS S3, CloudFront, Docker, Vite, Git, GitHub/GitLab/Bitbucket, CI/CD pipelines, Figma, Balsamiq | — |
 
-Source: `[R]`, D5. There is **no** proficiency or percentage field.
+Source: `[R]` (05 Nov 2026 resume Key Skills), D5. There is **no** proficiency or percentage field.
 
 ## 8. `Certification[]`
 
