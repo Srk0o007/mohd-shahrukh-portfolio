@@ -65,8 +65,11 @@ test('fonts are served only from this origin, never Google (NFR-PERF-07)', async
   expect(googleRequests).toEqual([])
   expect(fontRequests.length).toBeGreaterThan(0)
   expect(fontRequests.length).toBeLessThanOrEqual(4)
-  for (const url of fontRequests)
-    expect(url.startsWith(`${baseURL}/_next/static/media/`)).toBe(true)
+  // Same origin, under /_next/static/ (Vercel serves them from /_next/static/immutable/media/).
+  for (const url of fontRequests) {
+    expect(new URL(url).origin).toBe(new URL(baseURL ?? '').origin)
+    expect(new URL(url).pathname).toMatch(/^\/_next\/static\/(immutable\/)?media\//)
+  }
 })
 
 test('CV is served as the 03 Nov 2026 PDF (FR-RES-06, D7)', async ({ request }) => {

@@ -26,23 +26,40 @@ These names returned no record:
 
 **Email:** the domain has no email records today, so the change cannot affect email. If any MX, SPF, DKIM or DMARC record appears in the Hostinger panel, it stays as it is.
 
-## 2. Backup: the Hostinger zone
+## 2. Backup: the Hostinger zone (hPanel, 2026-11-05 14:53)
 
-Public lookups cannot list every record. Before the change, the owner exports or screenshots the full zone in **hPanel → Domains → mohdshahrukh.in → DNS / Nameservers** and keeps it with this file. Any record that §3 does not list stays as it is.
+Taken from the owner's screenshot of **hPanel → Domains → mohdshahrukh.in → DNS / Nameservers**. This is the authoritative list.
 
-## 3. Planned changes
+| # | Type | Name | Content | TTL | Phase 12 |
+|---|---|---|---|---|---|
+| 1 | ALIAS | `@` | `mohdshahrukh.in.cdn.hstgr.net` | 300 | **Replace** (§3) |
+| 2 | CNAME | `www` | `www.mohdshahrukh.in.cdn.hstgr.net` | 300 | **Edit** (§3) |
+| 3 | A | `ftp` | `82.112.239.33` | 1800 | Keep |
+| 4 | CNAME | `hostingermail-a._domainkey.universitytemplate` | `hostingermail-a.dkim.mail.hostinger.com` | 300 | Keep (email) |
+| 5 | CNAME | `hostingermail-b._domainkey.universitytemplate` | `hostingermail-b.dkim.mail.hostinger.com` | 300 | Keep (email) |
+| 6 | CNAME | `hostingermail-c._domainkey.universitytemplate` | `hostingermail-c.dkim.mail.hostinger.com` | 300 | Keep (email) |
+| 7 | CNAME | `autodiscover.universitytemplate` | `autodiscover.mail.hostinger.com` | 300 | Keep (email) |
+| 8 | CNAME | `autoconfig.universitytemplate` | `autoconfig.mail.hostinger.com` | 300 | Keep (email) |
+| 9 | TXT | `universitytemplate` | `"v=spf1 include:_spf.mail.hostinger.com ~all"` | 3600 | Keep (email, SPF) |
 
-Vercel shows the exact values when each domain is added, and those values win if they differ from this table.
+**Email:** rows 4–9 are Hostinger Mail records (DKIM, SPF and client autoconfiguration) for the subdomain `universitytemplate.mohdshahrukh.in`. The site does not use that subdomain. **None of these rows change.**
 
-| Name | Action | New record |
+There is no MX record for that subdomain, publicly or in the panel. That is an existing state, not something Phase 12 changes.
+
+The apex `@` has no MX, SPF or DMARC, so moving the website cannot affect email. The A and AAAA addresses in §1 are what the Hostinger CDN `ALIAS` (row 1) resolves to; they are not separate records.
+
+## 3. Planned changes (two rows only)
+
+Values shown by Vercel (**Project → Settings → Domains**) on 2026-11-05, after both domains were added. Vercel also still accepts the legacy targets `76.76.21.21` and `cname.vercel-dns.com`, but recommends these.
+
+| Row | Action in hPanel | Result |
 |---|---|---|
-| `@` (apex) | Replace the A and AAAA records above | `A 76.76.21.21` (Vercel) |
-| `@` AAAA | Remove the two Hostinger AAAA records | none (otherwise IPv6 visitors would still reach the old host) |
-| `www` | Replace the CNAME | `CNAME cname.vercel-dns.com.` |
-| `_vercel` TXT | Add, only if Vercel asks for verification | the value Vercel shows |
-| `ftp` | **Keep** | unchanged |
+| 1 `ALIAS @` | Delete it, then add `A`, name `@`, `216.198.79.1`, TTL 300 | Apex → Vercel |
+| 2 `CNAME www` | Edit the content to `3c9796e59e8bc55f.vercel-dns-017.com.`, TTL 300 | `www` → Vercel, which redirects (308) to the apex |
+| — | Add `TXT _vercel` only if Vercel asks for ownership verification | Verification |
+| 3–9 | No change | FTP and email untouched |
 
-Any Hostinger "CDN" or "website" toggle for the domain must be turned off, so that Hostinger does not override the apex or `www` record.
+Order: add the domains in Vercel first. Then change row 2, then row 1. Then wait for Vercel to show **Valid Configuration** and issue the certificates.
 
 ## 4. Canonical host
 
@@ -52,11 +69,13 @@ Any Hostinger "CDN" or "website" toggle for the domain must be turned off, so th
 
 ## 5. Rollback
 
-1. Restore the records in §1 in hPanel; the TTL is short, so this takes effect in minutes to an hour.
+1. In hPanel, restore rows 1 and 2 of §2. Delete the new `A @`, re-add `ALIAS @ → mohdshahrukh.in.cdn.hstgr.net`, and set `www` back to `www.mohdshahrukh.in.cdn.hstgr.net`. The TTL is 300 s, so this takes effect in minutes.
 2. The old Hostinger site is not touched, so it comes back as soon as DNS points to it again.
 
 ## 6. Change log
 
 | Date | Change | By |
 |---|---|---|
-| 2026-11-05 | Backup taken (§1). No change made. | Claude (read-only lookup) |
+| 2026-11-05 | Backup taken (§1 public lookup, §2 hPanel screenshot). No change made. | Claude (read-only) |
+| 2026-11-05 | `mohdshahrukh.in` (Production) and `www.mohdshahrukh.in` (308 → apex) added in Vercel; both show Invalid Configuration until DNS changes. Hostinger not touched. | Claude (Vercel dashboard) |
+| 2026-11-05 | **Cut-over.** hPanel: `CNAME www` → `3c9796e59e8bc55f.vercel-dns-017.com`; `ALIAS @` deleted (hPanel rejects an A record beside an ALIAS on the same name, so the edit could not be done in place) and `A @ → 216.198.79.1` added, TTL 300. Rows 3–9 unchanged. Verified: `ns1.dns-parking.com`, `1.1.1.1` and `8.8.8.8` return the new records with no AAAA; Let's Encrypt certificates issued for both names (expire 2027-02-03); `www` and `http://` return 308 to `https://mohdshahrukh.in/`; the apex serves `server: Vercel` with HSTS, CSP and the other security headers. | Claude (hPanel, owner-approved) |

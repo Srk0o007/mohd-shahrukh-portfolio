@@ -6,6 +6,8 @@ import { defineConfig, devices } from '@playwright/test'
  */
 const PORT = 3100
 const isCI = Boolean(process.env.CI)
+/** Phase 12: set `E2E_BASE_URL` to test a deployment (e.g. production) instead of a local build. */
+const remote = process.env.E2E_BASE_URL
 
 export default defineConfig({
   testDir: './tests',
@@ -17,7 +19,7 @@ export default defineConfig({
   retries: isCI ? 1 : 0,
   reporter: isCI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: remote ?? `http://localhost:${PORT}`,
     trace: 'retain-on-failure',
   },
   // Phase 11 (owner decision 4): the full suite runs in all three engines on every PR.
@@ -27,10 +29,14 @@ export default defineConfig({
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
-  webServer: {
-    command: `npm run start -- --port ${PORT}`,
-    url: `http://localhost:${PORT}`,
-    reuseExistingServer: !isCI,
-    timeout: 120_000,
-  },
+  ...(remote
+    ? {}
+    : {
+        webServer: {
+          command: `npm run start -- --port ${PORT}`,
+          url: `http://localhost:${PORT}`,
+          reuseExistingServer: !isCI,
+          timeout: 120_000,
+        },
+      }),
 })
