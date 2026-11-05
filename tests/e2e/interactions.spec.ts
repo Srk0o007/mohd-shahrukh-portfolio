@@ -59,7 +59,9 @@ test.describe('navigation (FR-NAV-04/06, FR-INT-05)', () => {
       .getByRole('link', { name: /Download CV/ })
       .focus()
     await page.waitForTimeout(400)
-    expect(await page.evaluate(() => Math.round(window.scrollY))).toBe(before)
+    // ±2 px: sub-pixel rounding of the scroll position (seen in CI); the regression is a jump.
+    const after = await page.evaluate(() => Math.round(window.scrollY))
+    expect(Math.abs(after - before)).toBeLessThanOrEqual(2)
   })
 
   test('tabbing into content keeps the focused element below the sticky header (WCAG 2.4.11)', async ({
@@ -67,6 +69,8 @@ test.describe('navigation (FR-NAV-04/06, FR-INT-05)', () => {
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/')
+    // WebKit relies on the motion module's focus guard (ADR 0016), which loads after idle.
+    await expect(html(page)).toHaveAttribute('data-reveal-on', '')
     const link = page.getByRole('link', {
       name: 'Visit SOSUDATECH Pvt. Ltd. website (opens in new tab)',
     })

@@ -15,6 +15,7 @@ import {
  * - parallax: `[data-speed]` layers move with `transform: translate3d` relative to their
  *   parent's distance from the viewport centre (35 % below 768 px, off under reduced motion);
  * - the education journey: `--progress` on `[data-journey]` and `data-lit` on each milestone.
+ * A `focusin` listener also keeps focused content clear of the sticky header (WCAG 2.4.11).
  *
  * Scroll reveal uses two IntersectionObservers: `[data-reveal]` elements fade in once 8 % of
  * them is inside the viewport (minus an 8 % bottom margin), and are reset only when they have
@@ -24,6 +25,9 @@ import {
  * hidden. Children of `[data-stagger]` get a 90 ms `--delay` per step (max 5). The reveal is
  * off under reduced motion; the CSS also forces every final state there.
  */
+/** Space between the sticky header and an element it would otherwise cover on focus. */
+const FOCUS_GAP_PX = 8
+
 export function createMotion(): { destroy: () => void } {
   const root = document.documentElement
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -127,8 +131,29 @@ export function createMotion(): { destroy: () => void } {
     schedule()
   }
 
+  /**
+   * WCAG 2.4.11 (Focus Not Obscured): WebKit does not scroll an element that receives focus while
+   * already inside the viewport, even when the sticky header covers it, and `scroll-margin` only
+   * applies when the browser scrolls. Nudge such an element just below the header, for keyboard
+   * focus only.
+   */
+  const keepFocusVisible = (event: FocusEvent) => {
+    const target = event.target
+    if (!header || !(target instanceof HTMLElement) || target.closest('header, [role="dialog"]')) {
+      return
+    }
+    // Keyboard focus only: scrolling between a pointer's down and up would make the click miss.
+    if (!target.matches(':focus-visible')) return
+    const headerBottom = header.getBoundingClientRect().bottom
+    const box = target.getBoundingClientRect()
+    if (box.bottom > 0 && box.top < headerBottom) {
+      window.scrollBy({ top: box.top - headerBottom - FOCUS_GAP_PX, behavior: 'instant' })
+    }
+  }
+
   window.addEventListener('scroll', schedule, { passive: true })
   window.addEventListener('resize', schedule, { passive: true })
+  document.addEventListener('focusin', keepFocusVisible)
   reduce.addEventListener('change', onReduceChange)
   startReveal()
   update()
@@ -137,6 +162,7 @@ export function createMotion(): { destroy: () => void } {
     destroy() {
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
+      document.removeEventListener('focusin', keepFocusVisible)
       reduce.removeEventListener('change', onReduceChange)
       if (frame) window.cancelAnimationFrame(frame)
       stopReveal()

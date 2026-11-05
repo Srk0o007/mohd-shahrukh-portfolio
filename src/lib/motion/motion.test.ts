@@ -86,6 +86,25 @@ describe('createMotion (ADR 0016)', () => {
     motion.destroy()
   })
 
+  it('moves a focused element out from under the sticky header (WCAG 2.4.11)', () => {
+    placeBoxes({ 'site-header': { top: 0, height: 80 }, below: { top: 20, height: 40 } })
+    const scrollBy = vi.fn()
+    vi.stubGlobal('scrollBy', scrollBy)
+    const matches = Element.prototype.matches
+    vi.spyOn(Element.prototype, 'matches').mockImplementation(function (this: Element, q: string) {
+      return q === ':focus-visible' || matches.call(this, q) // jsdom: treat focus as keyboard
+    })
+    const motion = createMotion()
+    document.getElementById('below')?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }))
+    expect(scrollBy).toHaveBeenCalledWith({ top: 20 - 80 - 8, behavior: 'instant' })
+    scrollBy.mockClear()
+    document
+      .getElementById('site-header')
+      ?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }))
+    expect(scrollBy).not.toHaveBeenCalled()
+    motion.destroy()
+  })
+
   it('cleans up on destroy', () => {
     createMotion().destroy()
     expect(document.documentElement).not.toHaveAttribute('data-reveal-on')
