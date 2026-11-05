@@ -8,5 +8,5 @@ export const siteConfig = {
   /** Formspree form endpoint (existing form; owner confirms account access before Phase 09). */
   formEndpoint: 'https://formspree.io/f/xleyzgzo',
   /** CV served from /public (FR-RES-06, D7). */
-  cvPath: '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf',
+  cvPath: '/Mohd_Shahrukh_Resume_05_Nov_2026.pdf',
 } as const

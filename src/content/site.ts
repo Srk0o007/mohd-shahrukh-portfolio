@@ -41,12 +41,12 @@ export function getSectionHeading(id: SectionId): SectionHeading {
   return heading
 }
 
-/** CONTENT_SCHEMA §11 — D7 (03 Nov 2026 resume, 72,379 bytes). */
+/** CONTENT_SCHEMA §11 — D7 (05 Nov 2026 resume, 64,319 bytes). */
 export const cv = {
   path: siteConfig.cvPath,
   label: 'Download CV',
   format: 'PDF',
-  sizeLabel: '72 KB',
+  sizeLabel: '64 KB',
   updated: '2026-11',
 } as const satisfies CvDocument
 

@@ -160,7 +160,8 @@ describe('I-9 owner decisions are respected', () => {
   })
 
   it('has no Twitter/X link and no second phone number (D4)', () => {
-    expect(all).not.toMatch(/twitter\.com|x\.com|shahrukh156\b(?!@)/i)
+    // The 05 Nov 2026 resume's LinkedIn slug (`mohdshahrukh156`) is allowed; a bare handle is not.
+    expect(all).not.toMatch(/twitter\.com|x\.com|(?<!linkedin\.com\/in\/mohd)shahrukh156\b(?!@)/i)
     expect(all).not.toContain('9458156004')
   })
 

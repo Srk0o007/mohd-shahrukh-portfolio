@@ -69,9 +69,8 @@ describe('03 — Experience (FR-RES-01, D1)', () => {
   it('repeats the CV download in content with format and size (FR-RES-06)', () => {
     render(<Experience />)
     const region = screen.getByRole('region', { name: 'My Experience' })
-    expect(within(region).getByRole('link', { name: 'Download CV (PDF, 72 KB)' })).toHaveAttribute(
-      'href',
-      '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf',
-    )
+    expect(
+      within(region).getByRole('link', { name: 'Download CV (PDF, 64 KB, opens in new tab)' }),
+    ).toHaveAttribute('href', '/Mohd_Shahrukh_Resume_05_Nov_2026.pdf')
   })
 })

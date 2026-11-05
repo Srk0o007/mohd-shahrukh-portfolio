@@ -34,7 +34,7 @@ describe('01 — About (FR-ABT-01)', () => {
     const links = within(list).getAllByRole('link')
     expect(links.map((l) => l.getAttribute('href'))).toEqual([
       'https://github.com/Srk0o007',
-      'https://www.linkedin.com/in/mohd-shah-rukh-703aa3153/',
+      'https://www.linkedin.com/in/mohdshahrukh156/',
     ])
     expect(screen.getByRole('link', { name: 'LinkedIn (opens in new tab)' })).toBeInTheDocument()
   })

@@ -25,7 +25,7 @@ export const socialLinks = [
   {
     id: 'linkedin',
     label: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/mohd-shah-rukh-703aa3153/',
+    href: 'https://www.linkedin.com/in/mohdshahrukh156/',
   },
   { id: 'email', label: 'Email', href: 'mailto:khan.shahrukh156@gmail.com' },
 ] as const satisfies readonly SocialLink[]

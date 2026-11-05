@@ -28,9 +28,11 @@ describe('SiteHeader (FR-NAV-01, D15)', () => {
 
   it('offers the CV download with format and size in its accessible name', () => {
     render(<SiteHeader />)
-    const cv = screen.getByRole('link', { name: 'Download CV (PDF, 72 KB)' })
-    expect(cv).toHaveAttribute('href', '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf')
-    expect(cv).toHaveAttribute('download')
+    const cv = screen.getByRole('link', { name: 'Download CV (PDF, 64 KB, opens in new tab)' })
+    expect(cv).toHaveAttribute('href', '/Mohd_Shahrukh_Resume_05_Nov_2026.pdf')
+    expect(cv).toHaveAttribute('target', '_blank')
+    expect(cv).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(cv).not.toHaveAttribute('download')
   })
 
   it('has the mobile menu toggle and no theme toggle (dark only, ADR 0014)', () => {

@@ -14,7 +14,11 @@ const props: MobileMenuProps = {
   ],
   footer: (
     <div>
-      <CvLink href="/cv.pdf" label="Download CV" accessibleSuffix="(PDF, 72 KB)" />
+      <CvLink
+        href="/cv.pdf"
+        label="Download CV"
+        accessibleSuffix="(PDF, 64 KB, opens in new tab)"
+      />
       <SocialLinks
         links={[
           { id: 'github', label: 'GitHub', href: 'https://github.com/Srk0o007' },
@@ -129,10 +133,9 @@ describe('MobileMenu (FR-NAV-02)', () => {
   it('includes the CV download and text-labelled social links', async () => {
     renderWithPage()
     await userEvent.click(openButton())
-    expect(screen.getByRole('link', { name: 'Download CV (PDF, 72 KB)' })).toHaveAttribute(
-      'href',
-      '/cv.pdf',
-    )
+    expect(
+      screen.getByRole('link', { name: 'Download CV (PDF, 64 KB, opens in new tab)' }),
+    ).toHaveAttribute('href', '/cv.pdf')
     expect(screen.getByRole('link', { name: 'GitHub (opens in new tab)' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Email' })).toHaveAttribute(
       'href',

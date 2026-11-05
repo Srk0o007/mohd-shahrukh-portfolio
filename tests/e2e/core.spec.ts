@@ -3,8 +3,8 @@ import { expect, test, type Page } from '../fixtures'
 
 /** Phase 07 — core portfolio: shell, navigation, sections, CV, no-JS, layout. */
 
-const CV_NAME = 'Download CV (PDF, 72 KB)'
-const CV_PATH = '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf'
+const CV_NAME = 'Download CV (PDF, 64 KB, opens in new tab)'
+const CV_PATH = '/Mohd_Shahrukh_Resume_05_Nov_2026.pdf'
 
 /*
  * Phase 07 allowed #projects, #testimonials (Phase 08) and #contact (Phase 09) to be missing
@@ -243,7 +243,10 @@ test('CV links: accessible name and PDF response (FR-RES-06)', async ({ page, re
   await page.goto('/')
   const links = page.getByRole('link', { name: CV_NAME })
   await expect(links).toHaveCount(2) // header + Experience section
-  for (const link of await links.all()) await expect(link).toHaveAttribute('href', CV_PATH)
+  for (const link of await links.all()) {
+    await expect(link).toHaveAttribute('href', CV_PATH)
+    await expect(link).toHaveAttribute('target', '_blank')
+  }
   const response = await request.get(CV_PATH)
   expect(response.status()).toBe(200)
   expect(response.headers()['content-type']).toContain('application/pdf')
