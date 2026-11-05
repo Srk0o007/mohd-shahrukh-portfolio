@@ -1,14 +1,14 @@
 # Project Status
 
 **Last updated:** 2026-11-05
-**Current phase:** Phase 11.5 — Dark Redesign & Particle Wave 🔍 In review: implemented, awaiting owner approval (branch `phase/11.5-dark-redesign`, not pushed)
-**Next phase:** Phase 12 — Deployment & Domain Configuration ⏳ Not started
+**Current phase:** Phase 12 — Deployment & Domain Configuration 🚧 In progress (approved 2026-11-05)
+**Next phase:** None (Phase 12 is the last phase)
 
 ## Current state
 
 | Item | Status |
 |---|---|
-| **Next approved action** | None. Phase 11.5 is implemented and validated locally and waits for the owner's review. Open decision: the mobile Lighthouse score (88 vs 91, see the Phase 11.5 summary). No push or PR until the owner says so. Phase 12 stays unstarted until explicitly approved. |
+| **Next approved action** | Phase 12, steps approved on 2026-11-05: push `phase/11.5-dark-redesign`, open the PR, merge to `main` after green CI, create the Vercel project, deploy to `*.vercel.app`, and add `mohdshahrukh.in` and `www` in Vercel. **The Hostinger DNS change needs a separate final confirmation** (docs/deployment/DNS_CONFIGURATION.md). |
 | **Blockers** | None |
 | **Pending work** | Phase 11.5 implementation. Before launch (PRODUCTION_READINESS §9): Vercel account and Hostinger DNS access for Phase 12. Owner's screen-reader smoke test after the PR (checklist in `docs/quality/ACCESSIBILITY_REPORT.md` §7). **Owner checklist in Formspree** (form `xleyzgzo`): reCAPTCHA off in Spam protection; notification email; allowed domain `mohdshahrukh.in` (ADR 0006 implementation notes). Owner sends the real test message from the live site after Phase 12 (decision 4b). Q8 / Q11 deferred until after deployment. JS optimisation in Phase 11. |
 
@@ -27,8 +27,8 @@
 | 09 | Contact & Interactive Features | ✅ Complete | 2026-11-04 |
 | 10 | Accessibility & Responsive Engineering | ✅ Complete | 2026-11-04 |
 | 11 | Performance, SEO & Quality Assurance | ✅ Complete (PR #10 merged) | 2026-11-04 |
-| 11.5 | Dark Redesign & Particle Wave (inserted 2026-11-05) | 🔍 In review | — |
-| 12 | Deployment & Domain Configuration | ⏳ Not started | — |
+| 11.5 | Dark Redesign & Particle Wave (inserted 2026-11-05) | ✅ Complete (owner approved) | 2026-11-05 |
+| 12 | Deployment & Domain Configuration | 🚧 In progress | — |
 
 Legend: ✅ Complete · 🔍 In review · 🚧 In progress · ⏸️ Awaiting approval · ⏳ Not started
 
@@ -472,6 +472,7 @@ Q1 typed role "UI/UX Designer" · Q2 "Targeting SDE-2" line · Q3 Bangalore vs B
 | 2026-11-04 | Architecture decisions ADR 0001–0011 accepted | Owner approved the Phase 05 proposal with recommendations; see [docs/architecture/adr/](docs/architecture/adr/) |
 | 2026-11-04 | **NFR-SEC-02 amended:** static CSP with `script-src 'self' 'unsafe-inline'`; retained until the Phase 11 evaluation of CSP hash sources (SRI is a separate mechanism for external files) | ADR 0008; nonces would force dynamic rendering (Next.js 16 docs) |
 | 2026-11-04 | Hosting plan is a deployment-stage decision: Vercel Hobby intended; limits, image-optimisation pricing and acceptable-use terms verified in Phase 12 | Owner review of PR #4; ADR 0002 |
+| 2026-11-05 | Phase 11.5 approved: mobile Lighthouse 88 accepted; the three accessibility departures from the prototype (`faint` #808080, field focus outline, no hover motion under reduced motion) accepted | Owner: "this is enough now, I want to deploy this" |
 | 2026-11-04 | ESLint 9.39.5 instead of 10 (ADR 0012); TypeScript stays exactly 6.0.3 | Bundled plugins do not declare ESLint 10 support (owner approved) |
 | 2026-11-04 | Content layer, images and CV implemented in Phase 06 | Owner approved: Phase 07 consumes a typed, tested content layer |
 | 2026-11-04 | Temporary component preview at `/` with scoped light/dark panels | Owner approved; replaced in Phase 07 |
