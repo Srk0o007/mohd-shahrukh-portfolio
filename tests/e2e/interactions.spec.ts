@@ -1,12 +1,15 @@
 import AxeBuilder from '@axe-core/playwright'
-import { applyWebKitHarness, expect, test, type Page, type Route } from '../fixtures'
+import { expect, test, type Page, type Route } from '../fixtures'
 
-/** Phase 09 — theme switching, current-section navigation, legacy anchors, back to top, contact. */
+/**
+ * Phase 09 — current-section navigation, legacy anchors, back to top, contact. The theme switcher
+ * tests were removed in Phase 11.5: the site is dark only (ADR 0014; dark-only checks live in
+ * foundation.spec.ts).
+ */
 
 const FORM = 'https://formspree.io/f/xleyzgzo'
 const SUCCESS = 'Thank you! Your message has been sent.'
 const html = (page: Page) => page.locator('html')
-const themeButton = (page: Page) => page.locator('header').getByRole('button', { name: /theme/ })
 const primaryNav = (page: Page) => page.getByRole('navigation', { name: 'Primary' })
 
 /**
@@ -17,92 +20,6 @@ test.beforeEach(async ({ page }) => {
   await page.route('https://formspree.io/**', (route) =>
     route.fulfill({ status: 599, body: 'unexpected request to Formspree in a test' }),
   )
-})
-
-test.describe('theme switcher (FR-THM-01–04)', () => {
-  test('switches, names the next action, and persists across reloads', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'light' })
-    await page.goto('/')
-    await expect(html(page)).toHaveAttribute('data-theme', 'light')
-    await expect(themeButton(page)).toHaveAccessibleName('Switch to dark theme')
-    // Keyboard activation (Safari/WebKit does not focus buttons on mouse click by design).
-    await themeButton(page).focus()
-    await page.keyboard.press('Enter')
-    await expect(html(page)).toHaveAttribute('data-theme', 'dark')
-    await expect(themeButton(page)).toHaveAccessibleName('Switch to light theme')
-    await expect(themeButton(page)).toBeFocused()
-    expect(await page.evaluate(() => localStorage.getItem('theme'))).toBe('dark')
-    await page.reload()
-    await expect(html(page)).toHaveAttribute('data-theme', 'dark')
-  })
-
-  test('a stored choice is applied before first paint (no flash)', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'light' })
-    await page.addInitScript(() => {
-      localStorage.setItem('theme', 'dark')
-      // Record every data-theme value <html> ever has.
-      const seen: string[] = []
-      ;(window as unknown as { __themes: string[] }).__themes = seen
-      // <html> may not exist yet when init scripts run, so observe the whole document.
-      new MutationObserver((records) => {
-        for (const record of records) {
-          const value = (record.target as Element).getAttribute?.('data-theme')
-          if (record.target === document.documentElement && value) seen.push(value)
-        }
-      }).observe(document, { attributes: true, subtree: true, attributeFilter: ['data-theme'] })
-    })
-    await page.goto('/')
-    const themes = await page.evaluate(() => (window as unknown as { __themes: string[] }).__themes)
-    expect(themes.length).toBeGreaterThan(0)
-    expect(new Set(themes)).toEqual(new Set(['dark']))
-  })
-
-  test('follows live system changes until the visitor chooses (FR-THM-04)', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'light' })
-    await page.goto('/')
-    await page.emulateMedia({ colorScheme: 'dark' })
-    await expect(html(page)).toHaveAttribute('data-theme', 'dark')
-    await themeButton(page).click() // choose light explicitly
-    await expect(html(page)).toHaveAttribute('data-theme', 'light')
-    await page.emulateMedia({ colorScheme: 'light' })
-    await page.emulateMedia({ colorScheme: 'dark' })
-    await expect(html(page)).toHaveAttribute('data-theme', 'light')
-  })
-
-  test('works for the visit when storage is blocked', async ({ page }) => {
-    await page.addInitScript(() => {
-      Object.defineProperty(window, 'localStorage', {
-        get() {
-          throw new Error('blocked')
-        },
-      })
-    })
-    await page.emulateMedia({ colorScheme: 'light' })
-    await page.goto('/')
-    await expect(html(page)).toHaveAttribute('data-theme', 'light')
-    await themeButton(page).click()
-    await expect(html(page)).toHaveAttribute('data-theme', 'dark')
-  })
-
-  test('is also in the mobile menu, and is hidden without JS', async ({
-    page,
-    browser,
-    browserName,
-  }) => {
-    await page.setViewportSize({ width: 375, height: 800 })
-    await page.goto('/')
-    await page.getByRole('button', { name: 'Open menu' }).click()
-    const panel = primaryNav(page).locator('xpath=ancestor::div[contains(@class, "fixed")]')
-    await panel.getByRole('button', { name: /theme/ }).click()
-    await expect(html(page)).toHaveAttribute('data-theme', /dark|light/)
-
-    const noJs = await browser.newContext({ javaScriptEnabled: false })
-    await applyWebKitHarness(noJs, browserName)
-    const plain = await noJs.newPage()
-    await plain.goto(page.url())
-    await expect(plain.getByRole('button', { name: /theme/ })).toHaveCount(0)
-    await noJs.close()
-  })
 })
 
 test.describe('navigation (FR-NAV-04/06, FR-INT-05)', () => {
@@ -137,7 +54,10 @@ test.describe('navigation (FR-NAV-04/06, FR-INT-05)', () => {
     await page.keyboard.press('Enter')
     await page.keyboard.press('Escape')
     await expect(page.getByRole('button', { name: 'Open menu' })).toBeFocused()
-    await page.locator('header').getByRole('button', { name: /theme/ }).focus()
+    await page
+      .locator('header')
+      .getByRole('link', { name: /Download CV/ })
+      .focus()
     await page.waitForTimeout(400)
     expect(await page.evaluate(() => Math.round(window.scrollY))).toBe(before)
   })
@@ -213,6 +133,14 @@ test.describe('contact form (FR-CON-02–07)', () => {
     await page.getByLabel(/How can I Help you/).fill('Intercepted test message.')
   }
   const send = (page: Page) => page.getByRole('button', { name: /^Send/ }).click()
+  /**
+   * Waits for hydration (the form turns on `noValidate`): typing before it would fall back to
+   * the no-JS native POST, which is correct for visitors but races the assertions here.
+   */
+  const openContact = async (page: Page) => {
+    await page.goto('/#contact')
+    await expect(page.locator('section#contact form')).toHaveJSProperty('noValidate', true)
+  }
 
   test('invalid submit: inline errors, first field focused, nothing sent', async ({ page }) => {
     let requests = 0
@@ -220,7 +148,7 @@ test.describe('contact form (FR-CON-02–07)', () => {
       requests += 1
       return route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' })
     })
-    await page.goto('/#contact')
+    await openContact(page)
     await send(page)
     const name = page.getByLabel(/What is Your Name/)
     await expect(name).toBeFocused()
@@ -238,7 +166,7 @@ test.describe('contact form (FR-CON-02–07)', () => {
       await held
       await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' })
     })
-    await page.goto('/#contact')
+    await openContact(page)
     await fill(page)
     await send(page)
     const sending = page.getByRole('button', { name: 'Sending…' })
@@ -261,7 +189,7 @@ test.describe('contact form (FR-CON-02–07)', () => {
   ] as const) {
     test(`${label}: error with email fallback, input kept, never a success`, async ({ page }) => {
       await page.route(FORM, respond)
-      await page.goto('/#contact')
+      await openContact(page)
       await fill(page)
       await send(page)
       const alert = page.getByRole('alert').filter({ hasText: "couldn't be sent" })
@@ -276,28 +204,25 @@ test.describe('contact form (FR-CON-02–07)', () => {
     })
   }
 
-  test('axe: no violations with errors and with the failure message (both themes)', async ({
-    page,
-  }) => {
+  test('axe: no violations with errors and with the failure message', async ({ page }) => {
     await page.route(FORM, (route) => route.fulfill({ status: 500, body: '{}' }))
-    for (const scheme of ['light', 'dark'] as const) {
-      await page.emulateMedia({ colorScheme: scheme })
-      await page.goto('/#contact')
-      await send(page)
-      const withErrors = await new AxeBuilder({ page })
-        .include('section#contact')
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .analyze()
-      expect(withErrors.violations.map((v) => v.id)).toEqual([])
-      await fill(page)
-      await send(page)
-      await expect(page.getByRole('alert').filter({ hasText: "couldn't be sent" })).toBeVisible()
-      const withAlert = await new AxeBuilder({ page })
-        .include('section#contact')
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .analyze()
-      expect(withAlert.violations.map((v) => v.id)).toEqual([])
-    }
+    // Reduced motion: final reveal states, so axe never measures content mid-fade (ADR 0016).
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await openContact(page)
+    await send(page)
+    const withErrors = await new AxeBuilder({ page })
+      .include('section#contact')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze()
+    expect(withErrors.violations.map((v) => v.id)).toEqual([])
+    await fill(page)
+    await send(page)
+    await expect(page.getByRole('alert').filter({ hasText: "couldn't be sent" })).toBeVisible()
+    const withAlert = await new AxeBuilder({ page })
+      .include('section#contact')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze()
+    expect(withAlert.violations.map((v) => v.id)).toEqual([])
   })
 })
 

@@ -1,6 +1,6 @@
 import { expect, test, WEBKIT_TAB_SKIPS_LINKS, type ConsoleMessage } from '../fixtures'
 
-/** Phase 06 foundation checks: rendering, theme bootstrap, fonts, metadata, headers, no-JS. */
+/** Phase 06 foundation checks: rendering, dark-only theme, fonts, metadata, headers, no-JS. */
 
 const CV_PATH = '/Mohd_Shahrukh_Resume_03_Nov_2026.pdf'
 
@@ -16,7 +16,6 @@ test.describe('home page', () => {
     expect(response?.status()).toBe(200)
     await expect(page.getByRole('heading', { level: 1, name: 'Mohd Shahrukh' })).toBeVisible()
     await expect(page.locator('html')).toHaveAttribute('data-js', '')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', /^(light|dark)$/)
     expect(errors, 'console errors/warnings (incl. CSP violations)').toEqual([])
   })
 
@@ -35,19 +34,20 @@ test.describe('home page', () => {
   })
 })
 
-test.describe('theme bootstrap (ADR 0005)', () => {
-  test('follows the system preference on first visit', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'dark' })
-    await page.goto('/')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
-  })
-
-  test('a stored choice overrides the system preference', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'dark' })
-    await page.addInitScript(() => window.localStorage.setItem('theme', 'light'))
-    await page.goto('/')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
-  })
+test.describe('dark only (ADR 0014)', () => {
+  for (const scheme of ['light', 'dark'] as const) {
+    test(`stays dark when the system prefers ${scheme}`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: scheme })
+      await page.goto('/')
+      const html = page.locator('html')
+      await expect(html).not.toHaveAttribute('data-theme')
+      expect(await html.evaluate((el) => getComputedStyle(el).colorScheme)).toBe('dark')
+      expect(
+        await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor),
+      ).toBe('rgb(16, 16, 13)')
+      await expect(page.getByRole('button', { name: /theme/i })).toHaveCount(0)
+    })
+  }
 })
 
 test('fonts are served only from this origin, never Google (NFR-PERF-07)', async ({

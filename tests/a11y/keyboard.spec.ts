@@ -68,7 +68,8 @@ for (const width of [375, 1280]) {
 
       expect(stops.length).toBeGreaterThan(25)
       expect(stops[0]?.name).toBe('Skip to main content')
-      expect(stops.at(-1)?.name).toBe('Email') // last footer link: nothing traps focus earlier
+      // Phase 11.5: the footer has no links, so back-to-top is last: nothing traps focus earlier.
+      expect(stops.at(-1)?.name).toBe('Back to top')
       const problems = stops.filter(
         (s) =>
           !s.outline || !s.inViewport || s.underHeader || !s.visibleAtCentre || s.positiveTabindex,
