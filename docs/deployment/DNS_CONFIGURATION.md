@@ -50,12 +50,12 @@ The apex `@` has no MX, SPF or DMARC, so moving the website cannot affect email.
 
 ## 3. Planned changes (two rows only)
 
-The values below are the usual Vercel targets. **Use exactly what Vercel shows** under **Project → Settings → Domains** for each domain; newer projects may show a project-specific A address or CNAME target.
+Values shown by Vercel (**Project → Settings → Domains**) on 2026-11-05, after both domains were added. Vercel also still accepts the legacy targets `76.76.21.21` and `cname.vercel-dns.com`, but recommends these.
 
 | Row | Action in hPanel | Result |
 |---|---|---|
-| 1 `ALIAS @` | Delete it, then add `A`, name `@`, the value Vercel shows (e.g. `76.76.21.21`), TTL 300 | Apex → Vercel |
-| 2 `CNAME www` | Edit the content to the target Vercel shows (e.g. `cname.vercel-dns.com`), TTL 300 | `www` → Vercel, which redirects (308) to the apex |
+| 1 `ALIAS @` | Delete it, then add `A`, name `@`, `216.198.79.1`, TTL 300 | Apex → Vercel |
+| 2 `CNAME www` | Edit the content to `3c9796e59e8bc55f.vercel-dns-017.com.`, TTL 300 | `www` → Vercel, which redirects (308) to the apex |
 | — | Add `TXT _vercel` only if Vercel asks for ownership verification | Verification |
 | 3–9 | No change | FTP and email untouched |
 
@@ -77,3 +77,4 @@ Order: add the domains in Vercel first. Then change row 2, then row 1. Then wait
 | Date | Change | By |
 |---|---|---|
 | 2026-11-05 | Backup taken (§1 public lookup, §2 hPanel screenshot). No change made. | Claude (read-only) |
+| 2026-11-05 | `mohdshahrukh.in` (Production) and `www.mohdshahrukh.in` (308 → apex) added in Vercel; both show Invalid Configuration until DNS changes. Hostinger not touched. | Claude (Vercel dashboard) |
